@@ -8,6 +8,5 @@ for task in doc clippy check test; do
   just $task "$@"
   just $task --no-default-features "$@"
   just $task --all-features "$@"
-  just $task --features std "$@"
   just $task --features parking_lot "$@"
 done
