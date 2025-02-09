@@ -20,10 +20,7 @@ keywords = [
   "pacman",
   "no-libalpm",
 ]
-categories = [
-  "no-std",
-  "parsing",
-]
+categories = []
 
 [features]
 default = ["std"]
