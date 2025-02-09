@@ -1,0 +1,19 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "schedule": ["* 0 1 * *"],
+  "semanticCommits": "enabled",
+  "semanticCommitType": "chore",
+  "prHourlyLimit": 10,
+  "addLabels": ["renovate"],
+  "github-actions": {
+    "addLabels": ["github-actions"],
+    "semanticCommitScope": "ci"
+  },
+  "cargo": {
+    "addLabels": ["dependencies", "rust"],
+    "semanticCommitScope": "deps"
+  }
+}
