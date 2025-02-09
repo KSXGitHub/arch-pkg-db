@@ -23,10 +23,10 @@ keywords = [
 categories = []
 
 [features]
-default = ["std"]
-std = ["arch-pkg-text/std", "libflate/std"]
+# default = ["std"]
+#std = ["arch-pkg-text/std"]
 parking_lot = ["arch-pkg-text/parking_lot"]
 
 [dependencies]
-arch-pkg-text = { version = "0.1.0", default-features = false }
-libflate = { version = "*", default-features = false }
+arch-pkg-text = "0.1.0"
+flate2 = { version = "1.0.35", default-features = false, features = ["rust_backend"] }
