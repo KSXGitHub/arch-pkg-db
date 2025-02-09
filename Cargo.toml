@@ -30,3 +30,4 @@ parking_lot = ["arch-pkg-text/parking_lot"]
 [dependencies]
 arch-pkg-text = { version = "0.1.0", default-features = false }
 libflate = { version = "*", default-features = false }
+tar-no-std = { version = "*", default-features = false }
