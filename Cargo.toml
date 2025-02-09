@@ -23,11 +23,10 @@ keywords = [
 categories = []
 
 [features]
-default = ["std"]
-std = ["arch-pkg-text/std", "libflate/std"]
+default = []
 parking_lot = ["arch-pkg-text/parking_lot"]
 
 [dependencies]
-arch-pkg-text = { version = "0.1.1", default-features = false }
-libflate = { version = "2.1.0", default-features = false }
-tar-no-std = { version = "0.3.2", default-features = false }
+arch-pkg-text = "0.1.1"
+libflate = "2.1.0"
+tar = "0.4.43"
