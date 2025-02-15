@@ -31,7 +31,9 @@ name = "arch-pkg-db"
 version = "0.0.0"
 dependencies = [
  "arch-pkg-text",
+ "derive_more",
  "libflate",
+ "pipe-trait",
  "tar",
 ]
 
