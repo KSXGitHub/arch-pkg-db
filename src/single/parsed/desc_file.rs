@@ -1,3 +1,4 @@
+use arch_pkg_text::desc::{ParsedField, Query, QueryMut};
 use std::path::Path;
 
 /// Representation of a `desc` file inside [`SingleParsedDatabase`](super::SingleParsedDatabase).
@@ -20,5 +21,23 @@ impl<'a, Querier> DescFile<'a, Querier> {
         let DescFile { path, querier } = self;
         let path = *path;
         DescFile { path, querier }
+    }
+}
+
+impl<'a, Querier: Query<'a>> Query<'a> for DescFile<'a, &Querier> {
+    fn query_raw_text(&self, field: ParsedField) -> Option<&'a str> {
+        self.querier.query_raw_text(field)
+    }
+}
+
+impl<'a, Querier: Query<'a>> QueryMut<'a> for DescFile<'a, &Querier> {
+    fn query_raw_text_mut(&mut self, field: ParsedField) -> Option<&'a str> {
+        self.query_raw_text(field)
+    }
+}
+
+impl<'a, Querier: QueryMut<'a>> QueryMut<'a> for DescFile<'a, &mut Querier> {
+    fn query_raw_text_mut(&mut self, field: ParsedField) -> Option<&'a str> {
+        self.querier.query_raw_text_mut(field)
     }
 }
