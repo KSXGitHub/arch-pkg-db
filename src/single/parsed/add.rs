@@ -26,7 +26,7 @@ where
 {
     /// Add a `desc` file to the database.
     ///
-    /// If an older [`DescFile`] already occupied the same [name](Name), it will be returned inside `Ok(Some(_))`.
+    /// If an older [`DescFile`] already occupied the same [name](arch_pkg_text::value::Name), it will be returned inside `Ok(Some(_))`.
     pub fn add(
         &mut self,
         path: &'a Path,
