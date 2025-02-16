@@ -28,7 +28,7 @@ where
     /// If an older querier already occupied the same [name](arch_pkg_text::value::Name), it will be returned inside `Ok(Some(_))`.
     pub fn add(&mut self, mut querier: Querier) -> Result<Option<Querier>, AddError<Querier>> {
         if let Some(name) = querier.name_mut() {
-            self.internal.insert(name, querier).pipe(Ok)
+            self.internal.insert(name.as_str(), querier).pipe(Ok)
         } else {
             Err(AddError::NoName(NoNameError { querier }))
         }
