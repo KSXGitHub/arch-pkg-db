@@ -1,6 +1,7 @@
 //! Manipulate metadata attachments.
 
 mod into;
+mod pkg;
 mod utils;
 
 pub use into::IntoAttached;
