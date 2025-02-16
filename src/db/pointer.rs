@@ -1,5 +1,9 @@
 use super::{Lookup, LookupMut, PackageDatabase};
 use arch_pkg_text::value::Name;
+use core::{
+    ops::{Deref, DerefMut},
+    pin::Pin,
+};
 use std::{rc::Rc, sync::Arc};
 
 macro_rules! impl_base {
@@ -49,3 +53,21 @@ impl_ref!(Rc);
 
 impl_base!(Arc);
 impl_ref!(Arc);
+
+impl<Ptr: Deref<Target: PackageDatabase>> PackageDatabase for Pin<Ptr> {
+    type Querier = <Ptr::Target as PackageDatabase>::Querier;
+}
+
+impl<Ptr: Deref<Target: Lookup>> Lookup for Pin<Ptr> {
+    type Error = <Ptr::Target as Lookup>::Error;
+    fn lookup(&self, name: Name<'_>) -> Result<&'_ Self::Querier, Self::Error> {
+        self.as_ref().get_ref().lookup(name)
+    }
+}
+
+impl<Ptr: DerefMut<Target: LookupMut + Unpin>> LookupMut for Pin<Ptr> {
+    type Error = <Ptr::Target as LookupMut>::Error;
+    fn lookup_mut(&mut self, name: Name<'_>) -> Result<&'_ mut Self::Querier, Self::Error> {
+        self.as_mut().get_mut().lookup_mut(name)
+    }
+}
