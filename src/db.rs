@@ -1,5 +1,6 @@
 //! Common interfaces to interact with database types.
 
+mod attached;
 mod pointer;
 
 use arch_pkg_text::value::Name;

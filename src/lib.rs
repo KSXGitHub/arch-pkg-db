@@ -1,8 +1,9 @@
 mod db;
-pub use db::{Lookup, LookupMut, PackageDatabase};
 
+pub mod attached;
 pub mod single;
 
+pub use db::{Lookup, LookupMut, PackageDatabase};
 pub use single::SingleParsedDatabase;
 
 pub use arch_pkg_text::indexmap;
