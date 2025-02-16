@@ -12,6 +12,6 @@ impl<Querier> SingleParsedDatabase<'_, Querier> {
 
 impl<Querier> Default for SingleParsedDatabase<'_, Querier> {
     fn default() -> Self {
-        SingleParsedDatabase::new()
+        Self::new()
     }
 }
