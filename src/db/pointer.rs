@@ -61,13 +61,13 @@ impl<Ptr: Deref<Target: PackageDatabase>> PackageDatabase for Pin<Ptr> {
 impl<Ptr: Deref<Target: Lookup>> Lookup for Pin<Ptr> {
     type Error = <Ptr::Target as Lookup>::Error;
     fn lookup(&self, name: Name<'_>) -> Result<&'_ Self::Querier, Self::Error> {
-        self.as_ref().get_ref().lookup(name)
+        self.deref().lookup(name)
     }
 }
 
 impl<Ptr: DerefMut<Target: LookupMut + Unpin>> LookupMut for Pin<Ptr> {
     type Error = <Ptr::Target as LookupMut>::Error;
     fn lookup_mut(&mut self, name: Name<'_>) -> Result<&'_ mut Self::Querier, Self::Error> {
-        self.as_mut().get_mut().lookup_mut(name)
+        self.deref_mut().lookup_mut(name)
     }
 }
