@@ -1,8 +1,10 @@
 mod add;
+mod db;
 mod get;
 mod new;
 
 pub use add::{AddError, NoNameError};
+pub use db::LookupError;
 
 use std::collections::HashMap;
 

@@ -1,3 +1,6 @@
+mod db;
+pub use db::{Lookup, LookupMut, PackageDatabase};
+
 pub mod single;
 
 pub use single::SingleParsedDatabase;
