@@ -25,7 +25,7 @@ where
 {
     /// Add a `desc` file to the database.
     ///
-    /// If an older `Querier` already occupied the same [name](arch_pkg_text::value::Name), it will be returned inside `Ok(Some(_))`.
+    /// If an older querier already occupied the same [name](arch_pkg_text::value::Name), it will be returned inside `Ok(Some(_))`.
     pub fn add(&mut self, mut querier: Querier) -> Result<Option<Querier>, AddError<Querier>> {
         if let Some(name) = querier.name_mut() {
             self.internal.insert(name, querier).pipe(Ok)
