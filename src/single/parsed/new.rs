@@ -1,11 +1,11 @@
 use super::SingleParsedDatabase;
-use arch_pkg_text::indexmap::IndexMap;
+use std::collections::HashMap;
 
 impl<Querier> SingleParsedDatabase<'_, Querier> {
     /// Create an empty database.
     pub fn new() -> Self {
         SingleParsedDatabase {
-            internal: IndexMap::new(),
+            internal: HashMap::new(),
         }
     }
 }

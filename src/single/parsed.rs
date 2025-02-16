@@ -4,10 +4,11 @@ mod new;
 
 pub use add::{AddError, NoNameError};
 
-use arch_pkg_text::{indexmap::IndexMap, value::Name};
+use arch_pkg_text::value::Name;
+use std::collections::HashMap;
 
 /// Database with parsed entries.
 #[derive(Debug, Clone)]
 pub struct SingleParsedDatabase<'a, Querier> {
-    internal: IndexMap<Name<'a>, Querier>,
+    internal: HashMap<Name<'a>, Querier>,
 }
