@@ -1,4 +1,5 @@
 use super::SingleParsedDatabase;
+use crate::Insert;
 use arch_pkg_text::desc::QueryMut;
 use derive_more::{Display, Error};
 use pipe_trait::Pipe;
@@ -32,5 +33,16 @@ where
         } else {
             Err(AddError::NoName(NoNameError { querier }))
         }
+    }
+}
+
+impl<'a, Querier> Insert for SingleParsedDatabase<'a, Querier>
+where
+    Querier: QueryMut<'a>,
+{
+    type Ejection = Option<Querier>;
+    type Error = AddError<Querier>;
+    fn insert(&mut self, querier: Self::Querier) -> Result<Self::Ejection, Self::Error> {
+        self.add(querier)
     }
 }

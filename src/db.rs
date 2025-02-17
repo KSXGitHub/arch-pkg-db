@@ -26,3 +26,12 @@ pub trait LookupMut: PackageDatabase {
     /// Get a mutable reference to a package inside the database.
     fn lookup_mut(&mut self, name: Name<'_>) -> Result<&'_ mut Self::Querier, Self::Error>;
 }
+
+pub trait Insert: PackageDatabase {
+    /// Ejected item on success.
+    type Ejection;
+    /// Reason for insertion failure.
+    type Error;
+    /// Insert a querier into
+    fn insert(&mut self, querier: Self::Querier) -> Result<Self::Ejection, Self::Error>;
+}
