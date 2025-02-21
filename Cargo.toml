@@ -2,7 +2,7 @@
 name = "arch-pkg-db"
 description = "Pure Rust library to read Arch Linux's package database archives"
 version = "0.0.0"
-edition = "2021"
+edition = "2024"
 authors = ["khai96_ <hvksmr1996@gmail.com>"]
 license = "MIT"
 repository = "https://github.com/pacman-repo-builder/arch-pkg-db.git"
