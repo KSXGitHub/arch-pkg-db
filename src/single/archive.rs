@@ -27,8 +27,13 @@ impl Archive {
         self.internal.shrink_to_fit()
     }
 
-    /// Extract the internal data from the archive.
-    pub fn into_internal(self) -> Vec<String> {
+    /// Create the archive from a `Vec` of `String`s.
+    pub fn from_vec(source: Vec<String>) -> Self {
+        Archive { internal: source }
+    }
+
+    /// Convert the archive into a `Vec` of `String`s.
+    pub fn into_vec(self) -> Vec<String> {
         self.internal
     }
 }
