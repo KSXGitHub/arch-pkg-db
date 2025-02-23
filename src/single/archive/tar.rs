@@ -13,7 +13,10 @@ pub struct LoadTarError(io::Error);
 
 impl Archive {
     /// Extract a tar archive and add contents from `desc` files to the archive.
-    pub fn extend_from_tar(&mut self, raw_tar_bytes: &[u8]) -> Result<(), LoadTarError> {
+    pub fn extend_from_tar<Bytes: Read>(
+        &mut self,
+        raw_tar_bytes: Bytes,
+    ) -> Result<(), LoadTarError> {
         let mut tar = tar::Archive::new(raw_tar_bytes);
         let entries = tar.entries().map_err(LoadTarError)?;
 
