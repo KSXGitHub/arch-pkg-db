@@ -6,4 +6,11 @@ pub mod single;
 
 pub use single::SingleParsedDatabase;
 
-pub use arch_pkg_text::{desc, parse, value};
+pub mod desc {
+    //! Fields, queriers, and parser of the text format of `desc` files.
+    pub use arch_pkg_text::{
+        desc::*,
+        parse::{DescParseError, DescParseIssue, ParsedDesc, PartialParseResult},
+        value,
+    };
+}
