@@ -13,11 +13,8 @@ pub struct LoadTarError(io::Error);
 
 impl TextCollection {
     /// Extract a tar archive and add contents from `desc` files to the text collection.
-    pub fn extend_from_tar<Bytes: Read>(
-        &mut self,
-        raw_tar_bytes: Bytes,
-    ) -> Result<(), LoadTarError> {
-        let mut tar = tar::Archive::new(raw_tar_bytes);
+    pub fn extend_from_tar<Bytes: Read>(&mut self, bytes: Bytes) -> Result<(), LoadTarError> {
+        let mut tar = tar::Archive::new(bytes);
         let entries = tar.entries().map_err(LoadTarError)?;
 
         for entry in entries {

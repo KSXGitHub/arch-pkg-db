@@ -21,17 +21,14 @@ pub enum LoadArchiveError {
 
 impl TextCollection {
     /// Detect mime type of an archive, extract it, and add contents from `desc` files to the text collection.
-    pub fn extend_from_archive(
-        &mut self,
-        raw_archive_bytes: &[u8],
-    ) -> Result<(), LoadArchiveError> {
-        let mime_type = infer::get(raw_archive_bytes)
+    pub fn extend_from_archive(&mut self, bytes: &[u8]) -> Result<(), LoadArchiveError> {
+        let mime_type = infer::get(bytes)
             .ok_or(LoadArchiveError::GetMime)?
             .mime_type();
         match SupportedArchiveType::try_from(mime_type) {
-            Ok(SupportedArchiveType::Tar) => self.extend_from_tar(raw_archive_bytes)?,
-            Ok(SupportedArchiveType::Gzip) => self.extend_from_tgz(raw_archive_bytes)?,
-            Ok(SupportedArchiveType::Xz) => self.extend_from_txz(raw_archive_bytes)?,
+            Ok(SupportedArchiveType::Tar) => self.extend_from_tar(bytes)?,
+            Ok(SupportedArchiveType::Gzip) => self.extend_from_tgz(bytes)?,
+            Ok(SupportedArchiveType::Xz) => self.extend_from_txz(bytes)?,
             Err(_) => return Err(LoadArchiveError::UnsupportedMimeType(mime_type)),
         }
         Ok(())

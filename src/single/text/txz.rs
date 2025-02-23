@@ -13,11 +13,8 @@ pub enum LoadTxzError {
 
 impl TextCollection {
     /// Extract a `.tar.xz` archive and add contents from `desc` files to the text collection.
-    pub fn extend_from_txz<Bytes: Read>(
-        &mut self,
-        raw_txz_bytes: Bytes,
-    ) -> Result<(), LoadTxzError> {
-        let mut buf_reader = BufReader::new(raw_txz_bytes);
+    pub fn extend_from_txz<Bytes: Read>(&mut self, bytes: Bytes) -> Result<(), LoadTxzError> {
+        let mut buf_reader = BufReader::new(bytes);
         let mut tar = Vec::new();
         xz_decompress(&mut buf_reader, &mut tar).map_err(LoadTxzError::Xz)?;
         self.extend_from_tar(tar.as_slice())

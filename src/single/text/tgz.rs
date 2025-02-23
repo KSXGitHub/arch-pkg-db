@@ -14,13 +14,8 @@ pub enum LoadTgzError {
 
 impl TextCollection {
     /// Extract a `.tar.gz` archive and add contents from `desc` files to the text collection.
-    pub fn extend_from_tgz<Bytes: Read>(
-        &mut self,
-        raw_tgz_bytes: Bytes,
-    ) -> Result<(), LoadTgzError> {
-        let tar = raw_tgz_bytes
-            .pipe(Decoder::new)
-            .map_err(LoadTgzError::Gzip)?;
+    pub fn extend_from_tgz<Bytes: Read>(&mut self, bytes: Bytes) -> Result<(), LoadTgzError> {
+        let tar = bytes.pipe(Decoder::new).map_err(LoadTgzError::Gzip)?;
         self.extend_from_tar(tar).map_err(LoadTgzError::Tar)
     }
 }
