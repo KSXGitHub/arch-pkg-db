@@ -3,6 +3,7 @@ mod insert;
 mod misc;
 mod new;
 mod tar;
+mod tgz;
 
 pub use tar::LoadTarError;
 
