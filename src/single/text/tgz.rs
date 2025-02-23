@@ -1,4 +1,4 @@
-use super::{LoadTarError, TextCollection};
+use super::{LoadArchiveError, LoadTarError, TextCollection};
 use derive_more::{Display, Error};
 use libflate::gzip::Decoder;
 use pipe_trait::Pipe;
@@ -22,5 +22,14 @@ impl TextCollection {
             .pipe(Decoder::new)
             .map_err(LoadTgzError::Gzip)?;
         self.extend_from_tar(tar).map_err(LoadTgzError::Tar)
+    }
+}
+
+impl From<LoadTgzError> for LoadArchiveError {
+    fn from(value: LoadTgzError) -> Self {
+        match value {
+            LoadTgzError::Gzip(error) => LoadArchiveError::Gzip(error),
+            LoadTgzError::Tar(error) => LoadArchiveError::Tar(error),
+        }
     }
 }

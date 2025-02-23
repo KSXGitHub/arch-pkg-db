@@ -1,4 +1,4 @@
-use super::{LoadTarError, LzmaError, TextCollection};
+use super::{LoadArchiveError, LoadTarError, LzmaError, TextCollection};
 use derive_more::{Display, Error};
 use lzma_rs::xz_decompress;
 use std::io::{BufReader, Read};
@@ -22,5 +22,14 @@ impl TextCollection {
         xz_decompress(&mut buf_reader, &mut tar).map_err(LoadTxzError::Xz)?;
         self.extend_from_tar(tar.as_slice())
             .map_err(LoadTxzError::Tar)
+    }
+}
+
+impl From<LoadTxzError> for LoadArchiveError {
+    fn from(value: LoadTxzError) -> Self {
+        match value {
+            LoadTxzError::Xz(error) => LoadArchiveError::Xz(error),
+            LoadTxzError::Tar(error) => LoadArchiveError::Tar(error),
+        }
     }
 }

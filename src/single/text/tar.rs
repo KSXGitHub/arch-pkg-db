@@ -1,4 +1,4 @@
-use super::TextCollection;
+use super::{LoadArchiveError, TextCollection};
 use derive_more::{Display, Error};
 use pipe_trait::Pipe;
 use std::{
@@ -39,5 +39,11 @@ impl TextCollection {
         }
 
         Ok(())
+    }
+}
+
+impl From<LoadTarError> for LoadArchiveError {
+    fn from(value: LoadTarError) -> Self {
+        LoadArchiveError::Tar(value)
     }
 }

@@ -1,6 +1,6 @@
 mod mime;
 
-use super::{LoadTarError, LoadTgzError, LoadTxzError, LzmaError, TextCollection};
+use super::{LoadTarError, LzmaError, TextCollection};
 use derive_more::{Display, Error};
 use mime::SupportedArchiveType;
 use std::io;
@@ -28,22 +28,12 @@ impl TextCollection {
         let mime_type = infer::get(raw_archive_bytes)
             .ok_or(LoadArchiveError::GetMime)?
             .mime_type();
-        Err(match SupportedArchiveType::try_from(mime_type) {
-            Ok(SupportedArchiveType::Tar) => match self.extend_from_tar(raw_archive_bytes) {
-                Ok(()) => return Ok(()),
-                Err(error) => LoadArchiveError::Tar(error),
-            },
-            Ok(SupportedArchiveType::Gzip) => match self.extend_from_tgz(raw_archive_bytes) {
-                Ok(()) => return Ok(()),
-                Err(LoadTgzError::Tar(error)) => LoadArchiveError::Tar(error),
-                Err(LoadTgzError::Gzip(error)) => LoadArchiveError::Gzip(error),
-            },
-            Ok(SupportedArchiveType::Xz) => match self.extend_from_txz(raw_archive_bytes) {
-                Ok(()) => return Ok(()),
-                Err(LoadTxzError::Tar(error)) => LoadArchiveError::Tar(error),
-                Err(LoadTxzError::Xz(error)) => LoadArchiveError::Xz(error),
-            },
-            Err(_) => LoadArchiveError::UnsupportedMimeType(mime_type),
-        })
+        match SupportedArchiveType::try_from(mime_type) {
+            Ok(SupportedArchiveType::Tar) => self.extend_from_tar(raw_archive_bytes)?,
+            Ok(SupportedArchiveType::Gzip) => self.extend_from_tgz(raw_archive_bytes)?,
+            Ok(SupportedArchiveType::Xz) => self.extend_from_txz(raw_archive_bytes)?,
+            Err(_) => return Err(LoadArchiveError::UnsupportedMimeType(mime_type)),
+        }
+        Ok(())
     }
 }
