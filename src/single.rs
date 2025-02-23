@@ -1,7 +1,7 @@
 //! Databases from single archives.
 
-pub mod archive;
 pub mod parsed;
+pub mod text;
 
-pub use archive::Archive;
 pub use parsed::SingleParsedDatabase;
+pub use text::TextCollection;

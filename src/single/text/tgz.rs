@@ -1,4 +1,4 @@
-use super::{Archive, LoadTarError};
+use super::{LoadTarError, TextCollection};
 use derive_more::{Display, Error};
 use libflate::gzip::Decoder;
 use pipe_trait::Pipe;
@@ -12,8 +12,8 @@ pub enum LoadTgzError {
     Tar(LoadTarError),
 }
 
-impl Archive {
-    /// Extract a `.tar.gz` archive and add contents from `desc` files to the archive.
+impl TextCollection {
+    /// Extract a `.tar.gz` archive and add contents from `desc` files to the text collection.
     pub fn extend_from_tgz<Bytes: Read>(
         &mut self,
         raw_tgz_bytes: Bytes,

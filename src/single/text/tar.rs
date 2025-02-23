@@ -1,4 +1,4 @@
-use super::Archive;
+use super::TextCollection;
 use derive_more::{Display, Error};
 use pipe_trait::Pipe;
 use std::{
@@ -11,8 +11,8 @@ use std::{
 #[display("Failed to read the tar archive: {_0}")]
 pub struct LoadTarError(io::Error);
 
-impl Archive {
-    /// Extract a tar archive and add contents from `desc` files to the archive.
+impl TextCollection {
+    /// Extract a tar archive and add contents from `desc` files to the text collection.
     pub fn extend_from_tar<Bytes: Read>(
         &mut self,
         raw_tar_bytes: Bytes,

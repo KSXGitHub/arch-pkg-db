@@ -1,4 +1,4 @@
-use super::{Archive, LoadTarError, LzmaError};
+use super::{LoadTarError, LzmaError, TextCollection};
 use derive_more::{Display, Error};
 use lzma_rs::xz_decompress;
 use std::io::{BufReader, Read};
@@ -11,8 +11,8 @@ pub enum LoadTxzError {
     Tar(LoadTarError),
 }
 
-impl Archive {
-    /// Extract a `.tar.xz` archive and add contents from `desc` files to the archive.
+impl TextCollection {
+    /// Extract a `.tar.xz` archive and add contents from `desc` files to the text collection.
     pub fn extend_from_txz<Bytes: Read>(
         &mut self,
         raw_txz_bytes: Bytes,

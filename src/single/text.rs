@@ -13,6 +13,6 @@ pub use txz::LoadTxzError;
 
 /// Collections of all `desc` texts from which queriers may access data.
 #[derive(Debug, Default, Clone)]
-pub struct Archive {
+pub struct TextCollection {
     internal: Vec<String>,
 }
