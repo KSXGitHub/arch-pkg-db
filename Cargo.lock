@@ -36,6 +36,7 @@ dependencies = [
  "libflate",
  "lzma-rs",
  "pipe-trait",
+ "strum",
  "tar",
 ]
 

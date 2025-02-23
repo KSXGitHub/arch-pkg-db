@@ -1,3 +1,4 @@
+mod archive;
 mod convert;
 mod insert;
 mod local;
@@ -7,6 +8,7 @@ mod tar;
 mod tgz;
 mod txz;
 
+pub use archive::LoadArchiveError;
 pub use local::LoadLocalDbError;
 pub use lzma_rs::error::Error as LzmaError;
 pub use tar::LoadTarError;
