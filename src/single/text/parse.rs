@@ -3,7 +3,7 @@ use crate::{QueryDatabase, single::query::AddError};
 use arch_pkg_text::{ParsedDesc, parse::DescParseError};
 use derive_more::{Display, Error};
 
-/// Error type when trying to create a [`SingleParsedDatabase`] from a [`TextCollection`].
+/// Error type when trying to create a [`QueryDatabase`] from a [`TextCollection`].
 #[derive(Debug, Display, Error)]
 #[display(bound(ParseError: Display))]
 pub enum TextCollectionParseError<Querier, ParseError> {
