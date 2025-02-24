@@ -1,4 +1,5 @@
-use super::{LoadArchiveError, TextCollection};
+use super::{LoadArchiveError, LoadUncompressedArchiveError};
+use crate::single::TextCollection;
 use derive_more::{Display, Error};
 use pipe_trait::Pipe;
 use std::{
@@ -12,7 +13,7 @@ use std::{
 pub struct LoadTarError(io::Error);
 
 impl TextCollection {
-    /// Extract a tar archive and add contents from `desc` files to the text collection.
+    /// Traverse a tar archive and add contents from `desc` files to the text collection.
     pub fn extend_from_tar<Bytes: Read>(&mut self, bytes: Bytes) -> Result<(), LoadTarError> {
         let mut tar = tar::Archive::new(bytes);
         let entries = tar.entries().map_err(LoadTarError)?;
@@ -36,6 +37,12 @@ impl TextCollection {
         }
 
         Ok(())
+    }
+}
+
+impl From<LoadTarError> for LoadUncompressedArchiveError {
+    fn from(value: LoadTarError) -> Self {
+        LoadUncompressedArchiveError::Tar(value)
     }
 }
 
