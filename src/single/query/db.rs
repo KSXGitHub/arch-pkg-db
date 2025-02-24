@@ -7,7 +7,7 @@ impl<Querier> PackageDatabase for QueryDatabase<'_, Querier> {
     type Querier = Querier;
 }
 
-/// Error type of [`Lookup`] and [`LookupMut`] on [`SingleParsedDatabase`].
+/// Error type of [`Lookup`] and [`LookupMut`] on [`QueryDatabase`].
 #[derive(Debug, Display, Error)]
 #[display("Name matches no entry")]
 #[non_exhaustive]

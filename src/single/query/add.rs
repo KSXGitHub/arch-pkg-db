@@ -13,7 +13,7 @@ pub struct NoNameError<Querier> {
     pub querier: Querier,
 }
 
-/// Error type of [`SingleParsedDatabase::add`].
+/// Error type of [`QueryDatabase::add`].
 #[derive(Debug, Display, Error)]
 #[display(bound())]
 pub enum AddError<Querier> {
