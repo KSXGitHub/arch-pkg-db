@@ -3,5 +3,5 @@
 pub mod query;
 pub mod text;
 
-pub use query::QueryDatabase;
+pub use query::{EagerQueryDatabase, MemoQueryDatabase, QueryDatabase};
 pub use text::TextCollection;
