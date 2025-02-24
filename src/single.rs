@@ -1,5 +1,5 @@
 //! Databases from single archives.
 
-pub mod parsed;
+pub mod query;
 
-pub use parsed::SingleParsedDatabase;
+pub use query::QueryDatabase;

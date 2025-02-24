@@ -4,7 +4,7 @@ pub use db::{Insert, Lookup, LookupMut, PackageDatabase};
 pub mod misc;
 pub mod single;
 
-pub use single::SingleParsedDatabase;
+pub use single::QueryDatabase;
 
 pub mod desc {
     //! Fields, queriers, and parser of the text format of `desc` files.
