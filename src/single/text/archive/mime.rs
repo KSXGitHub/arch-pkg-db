@@ -1,7 +1,8 @@
-use strum::{AsRefStr, Display, EnumString};
+use strum::{AsRefStr, EnumString};
 
 /// Mime type of a supported archive format.
-#[derive(Debug, Display, Clone, Copy, AsRefStr, EnumString)]
+#[derive(Clone, AsRefStr, EnumString)]
+#[strum(use_phf)]
 pub enum SupportedArchiveType {
     #[strum(serialize = "application/x-tar")]
     Tar,
