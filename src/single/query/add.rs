@@ -1,4 +1,4 @@
-use super::SingleParsedDatabase;
+use super::QueryDatabase;
 use crate::Insert;
 use arch_pkg_text::desc::QueryMut;
 use derive_more::{Display, Error};
@@ -20,7 +20,7 @@ pub enum AddError<Querier> {
     NoName(NoNameError<Querier>),
 }
 
-impl<'a, Querier> SingleParsedDatabase<'a, Querier>
+impl<'a, Querier> QueryDatabase<'a, Querier>
 where
     Querier: QueryMut<'a>,
 {
@@ -36,7 +36,7 @@ where
     }
 }
 
-impl<'a, Querier> Insert for SingleParsedDatabase<'a, Querier>
+impl<'a, Querier> Insert for QueryDatabase<'a, Querier>
 where
     Querier: QueryMut<'a>,
 {

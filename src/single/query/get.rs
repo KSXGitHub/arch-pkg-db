@@ -1,7 +1,7 @@
-use super::SingleParsedDatabase;
+use super::QueryDatabase;
 use arch_pkg_text::value::Name;
 
-impl<Querier> SingleParsedDatabase<'_, Querier> {
+impl<Querier> QueryDatabase<'_, Querier> {
     /// Get an immutable reference to a querier by package name.
     pub fn get(&self, name: Name<'_>) -> Option<&'_ Querier> {
         self.internal.get(name.as_str())

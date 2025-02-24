@@ -1,5 +1,5 @@
 use super::TextCollection;
-use crate::{SingleParsedDatabase, single::parsed::AddError};
+use crate::{QueryDatabase, single::query::AddError};
 use arch_pkg_text::{ParsedDesc, parse::DescParseError};
 use derive_more::{Display, Error};
 
@@ -13,7 +13,7 @@ pub enum TextCollectionParseError<Querier, ParseError> {
 
 /// Return type of [`TextCollection::parse_eager`].
 type ParseEagerResult<'a> = Result<
-    SingleParsedDatabase<'a, ParsedDesc<'a>>,
+    QueryDatabase<'a, ParsedDesc<'a>>,
     TextCollectionParseError<ParsedDesc<'a>, DescParseError<'a>>,
 >;
 
@@ -21,7 +21,7 @@ impl TextCollection {
     /// Parse a database of eager queriers.
     #[expect(clippy::result_large_err)] // until `parse_*_with_issue`.
     pub fn parse_eager(&self) -> ParseEagerResult<'_> {
-        let mut db = SingleParsedDatabase::new();
+        let mut db = QueryDatabase::new();
 
         for text in &self.internal {
             let querier = ParsedDesc::parse(text).map_err(TextCollectionParseError::Parse)?;
