@@ -12,7 +12,7 @@ pub use xz::LoadXzError;
 
 use super::TextCollection;
 use derive_more::{Display, Error};
-use mime::SupportedCompressionType;
+use mime::SupportedCompressedArchiveType;
 use std::io;
 
 /// Error when trying to load data from an archive.
@@ -34,10 +34,10 @@ pub enum LoadArchiveError {
 impl TextCollection {
     /// Detect mime type of an archive, extract it, and add contents from `desc` files to the text collection.
     pub fn extend_from_archive(&mut self, bytes: &[u8]) -> Result<(), LoadArchiveError> {
-        match SupportedCompressionType::check(bytes) {
-            Ok(SupportedCompressionType::Tar) => self.extend_from_tar(bytes)?,
-            Ok(SupportedCompressionType::Gzip) => self.extend_from_gz(bytes)?,
-            Ok(SupportedCompressionType::Xz) => self.extend_from_xz(bytes)?,
+        match SupportedCompressedArchiveType::check(bytes) {
+            Ok(SupportedCompressedArchiveType::Tar) => self.extend_from_tar(bytes)?,
+            Ok(SupportedCompressedArchiveType::Gzip) => self.extend_from_gz(bytes)?,
+            Ok(SupportedCompressedArchiveType::Xz) => self.extend_from_xz(bytes)?,
             Err(Some(mime)) => return Err(LoadArchiveError::UnsupportedMimeType(mime)),
             Err(None) => return Err(LoadArchiveError::GetMime),
         }

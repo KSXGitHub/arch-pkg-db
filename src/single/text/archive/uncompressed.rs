@@ -1,4 +1,4 @@
-use super::{mime::SupportedArchiveType, tar::LoadTarError};
+use super::{mime::SupportedUncompressedArchiveType, tar::LoadTarError};
 use crate::single::TextCollection;
 use derive_more::{Display, Error};
 
@@ -19,8 +19,8 @@ impl TextCollection {
         &mut self,
         bytes: &[u8],
     ) -> Result<(), LoadUncompressedArchiveError> {
-        match SupportedArchiveType::check(bytes) {
-            Ok(SupportedArchiveType::Tar) => self
+        match SupportedUncompressedArchiveType::check(bytes) {
+            Ok(SupportedUncompressedArchiveType::Tar) => self
                 .extend_from_tar(bytes)
                 .map_err(LoadUncompressedArchiveError::Tar),
             Err(Some(mime)) => Err(LoadUncompressedArchiveError::UnsupportedMimeType(mime)),
