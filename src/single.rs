@@ -2,4 +2,4 @@
 
 pub mod query;
 
-pub use query::QueryDatabase;
+pub use query::{EagerQueryDatabase, MemoQueryDatabase, QueryDatabase};
