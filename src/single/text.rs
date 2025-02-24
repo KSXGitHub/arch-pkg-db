@@ -3,6 +3,7 @@ mod insert;
 mod local;
 mod misc;
 mod new;
+mod parse;
 
 pub mod archive;
 
