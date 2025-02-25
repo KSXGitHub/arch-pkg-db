@@ -1,4 +1,3 @@
-mod convert;
 mod insert;
 mod local;
 mod misc;
