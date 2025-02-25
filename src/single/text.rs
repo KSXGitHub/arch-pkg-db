@@ -16,7 +16,7 @@ use derive_more::{Display, From, Into};
 #[derive(Debug, Display, Clone, From, Into, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Text(Box<str>);
 
-/// Collections of all `desc` texts from which queriers may access data.
+/// Collection of all `desc` texts from which queriers may access data.
 #[derive(Debug, Default, Clone)]
 pub struct TextCollection {
     internal: Vec<Text>,
