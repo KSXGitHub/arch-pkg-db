@@ -1,12 +1,12 @@
 use super::TextCollection;
 
 impl TextCollection {
-    /// Create the text collection from a `Vec` of `String`s.
+    /// Create the text collection from a list of owned strings.
     pub fn from_vec(source: Vec<Box<str>>) -> Self {
         TextCollection { internal: source }
     }
 
-    /// Convert the text collection into a `Vec` of `String`s.
+    /// Convert the text collection into a list of owned strings.
     pub fn into_vec(self) -> Vec<Box<str>> {
         self.internal
     }
