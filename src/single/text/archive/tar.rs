@@ -33,7 +33,7 @@ impl TextCollection {
                 .unwrap_or(0)
                 .pipe(String::with_capacity);
             entry.read_to_string(&mut text).map_err(LoadTarError)?;
-            self.insert(text);
+            self.insert(text.into());
         }
 
         Ok(())

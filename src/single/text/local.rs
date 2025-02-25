@@ -46,7 +46,7 @@ impl TextCollection {
             }
             let file_path = entry.path().join("desc");
             match read_to_string(&file_path) {
-                Ok(text) => self.insert(text),
+                Ok(text) => self.insert(text.into()),
                 Err(error) if error.kind() == ErrorKind::NotFound => continue,
                 Err(error) => {
                     return Err(LoadLocalDbError::ReadFile {

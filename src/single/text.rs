@@ -13,5 +13,5 @@ pub use parse::TextCollectionParseError;
 /// Collections of all `desc` texts from which queriers may access data.
 #[derive(Debug, Default, Clone)]
 pub struct TextCollection {
-    internal: Vec<String>,
+    internal: Vec<Box<str>>,
 }
