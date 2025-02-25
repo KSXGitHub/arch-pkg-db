@@ -4,6 +4,13 @@ use core::{
     ops::{Deref, DerefMut},
 };
 
+impl Text {
+    /// Extract the string slice containing the entire string.
+    pub fn as_str(&self) -> &str {
+        self
+    }
+}
+
 impl From<String> for Text {
     fn from(value: String) -> Self {
         value.into_boxed_str().into()
