@@ -43,4 +43,10 @@ impl TextCollection {
         }
         Ok(())
     }
+
+    /// Detect mime type of an archive, extract it, and add contents from `desc` files to the text collection.
+    pub fn add_archive(mut self, bytes: &[u8]) -> Result<Self, LoadArchiveError> {
+        self.extend_from_archive(bytes)?;
+        Ok(self)
+    }
 }

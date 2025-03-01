@@ -38,6 +38,12 @@ impl TextCollection {
 
         Ok(())
     }
+
+    /// Traverse a tar archive and add contents from `desc` files to the text collection.
+    pub fn add_tar<Bytes: Read>(mut self, bytes: Bytes) -> Result<Self, LoadTarError> {
+        self.extend_from_tar(bytes)?;
+        Ok(self)
+    }
 }
 
 impl From<LoadTarError> for LoadUncompressedArchiveError {

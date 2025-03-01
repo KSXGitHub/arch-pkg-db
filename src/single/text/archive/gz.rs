@@ -22,6 +22,12 @@ impl TextCollection {
         self.extend_from_uncompressed_archive(&tar)
             .map_err(LoadGzError::InternalArchive)
     }
+
+    /// Extract a gzipped archive and add contents from its `desc` files to the text collection.
+    pub fn add_gz<Bytes: Read>(mut self, bytes: Bytes) -> Result<Self, LoadGzError> {
+        self.extend_from_gz(bytes)?;
+        Ok(self)
+    }
 }
 
 impl From<LoadGzError> for LoadArchiveError {
