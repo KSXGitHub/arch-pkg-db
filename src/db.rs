@@ -26,6 +26,7 @@ pub trait LookupMut: PackageDatabase {
     fn lookup_mut(&mut self, name: Name<'_>) -> Result<&'_ mut Self::Querier, Self::Error>;
 }
 
+/// Capability to insert a querier into the database.
 pub trait Insert: PackageDatabase {
     /// Ejected item on success.
     type Ejection;
