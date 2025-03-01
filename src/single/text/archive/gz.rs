@@ -28,6 +28,11 @@ impl TextCollection {
         self.extend_from_gz(bytes)?;
         Ok(self)
     }
+
+    /// Extract a gzipped archive and add contents from its `desc` files to the text collection.
+    pub fn from_gz<Bytes: Read>(bytes: Bytes) -> Result<Self, LoadGzError> {
+        TextCollection::new().add_gz(bytes)
+    }
 }
 
 impl From<LoadGzError> for LoadArchiveError {

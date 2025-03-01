@@ -27,6 +27,11 @@ impl TextCollection {
         self.extend_from_xz(bytes)?;
         Ok(self)
     }
+
+    /// Extract an xz archive and add contents from its `desc` files to the text collection.
+    pub fn from_xz<Bytes: Read>(bytes: Bytes) -> Result<Self, LoadXzError> {
+        TextCollection::new().add_xz(bytes)
+    }
 }
 
 impl From<LoadXzError> for LoadArchiveError {

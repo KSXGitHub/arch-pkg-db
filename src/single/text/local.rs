@@ -67,4 +67,11 @@ impl TextCollection {
         self.extend_from_local_db(local_db_path)?;
         Ok(self)
     }
+
+    /// Load data from a local pacman database.
+    ///
+    /// A local pacman database is a directory usually located at `$ARCH_ROOT/var/lib/pacman/local/`.
+    pub fn from_local_db(local_db_path: &Path) -> Result<Self, LoadLocalDbError> {
+        TextCollection::new().add_local_db(local_db_path)
+    }
 }
