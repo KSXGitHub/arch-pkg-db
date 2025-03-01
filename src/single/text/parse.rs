@@ -1,9 +1,6 @@
 use super::TextCollection;
 use crate::{QueryDatabase, single::query::AddError};
-use arch_pkg_text::desc::{
-    QueryMut,
-    misc::{ReuseAdvice, True},
-};
+use arch_pkg_text::desc::{QueryMut, misc::ShouldReuse};
 use derive_more::{Display, Error};
 
 /// Error type when trying to create a [`QueryDatabase`] from a [`TextCollection`].
@@ -27,7 +24,7 @@ impl TextCollection {
     pub fn parse<'a, Querier>(&'a self) -> ParseResult<'a, Querier>
     where
         &'a str: TryInto<Querier>,
-        Querier: QueryMut<'a> + ReuseAdvice<ShouldReuse = True>,
+        Querier: QueryMut<'a> + ShouldReuse,
     {
         let mut db = QueryDatabase::new();
 
