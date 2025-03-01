@@ -51,3 +51,30 @@ fn valid_txz() {
     let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
     assert_bash_db(&queriers);
 }
+
+#[test]
+fn detect_archive_type() {
+    eprintln!("CASE: tar");
+    let texts = BASH_TAR
+        .as_slice()
+        .pipe(TextCollection::from_archive)
+        .unwrap();
+    let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
+    assert_bash_db(&queriers);
+
+    eprintln!("CASE: tgz");
+    let texts = BASH_TGZ
+        .as_slice()
+        .pipe(TextCollection::from_archive)
+        .unwrap();
+    let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
+    assert_bash_db(&queriers);
+
+    eprintln!("CASE: txz");
+    let texts = BASH_TXZ
+        .as_slice()
+        .pipe(TextCollection::from_archive)
+        .unwrap();
+    let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
+    assert_bash_db(&queriers);
+}
