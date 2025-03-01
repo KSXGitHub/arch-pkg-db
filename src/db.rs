@@ -31,6 +31,6 @@ pub trait Insert: PackageDatabase {
     type Ejection;
     /// Reason for insertion failure.
     type Error;
-    /// Insert a querier into
+    /// Insert a querier into the database whose type implemented this trait.
     fn insert(&mut self, querier: Self::Querier) -> Result<Self::Ejection, Self::Error>;
 }
