@@ -35,3 +35,6 @@ lzma-rs = "0.3.0"
 pipe-trait = "0.4.0"
 strum = { version = "0.27.1", features = ["phf"] }
 tar = "0.4.44"
+
+[dev-dependencies]
+pretty_assertions = "1.4.1"
