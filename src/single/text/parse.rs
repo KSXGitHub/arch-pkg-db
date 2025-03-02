@@ -1,5 +1,5 @@
 use super::TextCollection;
-use crate::{QueryDatabase, single::query::AddError};
+use crate::{QueryDatabase, single::query::InsertError};
 use arch_pkg_text::desc::{QueryMut, misc::ShouldReuse};
 use derive_more::{Display, Error};
 
@@ -10,7 +10,7 @@ use derive_more::{Display, Error};
 #[display(bound(ParseError: Display))]
 pub enum TextCollectionParseError<Querier, ParseError> {
     Parse(ParseError),
-    Add(AddError<Querier>),
+    Insert(InsertError<Querier>),
 }
 
 /// Return type of [`TextCollection::parse`].
@@ -33,7 +33,8 @@ impl TextCollection {
                 .as_str()
                 .try_into()
                 .map_err(TextCollectionParseError::Parse)?;
-            db.add(querier).map_err(TextCollectionParseError::Add)?;
+            db.insert(querier)
+                .map_err(TextCollectionParseError::Insert)?;
         }
 
         Ok(db)
