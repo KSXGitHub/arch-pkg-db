@@ -37,5 +37,5 @@ strum = { version = "0.27.1", features = ["phf"] }
 tar = "0.4.44"
 
 [dev-dependencies]
-pretty_assertions = "1.4.1"
 build-fs-tree = "0.7.1"
+pretty_assertions = "1.4.1"
