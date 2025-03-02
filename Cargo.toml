@@ -38,3 +38,4 @@ tar = "0.4.44"
 
 [dev-dependencies]
 pretty_assertions = "1.4.1"
+build-fs-tree = "0.7.1"
