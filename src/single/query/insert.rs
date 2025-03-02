@@ -13,7 +13,7 @@ pub struct NoNameError<Querier> {
     pub querier: Querier,
 }
 
-/// Error type of [`QueryDatabase::add`].
+/// Error type of [`QueryDatabase::insert`].
 #[derive(Debug, Display, Error)]
 #[display(bound())]
 pub enum InsertError<Querier> {
