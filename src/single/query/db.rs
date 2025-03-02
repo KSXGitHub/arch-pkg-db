@@ -1,4 +1,4 @@
-use super::{AddError, QueryDatabase};
+use super::{InsertError, QueryDatabase};
 use crate::{Insert, Lookup, LookupMut, PackageDatabase};
 use arch_pkg_text::{desc::QueryMut, value::Name};
 use derive_more::{Display, Error};
@@ -32,7 +32,7 @@ where
     Querier: QueryMut<'a>,
 {
     type Ejection = Option<Querier>;
-    type Error = AddError<Querier>;
+    type Error = InsertError<Querier>;
     fn insert(&mut self, querier: Self::Querier) -> Result<Self::Ejection, Self::Error> {
         self.insert(querier)
     }

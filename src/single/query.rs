@@ -3,7 +3,7 @@ mod db;
 mod get;
 mod new;
 
-pub use add::{AddError, NoNameError};
+pub use add::{InsertError, NoNameError};
 pub use db::LookupError;
 
 use arch_pkg_text::desc::{EagerQuerier, MemoQuerier};

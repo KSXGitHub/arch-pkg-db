@@ -15,7 +15,7 @@ pub struct NoNameError<Querier> {
 /// Error type of [`QueryDatabase::add`].
 #[derive(Debug, Display, Error)]
 #[display(bound())]
-pub enum AddError<Querier> {
+pub enum InsertError<Querier> {
     NoName(NoNameError<Querier>),
 }
 
@@ -26,11 +26,14 @@ where
     /// Add a `desc` file to the database.
     ///
     /// If an older querier already occupied the same [name](arch_pkg_text::value::Name), it will be returned inside `Ok(Some(_))`.
-    pub fn insert(&mut self, mut querier: Querier) -> Result<Option<Querier>, AddError<Querier>> {
+    pub fn insert(
+        &mut self,
+        mut querier: Querier,
+    ) -> Result<Option<Querier>, InsertError<Querier>> {
         if let Some(name) = querier.name_mut() {
             self.internal.insert(name.as_str(), querier).pipe(Ok)
         } else {
-            Err(AddError::NoName(NoNameError { querier }))
+            Err(InsertError::NoName(NoNameError { querier }))
         }
     }
 }
