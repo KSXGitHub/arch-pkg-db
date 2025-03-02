@@ -1,5 +1,5 @@
 mod db;
-pub use db::{Insert, Lookup, LookupMut, PackageDatabase};
+pub use db::{Add, Insert, Lookup, LookupMut, PackageDatabase};
 
 pub mod misc;
 pub mod single;

@@ -2,7 +2,9 @@
 
 mod pointer;
 
+use crate::misc::IsType;
 use arch_pkg_text::value::Name;
+use core::convert::Infallible;
 
 /// Database of packages.
 pub trait PackageDatabase {
@@ -35,3 +37,22 @@ pub trait Insert: PackageDatabase {
     /// Insert a querier into the database whose type implemented this trait.
     fn insert(&mut self, querier: Self::Querier) -> Result<Self::Ejection, Self::Error>;
 }
+
+/// Utility methods to quickly construct a database by insertion.
+pub trait Add: Insert<Querier: Sized> + Sized {
+    /// Insert a querier into the database whose type implemented [`Insert`].
+    fn add(mut self, querier: Self::Querier) -> Result<Self, Self::Error> {
+        self.insert(querier)?;
+        Ok(self)
+    }
+
+    /// Insert a querier into the database whose type implemented [`Insert`] with an [`Infallible`] error.
+    fn add_infallible(self, querier: Self::Querier) -> Self
+    where
+        Self::Error: IsType<Infallible>,
+    {
+        let Ok(db) = self.add(querier).map_err(IsType::cast);
+        db
+    }
+}
+impl<Db: Insert<Querier: Sized> + Sized> Add for Db {}
