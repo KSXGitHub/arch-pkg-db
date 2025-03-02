@@ -1,9 +1,15 @@
-use build_fs_tree::{FileSystemTree, dir, file};
+use build_fs_tree::{Build, FileSystemTree, MergeableFileSystemTree, dir, file};
+use derive_more::{AsRef, Deref};
 use libflate::gzip;
 use lzma_rs::xz_compress;
+use pipe_trait::Pipe;
+use rand::{Rng, distr::Alphanumeric, rng};
 use std::{
     borrow::Cow,
+    env::temp_dir,
+    fs::{create_dir_all, remove_dir_all},
     io::{self, Write},
+    path::PathBuf,
     sync::LazyLock,
 };
 
@@ -33,6 +39,16 @@ pub static BASH_TXZ: LazyLock<Vec<u8>> = LazyLock::new(|| {
     let mut xz = Vec::new();
     xz_compress(&mut BASH_TAR.as_slice(), &mut xz).unwrap();
     xz
+});
+
+pub static BASH_LOCAL: LazyLock<Temp> = LazyLock::new(|| {
+    let temp = Temp::new("testing-bash-local-db-");
+    BASH_DB_TREE
+        .clone()
+        .pipe(MergeableFileSystemTree::from)
+        .build(&temp)
+        .unwrap();
+    temp
 });
 
 fn append_file_to_tar<Writer>(
@@ -74,4 +90,37 @@ fn tar_from_tree(tree: &FileSystemTree<&str, &str>) -> io::Result<Vec<u8>> {
     let mut builder = tar::Builder::new(Vec::new());
     append_tree_to_tar(&mut builder, "", tree)?;
     builder.into_inner()
+}
+
+/// Temporary directory that would delete itself upon [`drop`].
+#[derive(Debug, AsRef, Deref)]
+#[as_ref(forward)]
+#[deref(forward)]
+pub struct Temp(PathBuf);
+
+impl Temp {
+    const SUFFIX_LEN: usize = 15;
+
+    /// Create a new temporary directory and return the handle.
+    pub fn new(name_prefix: &str) -> Self {
+        use core::fmt::Write;
+        let mut name = String::with_capacity(name_prefix.len() + Self::SUFFIX_LEN);
+        name.write_str(name_prefix).unwrap();
+        for code in rng().sample_iter(Alphanumeric).take(15) {
+            name.write_char(code.into()).unwrap();
+        }
+        let path = temp_dir().join(name);
+        create_dir_all(&path).unwrap();
+        Temp(path)
+    }
+}
+
+impl Drop for Temp {
+    /// Delete the temporary directory or print a warning on failure.
+    fn drop(&mut self) {
+        let path = &self.0;
+        if let Err(error) = remove_dir_all(path) {
+            eprintln!("warning: Failed to delete {path:?}: {error}");
+        }
+    }
 }

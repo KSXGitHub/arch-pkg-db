@@ -78,3 +78,10 @@ fn detect_archive_type() {
     let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
     assert_bash_db(&queriers);
 }
+
+#[test]
+fn valid_local() {
+    let texts = TextCollection::from_local_db(&BASH_LOCAL).unwrap();
+    let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
+    assert_bash_db(&queriers);
+}
