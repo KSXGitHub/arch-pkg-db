@@ -28,7 +28,7 @@ fn assert_bash_db(queriers: &mut MemoQueryDatabase<'_>) {
         Some(Description("Programmable completion for the bash shell")),
     );
 
-    assert!(queriers.lookup_mut(Name("not-exist")).is_err());
+    queriers.lookup_mut(Name("not-exist")).unwrap_err();
 }
 
 #[test]
