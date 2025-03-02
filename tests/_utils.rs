@@ -41,16 +41,6 @@ pub static BASH_TXZ: LazyLock<Vec<u8>> = LazyLock::new(|| {
     xz
 });
 
-pub static BASH_LOCAL: LazyLock<Temp> = LazyLock::new(|| {
-    let temp = Temp::new("testing-bash-local-db-");
-    BASH_DB_TREE
-        .clone()
-        .pipe(MergeableFileSystemTree::from)
-        .build(&temp)
-        .unwrap();
-    temp
-});
-
 fn append_file_to_tar<Writer>(
     builder: &mut tar::Builder<Writer>,
     path: &str,
@@ -112,6 +102,17 @@ impl Temp {
         let path = temp_dir().join(name);
         create_dir_all(&path).unwrap();
         Temp(path)
+    }
+
+    /// Create a bash workspace.
+    pub fn bash_db() -> Self {
+        let temp = Temp::new("testing-bash-local-db-");
+        BASH_DB_TREE
+            .clone()
+            .pipe(MergeableFileSystemTree::from)
+            .build(&temp)
+            .unwrap();
+        temp
     }
 }
 

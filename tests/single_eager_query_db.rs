@@ -81,7 +81,8 @@ fn detect_archive_type() {
 
 #[test]
 fn valid_local() {
-    let texts = TextCollection::from_local_db(&BASH_LOCAL).unwrap();
+    let local_db = Temp::bash_db();
+    let texts = TextCollection::from_local_db(&local_db).unwrap();
     let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
     assert_bash_db(&queriers);
 }
