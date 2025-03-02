@@ -38,7 +38,7 @@ pub trait Insert: PackageDatabase {
     fn insert(&mut self, querier: Self::Querier) -> Result<Self::Ejection, Self::Error>;
 }
 
-/// Utility methods to quickly construct a database by insertion.
+/// Utility methods to quickly construct a database by [insertion](Insert).
 pub trait Add: Insert<Querier: Sized> + Sized {
     /// Insert a querier into the database whose type implemented [`Insert`].
     fn add(mut self, querier: Self::Querier) -> Result<Self, Self::Error> {
