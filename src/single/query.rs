@@ -1,10 +1,10 @@
-mod add;
 mod db;
-mod get;
+mod insert;
+mod lookup;
 mod new;
 
-pub use add::{AddError, NoNameError};
-pub use db::LookupError;
+pub use insert::{InsertError, NoNameError};
+pub use lookup::LookupError;
 
 use arch_pkg_text::desc::{EagerQuerier, MemoQuerier};
 use std::collections::HashMap;
