@@ -104,7 +104,7 @@ impl Temp {
         Temp(path)
     }
 
-    /// Create a bash workspace.
+    /// Create a local db for bash packages.
     pub fn bash_db() -> Self {
         let temp = Temp::new("testing-bash-local-db-");
         BASH_DB_TREE
