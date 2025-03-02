@@ -14,7 +14,7 @@ macro_rules! impl_ref {
     ($container:ident $($lt:lifetime)?) => {
         impl<$($lt,)? Db: Lookup + ?Sized> Lookup for $container<$($lt,)? Db> {
             type Error = Db::Error;
-            fn lookup(&self, name: Name<'_>) -> Result<&'_ Self::Querier, Self::Error> {
+            fn lookup(&self, name: Name) -> Result<&Self::Querier, Self::Error> {
                 Db::lookup(self, name)
             }
         }
@@ -25,7 +25,7 @@ macro_rules! impl_mut {
     ($container:ident $($lt:lifetime)?) => {
         impl<$($lt,)? Db: LookupMut + ?Sized> LookupMut for $container<$($lt,)? Db> {
             type Error = Db::Error;
-            fn lookup_mut(&mut self, name: Name<'_>) -> Result<&'_ mut Self::Querier, Self::Error> {
+            fn lookup_mut(&mut self, name: Name) -> Result<&mut Self::Querier, Self::Error> {
                 Db::lookup_mut(self, name)
             }
         }

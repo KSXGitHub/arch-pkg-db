@@ -15,7 +15,7 @@ pub trait Lookup: PackageDatabase {
     /// Reason for lookup failure.
     type Error;
     /// Get an immutable reference to a package inside the database.
-    fn lookup(&self, name: Name<'_>) -> Result<&'_ Self::Querier, Self::Error>;
+    fn lookup(&self, name: Name) -> Result<&Self::Querier, Self::Error>;
 }
 
 /// Capability to get a mutable reference to a package inside the database.
@@ -23,7 +23,7 @@ pub trait LookupMut: PackageDatabase {
     /// Reason for lookup failure.
     type Error;
     /// Get a mutable reference to a package inside the database.
-    fn lookup_mut(&mut self, name: Name<'_>) -> Result<&'_ mut Self::Querier, Self::Error>;
+    fn lookup_mut(&mut self, name: Name) -> Result<&mut Self::Querier, Self::Error>;
 }
 
 /// Capability to insert a querier into the database.
