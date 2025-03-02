@@ -32,6 +32,7 @@ version = "0.0.0"
 dependencies = [
  "arch-pkg-text",
  "derive_more",
+ "is_type",
  "libflate",
  "pipe-trait",
  "tar",
@@ -175,6 +176,12 @@ dependencies = [
  "equivalent",
  "hashbrown 0.15.2",
 ]
+
+[[package]]
+name = "is_type"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fee7cda167bfafe6eb1c70926de545028f3169c9a8bcfa6db9d53f67aab2f3ec"
 
 [[package]]
 name = "iter-scan"

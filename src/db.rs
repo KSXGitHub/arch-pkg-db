@@ -2,9 +2,9 @@
 
 mod pointer;
 
-use crate::misc::IsType;
 use arch_pkg_text::value::Name;
 use core::convert::Infallible;
+use is_type::Is;
 
 /// Database of packages.
 pub trait PackageDatabase {
@@ -49,9 +49,9 @@ pub trait Add: Insert<Querier: Sized> + Sized {
     /// Insert a querier into the database whose type implemented [`Insert`] with an [`Infallible`] error.
     fn add_infallible(self, querier: Self::Querier) -> Self
     where
-        Self::Error: IsType<Infallible>,
+        Self::Error: Is<Type = Infallible>,
     {
-        let Ok(db) = self.add(querier).map_err(IsType::cast);
+        let Ok(db) = self.add(querier).map_err(Is::into_val);
         db
     }
 }

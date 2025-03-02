@@ -30,5 +30,6 @@ parking_lot = ["arch-pkg-text/parking_lot"]
 arch-pkg-text = "0.7.3"
 derive_more = { version = "2.0.1", default-features = false, features = ["display", "error"] }
 libflate = "2.1.0"
+is_type = "0.2.1"
 pipe-trait = "0.4.0"
 tar = "0.4.44"
