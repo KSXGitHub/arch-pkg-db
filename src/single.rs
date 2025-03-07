@@ -1,4 +1,4 @@
-//! Databases from single archives.
+//! Database of a single repository.
 
 pub mod query;
 pub mod text;
