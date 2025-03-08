@@ -1,9 +1,11 @@
 mod db;
 mod insert;
+mod list;
 mod lookup;
 mod new;
 
 pub use insert::{InsertError, NoNameError};
+pub use list::{Entries, EntriesMut, Names, Queriers, QueriersMut};
 pub use lookup::LookupError;
 
 use arch_pkg_text::desc::{EagerQuerier, MemoQuerier};

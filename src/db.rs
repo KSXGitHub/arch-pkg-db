@@ -28,6 +28,36 @@ pub trait LookupMut: PackageDatabase {
     fn lookup_mut(&mut self, name: Name) -> Result<&mut Self::Querier, Self::Error>;
 }
 
+/// Capability to iterate over all package names.
+pub trait IterNames: PackageDatabase {
+    /// Iterate over all package names.
+    fn names(&self) -> impl Iterator<Item = Name>;
+}
+
+/// Capability to iterate over all immutable queriers.
+pub trait IterQueriers: PackageDatabase {
+    /// Iterate over all immutable queriers.
+    fn queriers(&self) -> impl Iterator<Item = &Self::Querier>;
+}
+
+/// Capability to iterator over all mutable queriers.
+pub trait IterQueriersMut: PackageDatabase {
+    /// Iterate over all mutable queriers.
+    fn queriers_mut(&mut self) -> impl Iterator<Item = &mut Self::Querier>;
+}
+
+/// Capability to iterate over all pairs of package names and immutable queriers.
+pub trait IterEntries: PackageDatabase {
+    /// Get an iterator over all pairs of package names and queriers.
+    fn entries(&self) -> impl Iterator<Item = (Name, &Self::Querier)>;
+}
+
+/// Capability to iterate over all pairs of package names and mutable queriers.
+pub trait IterEntriesMut: PackageDatabase {
+    /// Get an iterator over all pairs of package names and mutable queriers.
+    fn entries_mut(&mut self) -> impl Iterator<Item = (Name, &mut Self::Querier)>;
+}
+
 /// Capability to insert a querier into the database.
 pub trait Insert: PackageDatabase {
     /// Ejected item on success.
