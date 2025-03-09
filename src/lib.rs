@@ -1,9 +1,3 @@
-mod db;
-pub use db::{
-    Add, Insert, IterEntries, IterEntriesMut, IterNames, IterQueriers, IterQueriersMut, Lookup,
-    LookupMut, PackageDatabase,
-};
-
 pub mod misc;
 pub mod multi;
 pub mod single;

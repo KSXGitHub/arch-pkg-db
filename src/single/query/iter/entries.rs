@@ -1,4 +1,4 @@
-use crate::{IterEntries, IterEntriesMut, QueryDatabase};
+use crate::QueryDatabase;
 use arch_pkg_text::value::Name;
 use core::iter::FusedIterator;
 use std::collections::hash_map;
@@ -60,17 +60,5 @@ impl<'a, Querier> QueryDatabase<'a, Querier> {
         EntriesMut {
             internal: self.internal.iter_mut(),
         }
-    }
-}
-
-impl<Querier> IterEntries for QueryDatabase<'_, Querier> {
-    fn entries(&self) -> impl Iterator<Item = (Name, &Self::Querier)> {
-        self.entries()
-    }
-}
-
-impl<Querier> IterEntriesMut for QueryDatabase<'_, Querier> {
-    fn entries_mut(&mut self) -> impl Iterator<Item = (Name, &mut Self::Querier)> {
-        self.entries_mut()
     }
 }

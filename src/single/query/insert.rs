@@ -1,5 +1,4 @@
 use super::QueryDatabase;
-use crate::Insert;
 use arch_pkg_text::desc::QueryMut;
 use derive_more::{Display, Error};
 use pipe_trait::Pipe;
@@ -36,16 +35,5 @@ where
         } else {
             Err(InsertError::NoName(NoNameError { querier }))
         }
-    }
-}
-
-impl<'a, Querier> Insert for QueryDatabase<'a, Querier>
-where
-    Querier: QueryMut<'a>,
-{
-    type Ejection = Option<Querier>;
-    type Error = InsertError<Querier>;
-    fn insert(&mut self, querier: Self::Querier) -> Result<Self::Ejection, Self::Error> {
-        self.insert(querier)
     }
 }

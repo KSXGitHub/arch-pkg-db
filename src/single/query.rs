@@ -1,4 +1,3 @@
-mod db;
 mod insert;
 mod iter;
 mod lookup;
@@ -6,7 +5,6 @@ mod new;
 
 pub use insert::{InsertError, NoNameError};
 pub use iter::{Entries, EntriesMut, Names, OwnedEntries, Queriers, QueriersMut};
-pub use lookup::LookupError;
 
 use arch_pkg_text::desc::{EagerQuerier, MemoQuerier};
 use std::collections::HashMap;

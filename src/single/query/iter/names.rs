@@ -1,4 +1,4 @@
-use crate::{IterNames, QueryDatabase};
+use crate::QueryDatabase;
 use arch_pkg_text::value::Name;
 use core::iter::FusedIterator;
 use std::collections::hash_map::Keys;
@@ -30,11 +30,5 @@ impl<'a, Querier> QueryDatabase<'a, Querier> {
         Names {
             internal: self.internal.keys(),
         }
-    }
-}
-
-impl<Querier> IterNames for QueryDatabase<'_, Querier> {
-    fn names(&self) -> impl Iterator<Item = Name> {
-        self.names()
     }
 }

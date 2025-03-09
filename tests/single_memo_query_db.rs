@@ -2,7 +2,7 @@ pub mod _utils;
 pub use _utils::*;
 
 use arch_pkg_db::{
-    LookupMut, MemoQueryDatabase, TextCollection,
+    MemoQueryDatabase, TextCollection,
     desc::{
         QueryMut,
         value::{Description, Name},
@@ -14,21 +14,21 @@ use pretty_assertions::assert_eq;
 fn assert_bash_db(queriers: &mut MemoQueryDatabase<'_>) {
     dbg!(&queriers);
 
-    let querier = queriers.lookup_mut(Name("bash")).unwrap();
+    let querier = queriers.get_mut(Name("bash")).unwrap();
     assert_eq!(querier.name_mut(), Some(Name("bash")));
     assert_eq!(
         querier.description_mut(),
         Some(Description("The GNU Bourne Again shell")),
     );
 
-    let querier = queriers.lookup_mut(Name("bash-completion")).unwrap();
+    let querier = queriers.get_mut(Name("bash-completion")).unwrap();
     assert_eq!(querier.name_mut(), Some(Name("bash-completion")));
     assert_eq!(
         querier.description_mut(),
         Some(Description("Programmable completion for the bash shell")),
     );
 
-    queriers.lookup_mut(Name("not-exist")).unwrap_err();
+    assert!(queriers.get_mut(Name("not-exist")).is_none());
 }
 
 #[test]
