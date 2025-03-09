@@ -8,6 +8,7 @@ use arch_pkg_db::{
         value::{Description, Name},
     },
 };
+use itertools::Itertools;
 use pipe_trait::Pipe;
 use pretty_assertions::assert_eq;
 
@@ -29,6 +30,31 @@ fn assert_bash_db(queriers: &EagerQueryDatabase<'_>) {
     );
 
     assert!(queriers.get(Name("not-exist")).is_none());
+
+    assert_eq!(
+        queriers.names().sorted().collect::<Vec<_>>(),
+        ["bash", "bash-completion"].map(Name),
+    );
+
+    assert_eq!(
+        queriers
+            .queriers()
+            .map(Query::name)
+            .sorted()
+            .collect::<Vec<_>>(),
+        ["bash", "bash-completion"].map(Name).map(Some),
+    );
+
+    assert_eq!(
+        queriers
+            .entries()
+            .map(|(name, querier)| (name, querier.name()))
+            .sorted()
+            .collect::<Vec<_>>(),
+        ["bash", "bash-completion"]
+            .map(Name)
+            .map(|name| (name, Some(name))),
+    )
 }
 
 #[test]

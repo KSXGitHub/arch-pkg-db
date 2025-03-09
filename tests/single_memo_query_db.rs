@@ -8,6 +8,7 @@ use arch_pkg_db::{
         value::{Description, Name},
     },
 };
+use itertools::Itertools;
 use pipe_trait::Pipe;
 use pretty_assertions::assert_eq;
 
@@ -29,6 +30,30 @@ fn assert_bash_db(queriers: &mut MemoQueryDatabase<'_>) {
     );
 
     assert!(queriers.get_mut(Name("not-exist")).is_none());
+    assert_eq!(
+        queriers.names().sorted().collect::<Vec<_>>(),
+        ["bash", "bash-completion"].map(Name),
+    );
+
+    assert_eq!(
+        queriers
+            .queriers_mut()
+            .map(QueryMut::name_mut)
+            .sorted()
+            .collect::<Vec<_>>(),
+        ["bash", "bash-completion"].map(Name).map(Some),
+    );
+
+    assert_eq!(
+        queriers
+            .entries_mut()
+            .map(|(name, querier)| (name, querier.name_mut()))
+            .sorted()
+            .collect::<Vec<_>>(),
+        ["bash", "bash-completion"]
+            .map(Name)
+            .map(|name| (name, Some(name))),
+    )
 }
 
 #[test]
