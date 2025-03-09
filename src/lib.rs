@@ -5,8 +5,10 @@ pub use db::{
 };
 
 pub mod misc;
+pub mod multi;
 pub mod single;
 
+pub use multi::{EagerMultiQueryDatabase, MemoMultiQueryDatabase, MultiQueryDatabase};
 pub use single::{EagerQueryDatabase, MemoQueryDatabase, QueryDatabase, Text, TextCollection};
 
 pub mod desc {
