@@ -1,5 +1,5 @@
+mod get;
 mod insert;
-mod lookup;
 mod new;
 
 use arch_pkg_text::desc::{EagerQuerier, MemoQuerier};

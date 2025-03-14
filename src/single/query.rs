@@ -1,6 +1,6 @@
+mod get;
 mod insert;
 mod iter;
-mod lookup;
 mod new;
 
 pub use insert::{InsertError, NoNameError};
