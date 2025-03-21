@@ -19,14 +19,14 @@ impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
 }
 
 impl<'a, Querier> MultiQuerier<'a, Querier> {
-    /// Get an immutable reference to a querier by package version.
-    pub fn get(&self, version: Version) -> Option<&Querier> {
-        self.internal.get(version.as_str())
+    /// Get an immutable reference to a querier by repository name.
+    pub fn get(&self, repository: &str) -> Option<&Querier> {
+        self.internal.get(repository)
     }
 
-    /// Get a mutable reference to a querier by package version.
-    pub fn get_mut(&mut self, version: Version) -> Option<&mut Querier> {
-        self.internal.get_mut(version.as_str())
+    /// Get a mutable reference to a querier by repository name.
+    pub fn get_mut(&mut self, repository: &str) -> Option<&mut Querier> {
+        self.internal.get_mut(repository)
     }
 
     /// Get an immutable reference to a querier whose package's version is greatest.
