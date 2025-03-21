@@ -40,9 +40,9 @@ dependencies = [
 
 [[package]]
 name = "arch-pkg-text"
-version = "0.7.3"
+version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "474ac48cd1e7da1f56b186dfce425a1f61d632a604d3d009d5d16e41fec46ead"
+checksum = "aa482ade6d60c7ba4878659d7f2b3c5e9f957d794ac706cc1176bb5467528595"
 dependencies = [
  "derive_more",
  "indexmap",
