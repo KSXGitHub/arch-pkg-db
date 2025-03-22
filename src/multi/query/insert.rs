@@ -19,13 +19,13 @@ pub enum InsertError<'a> {
 }
 
 impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
-    /// Add a `desc` file to the database.
+    /// Add a [mutable querier](QueryMut) of a `desc` file to the database.
     ///
     /// If an older querier already occupied the same pair of [name] and [repository], it will be returned inside `Ok(Some(_))`.
     ///
     /// [name]: arch_pkg_text::value::Name
     /// [repository]: RepositoryName
-    pub fn insert(
+    pub fn insert_mut(
         &mut self,
         repository: RepositoryName<'a>,
         mut querier: Querier,
