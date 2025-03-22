@@ -1,6 +1,6 @@
 use super::TextCollection;
 use crate::{QueryDatabase, single::query::InsertError};
-use arch_pkg_text::desc::{QueryMut, misc::ShouldReuse};
+use arch_pkg_text::desc::{Query, QueryMut, misc::ShouldReuse};
 use derive_more::{Display, Error};
 
 /// Error type when trying to create a [`QueryDatabase`] from a [`TextCollection`].
@@ -21,10 +21,10 @@ type ParseResult<'a, Querier> = Result<
 
 impl TextCollection {
     /// Parse a database of queriers.
-    pub fn parse<'a, Querier>(&'a self) -> ParseResult<'a, Querier>
+    fn parse_with<'a, Querier, Insert>(&'a self, mut insert: Insert) -> ParseResult<'a, Querier>
     where
         &'a str: TryInto<Querier>,
-        Querier: QueryMut<'a> + ShouldReuse,
+        Insert: FnMut(&mut QueryDatabase<'a, Querier>, Querier) -> Result<(), InsertError>,
     {
         let mut db = QueryDatabase::new();
 
@@ -33,10 +33,27 @@ impl TextCollection {
                 .as_str()
                 .try_into()
                 .map_err(TextCollectionParseError::Parse)?;
-            db.insert_mut(querier)
-                .map_err(TextCollectionParseError::Insert)?;
+            insert(&mut db, querier).map_err(TextCollectionParseError::Insert)?;
         }
 
         Ok(db)
+    }
+
+    /// Parse a database of [immutable queriers](Query).
+    pub fn parse<'a, Querier>(&'a self) -> ParseResult<'a, Querier>
+    where
+        &'a str: TryInto<Querier>,
+        Querier: Query<'a> + ShouldReuse,
+    {
+        self.parse_with(|db, querier| db.insert(querier).map(drop))
+    }
+
+    /// Parse a database of [mutable queriers](QueryMut).
+    pub fn parse_mut<'a, Querier>(&'a self) -> ParseResult<'a, Querier>
+    where
+        &'a str: TryInto<Querier>,
+        Querier: QueryMut<'a> + ShouldReuse,
+    {
+        self.parse_with(|db, querier| db.insert_mut(querier).map(drop))
     }
 }
