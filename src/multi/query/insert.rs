@@ -1,6 +1,9 @@
 use super::{MultiQueryDatabase, WithVersion};
 use crate::{misc::IntoAttached, multi::RepositoryName};
-use arch_pkg_text::{desc::QueryMut, value::ParseVersionError};
+use arch_pkg_text::{
+    desc::{QueryMut, misc::ShouldReuse},
+    value::ParseVersionError,
+};
 use derive_more::{Display, Error};
 use pipe_trait::Pipe;
 
@@ -15,7 +18,7 @@ pub enum InsertError<'a> {
     ParseVersion(#[error(not(source))] ParseVersionError<'a>),
 }
 
-impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
+impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
     /// Add a `desc` file to the database.
     ///
     /// If an older querier already occupied the same pair of [name] and [repository], it will be returned inside `Ok(Some(_))`.
