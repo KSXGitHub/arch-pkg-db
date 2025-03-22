@@ -1,4 +1,5 @@
-use super::QueryDatabase;
+use super::MultiQueryDatabase;
+use crate::multi::RepositoryName;
 use arch_pkg_text::desc::QueryMut;
 use derive_more::{Display, Error};
 use pipe_trait::Pipe;
@@ -19,21 +20,29 @@ pub enum InsertError<Querier> {
     NoName(NoNameError<Querier>),
 }
 
-impl<'a, Querier> QueryDatabase<'a, Querier>
+impl<'a, Querier> MultiQueryDatabase<'a, Querier>
 where
     Querier: QueryMut<'a>,
 {
     /// Add a `desc` file to the database.
     ///
-    /// If an older querier already occupied the same [name](arch_pkg_text::value::Name), it will be returned inside `Ok(Some(_))`.
+    /// If an older querier already occupied the same pair of [name] and [repository], it will be returned inside `Ok(Some(_))`.
+    ///
+    /// [name]: arch_pkg_text::value::Name
+    /// [repository]: RepositoryName
     pub fn insert(
         &mut self,
+        repository: RepositoryName<'a>,
         mut querier: Querier,
     ) -> Result<Option<Querier>, InsertError<Querier>> {
-        if let Some(name) = querier.name_mut() {
-            self.internal.insert(name.as_str(), querier).pipe(Ok)
-        } else {
-            Err(InsertError::NoName(NoNameError { querier }))
-        }
+        let Some(name) = querier.name_mut() else {
+            return Err(InsertError::NoName(NoNameError { querier }));
+        };
+        self.internal
+            .entry(&name)
+            .or_default()
+            .internal
+            .insert(&repository, querier)
+            .pipe(Ok)
     }
 }
