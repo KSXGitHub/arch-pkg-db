@@ -1,8 +1,11 @@
-use super::{MultiQuerier, MultiQueryDatabase};
-use crate::multi::RepositoryName;
+use super::{MultiQuerier, MultiQueryDatabase, WithRepository, WithVersion};
+use crate::{
+    misc::{AttachedUtils, IntoAttached},
+    multi::RepositoryName,
+};
 use arch_pkg_text::{
-    desc::{ParsedField, Query, QueryMut, misc::ReuseAdvice},
-    value::{Name, ParsedVersion, Version},
+    desc::{Query, QueryMut},
+    value::Name,
 };
 
 impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
@@ -21,81 +24,55 @@ impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
 
 impl<Querier> MultiQuerier<'_, Querier> {
     /// Get an immutable reference to a querier by repository name.
-    pub fn get(&self, repository: RepositoryName) -> Option<&Querier> {
-        self.internal.get(repository.as_str())
+    pub fn get(&self, repository: RepositoryName) -> Option<WithVersion<&Querier>> {
+        self.internal
+            .get(repository.as_str())
+            .map(AttachedUtils::as_deref)
+            .map(AttachedUtils::copied_attachment)
     }
 
     /// Get a mutable reference to a querier by repository name.
-    pub fn get_mut(&mut self, repository: RepositoryName) -> Option<&mut Querier> {
-        self.internal.get_mut(repository.as_str())
+    pub fn get_mut(&mut self, repository: RepositoryName) -> Option<WithVersion<&mut Querier>> {
+        self.internal
+            .get_mut(repository.as_str())
+            .map(AttachedUtils::as_deref_mut)
+            .map(AttachedUtils::copied_attachment)
     }
 }
 
 /// Return type of [`MultiQuerier::latest`] and [`MultiQuerier::latest_mut`].
-#[derive(Debug, Clone, Copy)]
-pub struct LatestQuerier<'repo, 'ver, Querier> {
-    pub repository: RepositoryName<'repo>,
-    pub version: Version<'ver>,
-    pub parsed_version: ParsedVersion<'ver>,
-    pub querier: Querier,
-}
+pub type LatestQuerier<'a, Querier> = WithRepository<'a, WithVersion<'a, Querier>>;
 
-impl<'a, Querier: Query<'a>> Query<'a> for LatestQuerier<'_, '_, Querier> {
-    fn query_raw_text(&self, field: ParsedField) -> Option<&'a str> {
-        self.querier.query_raw_text(field)
-    }
-}
-
-impl<'a, Querier: QueryMut<'a>> QueryMut<'a> for LatestQuerier<'_, '_, Querier> {
-    fn query_raw_text_mut(&mut self, field: ParsedField) -> Option<&'a str> {
-        self.querier.query_raw_text_mut(field)
-    }
-}
-
-impl<Querier: ReuseAdvice> ReuseAdvice for LatestQuerier<'_, '_, Querier> {
-    type ShouldReuse = Querier::ShouldReuse;
-}
-
-impl<Querier> MultiQuerier<'_, Querier> {
+impl<'a, Querier> MultiQuerier<'a, Querier> {
     /// Get an immutable reference to a querier whose package's version is greatest.
-    pub fn latest<'ver>(&self) -> Option<LatestQuerier<'_, 'ver, &Querier>>
+    pub fn latest<'query>(&self) -> Option<LatestQuerier<'a, &Querier>>
     where
-        Querier: Query<'ver>,
+        Querier: Query<'query>,
     {
         self.internal
             .iter()
-            .filter_map(|(repository, querier)| {
-                let repository = RepositoryName(repository);
-                let version = querier.version()?;
-                let parsed_version = version.parse().ok()?;
-                Some(LatestQuerier {
-                    repository,
-                    version,
-                    parsed_version,
-                    querier,
-                })
+            .max_by_key(|(_, querier)| querier.attachment())
+            .map(|(repository, querier)| {
+                querier
+                    .as_deref()
+                    .copied_attachment()
+                    .into_attached(RepositoryName(repository))
             })
-            .max_by_key(|querier| querier.parsed_version)
     }
 
     /// Get a mutable reference to a querier whose package's version is greatest.
-    pub fn latest_mut<'ver>(&mut self) -> Option<LatestQuerier<'_, 'ver, &mut Querier>>
+    pub fn latest_mut<'query>(&mut self) -> Option<LatestQuerier<'a, &mut Querier>>
     where
-        Querier: QueryMut<'ver>,
+        Querier: QueryMut<'query>,
     {
         self.internal
             .iter_mut()
-            .filter_map(|(repository, querier)| {
-                let repository = RepositoryName(repository);
-                let version = querier.version_mut()?;
-                let parsed_version = version.parse().ok()?;
-                Some(LatestQuerier {
-                    repository,
-                    version,
-                    parsed_version,
-                    querier,
-                })
+            .max_by_key(|(_, querier)| *querier.attachment())
+            .map(|(repository, querier)| {
+                querier
+                    .as_deref_mut()
+                    .copied_attachment()
+                    .into_attached(RepositoryName(repository))
             })
-            .max_by_key(|querier| querier.parsed_version)
     }
 }

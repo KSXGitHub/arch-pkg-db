@@ -2,16 +2,25 @@ mod get;
 mod insert;
 mod new;
 
-use arch_pkg_text::desc::{EagerQuerier, MemoQuerier};
+use super::RepositoryName;
+use crate::misc::Attached;
+use arch_pkg_text::{
+    desc::{EagerQuerier, MemoQuerier},
+    value::ParsedVersion,
+};
 use std::collections::HashMap;
 
-pub use get::LatestQuerier;
+/// Querier attached to a version.
+type WithVersion<'a, Querier> = Attached<Querier, ParsedVersion<'a>>;
+
+/// Querier attached to a repository name.
+type WithRepository<'a, Querier> = Attached<Querier, RepositoryName<'a>>;
 
 /// Queriers of multiple same-name packages from different repositories.
 #[derive(Debug, Clone)]
 pub struct MultiQuerier<'a, Querier> {
     /// Map repository names to their queriers.
-    internal: HashMap<&'a str, Querier>,
+    internal: HashMap<&'a str, WithVersion<'a, Querier>>,
 }
 
 /// Database to lookup queriers from their package names and repositories.
