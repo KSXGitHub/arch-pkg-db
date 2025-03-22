@@ -1,6 +1,16 @@
 use super::{Attached, IntoAttached};
 use core::{mem::replace, ops::Deref};
 
+/// Return type of [`AttachedUtils::flatten`].
+type Flattened<Main, Attachment> =
+    Attached<<Main as AttachedUtils>::Main, (Attachment, <Main as AttachedUtils>::Attachment)>;
+
+/// Return type of [`AttachedUtils::transpose`].
+type Transposed<Main, Attachment> = Attached<
+    Attached<<Main as AttachedUtils>::Main, Attachment>,
+    <Main as AttachedUtils>::Attachment,
+>;
+
 /// Methods to interact with [`Attached`].
 pub trait AttachedUtils: Sized + sealed::Sealed {
     /// Main data.
@@ -51,6 +61,26 @@ pub trait AttachedUtils: Sized + sealed::Sealed {
     {
         let (main, attachment) = self.into_tuple();
         f(main).into_attached(attachment)
+    }
+
+    /// Flatten a pair with nested main.
+    fn flatten(self) -> Flattened<Self::Main, Self::Attachment>
+    where
+        Self::Main: AttachedUtils,
+    {
+        let (main, attachment1) = self.into_tuple();
+        let (main, attachment2) = main.into_tuple();
+        main.into_attached((attachment1, attachment2))
+    }
+
+    /// Swap inner and outer attachment types of a pair with nested main.
+    fn transpose(self) -> Transposed<Self::Main, Self::Attachment>
+    where
+        Self::Main: AttachedUtils,
+    {
+        let (main, attachment1) = self.into_tuple();
+        let (main, attachment2) = main.into_tuple();
+        main.into_attached(attachment1).into_attached(attachment2)
     }
 
     /// Convert an immutable reference of a whole pair to an owned pair of immutable references.
