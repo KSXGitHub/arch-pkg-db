@@ -1,4 +1,5 @@
 use super::{MultiQuerier, MultiQueryDatabase};
+use crate::multi::RepositoryName;
 use arch_pkg_text::{
     desc::{Query, QueryMut},
     value::{Name, Version},
@@ -20,13 +21,13 @@ impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
 
 impl<'a, Querier> MultiQuerier<'a, Querier> {
     /// Get an immutable reference to a querier by repository name.
-    pub fn get(&self, repository: &str) -> Option<&Querier> {
-        self.internal.get(repository)
+    pub fn get(&self, repository: RepositoryName) -> Option<&Querier> {
+        self.internal.get(repository.as_str())
     }
 
     /// Get a mutable reference to a querier by repository name.
-    pub fn get_mut(&mut self, repository: &str) -> Option<&mut Querier> {
-        self.internal.get_mut(repository)
+    pub fn get_mut(&mut self, repository: RepositoryName) -> Option<&mut Querier> {
+        self.internal.get_mut(repository.as_str())
     }
 
     /// Get an immutable reference to a querier whose package's version is greatest.
