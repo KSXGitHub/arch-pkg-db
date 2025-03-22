@@ -33,7 +33,7 @@ impl TextCollection {
                 .as_str()
                 .try_into()
                 .map_err(TextCollectionParseError::Parse)?;
-            db.insert(querier)
+            db.insert_mut(querier)
                 .map_err(TextCollectionParseError::Insert)?;
         }
 
