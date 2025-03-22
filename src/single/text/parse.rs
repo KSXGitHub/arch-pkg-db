@@ -8,15 +8,15 @@ use derive_more::{Display, Error};
 /// [`QueryDatabase`]: crate::QueryDatabase
 #[derive(Debug, Display, Error)]
 #[display(bound(ParseError: Display))]
-pub enum TextCollectionParseError<Querier, ParseError> {
+pub enum TextCollectionParseError<ParseError> {
     Parse(ParseError),
-    Insert(InsertError<Querier>),
+    Insert(InsertError),
 }
 
 /// Return type of [`TextCollection::parse`].
 type ParseResult<'a, Querier> = Result<
     QueryDatabase<'a, Querier>,
-    TextCollectionParseError<Querier, <&'a str as TryInto<Querier>>::Error>,
+    TextCollectionParseError<<&'a str as TryInto<Querier>>::Error>,
 >;
 
 impl TextCollection {
