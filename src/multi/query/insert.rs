@@ -15,10 +15,7 @@ pub enum InsertError<'a> {
     ParseVersion(#[error(not(source))] ParseVersionError<'a>),
 }
 
-impl<'a, Querier> MultiQueryDatabase<'a, Querier>
-where
-    Querier: QueryMut<'a>,
-{
+impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
     /// Add a `desc` file to the database.
     ///
     /// If an older querier already occupied the same pair of [name] and [repository], it will be returned inside `Ok(Some(_))`.
@@ -29,7 +26,10 @@ where
         &mut self,
         repository: RepositoryName<'a>,
         mut querier: Querier,
-    ) -> Result<Option<WithVersion<'a, Querier>>, InsertError<'a>> {
+    ) -> Result<Option<WithVersion<'a, Querier>>, InsertError<'a>>
+    where
+        Querier: QueryMut<'a>,
+    {
         let name = querier.name_mut().ok_or(InsertError::NoName)?;
         let version = querier
             .version_mut()
