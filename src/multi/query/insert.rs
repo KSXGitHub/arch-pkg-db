@@ -1,7 +1,7 @@
 use super::{MultiQueryDatabase, WithVersion};
 use crate::{misc::IntoAttached, multi::RepositoryName};
 use arch_pkg_text::{
-    desc::{QueryMut, misc::ShouldReuse},
+    desc::{Query, QueryMut, misc::ShouldReuse},
     value::ParseVersionError,
 };
 use derive_more::{Display, Error};
@@ -19,6 +19,34 @@ pub enum InsertError<'a> {
 }
 
 impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
+    /// Add an [immutable querier](Query) of a `desc` file to the database.
+    ///
+    /// If an older querier already occupied the same pair of [name] and [repository], it will be returned inside `Ok(Some(_))`.
+    ///
+    /// [name]: arch_pkg_text::value::Name
+    /// [repository]: RepositoryName
+    pub fn insert(
+        &mut self,
+        repository: RepositoryName<'a>,
+        querier: Querier,
+    ) -> Result<Option<WithVersion<'a, Querier>>, InsertError<'a>>
+    where
+        Querier: Query<'a>,
+    {
+        let name = querier.name().ok_or(InsertError::NoName)?;
+        let version = querier
+            .version()
+            .ok_or(InsertError::NoVersion)?
+            .parse()
+            .map_err(InsertError::ParseVersion)?;
+        self.internal
+            .entry(&name)
+            .or_default()
+            .internal
+            .insert(&repository, querier.into_attached(version))
+            .pipe(Ok)
+    }
+
     /// Add a [mutable querier](QueryMut) of a `desc` file to the database.
     ///
     /// If an older querier already occupied the same pair of [name] and [repository], it will be returned inside `Ok(Some(_))`.
