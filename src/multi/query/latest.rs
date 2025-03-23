@@ -1,12 +1,9 @@
-use super::{MultiQuerier, WithRepository, WithVersion};
+use super::{LatestQuerier, MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest};
 use crate::{
     misc::{AttachedUtils, IntoAttached},
     multi::RepositoryName,
 };
 use arch_pkg_text::desc::{Query, QueryMut};
-
-/// Return type of [`MultiQuerier::latest`] and [`MultiQuerier::latest_mut`].
-pub type LatestQuerier<'a, Querier> = WithRepository<'a, WithVersion<'a, Querier>>;
 
 impl<'a, Querier> MultiQuerier<'a, Querier> {
     /// Get an immutable reference to a querier whose package's version is greatest.
@@ -39,5 +36,19 @@ impl<'a, Querier> MultiQuerier<'a, Querier> {
                     .copied_attachment()
                     .into_attached(RepositoryName(repository))
             })
+    }
+}
+
+impl<Querier> MultiQueryDatabase<'_, Querier> {
+    /// Combine the different repositories into a database view of immutable queriers
+    /// that lookup the latest versions of packages.
+    pub fn latest(&self) -> MultiQueryDatabaseLatest<&Self> {
+        MultiQueryDatabaseLatest { base: self }
+    }
+
+    /// Combine the different repositories into a database view of mutable queriers
+    /// that lookup the latest versions of packages.
+    pub fn latest_mut(&mut self) -> MultiQueryDatabaseLatest<&mut Self> {
+        MultiQueryDatabaseLatest { base: self }
     }
 }

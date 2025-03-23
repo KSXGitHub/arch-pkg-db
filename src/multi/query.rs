@@ -17,6 +17,9 @@ type WithVersion<'a, Querier> = Attached<Querier, ParsedVersion<'a>>;
 /// Querier attached to a repository name.
 type WithRepository<'a, Querier> = Attached<Querier, RepositoryName<'a>>;
 
+/// Return type of [`MultiQuerier::latest`] and [`MultiQuerier::latest_mut`].
+type LatestQuerier<'a, Querier> = WithRepository<'a, WithVersion<'a, Querier>>;
+
 /// Queriers of multiple same-name packages from different repositories.
 #[derive(Debug, Clone)]
 pub struct MultiQuerier<'a, Querier> {
@@ -31,8 +34,22 @@ pub struct MultiQueryDatabase<'a, Querier> {
     internal: HashMap<&'a str, MultiQuerier<'a, Querier>>,
 }
 
+/// Database view to lookup queriers of the latest packages from their names.
+#[derive(Debug, Clone, Copy)]
+pub struct MultiQueryDatabaseLatest<Ref> {
+    base: Ref,
+}
+
 /// Database to lookup eager queriers from their package names.
 pub type EagerMultiQueryDatabase<'a> = MultiQueryDatabase<'a, EagerQuerier<'a>>;
 
 /// Database to lookup memo queriers from their package names.
 pub type MemoMultiQueryDatabase<'a> = MultiQueryDatabase<'a, MemoQuerier<'a>>;
+
+/// Database to lookup eager queriers of the latest packages from their names.
+pub type EagerMultiQueryDatabaseLatest<'r, 'a> =
+    MultiQueryDatabaseLatest<&'r EagerMultiQueryDatabase<'a>>;
+
+/// Database to lookup memo queriers of the latest packages from their names.
+pub type MemoMultiQueryDatabaseLatest<'r, 'a> =
+    MultiQueryDatabaseLatest<&'r mut MemoMultiQueryDatabase<'a>>;
