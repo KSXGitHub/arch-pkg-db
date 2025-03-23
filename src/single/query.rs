@@ -3,7 +3,7 @@ mod insert;
 mod iter;
 mod new;
 
-pub use insert::InsertError;
+pub use insert::{InsertError, InsertNewerError, InsertNewerReturn};
 pub use iter::{Entries, EntriesMut, Names, OwnedEntries, Queriers, QueriersMut};
 
 use arch_pkg_text::desc::{EagerQuerier, MemoQuerier};
