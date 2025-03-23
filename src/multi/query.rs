@@ -3,6 +3,8 @@ mod insert;
 mod latest;
 mod new;
 
+pub use insert::InsertError;
+
 use super::RepositoryName;
 use crate::misc::Attached;
 use arch_pkg_text::{
