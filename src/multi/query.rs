@@ -1,5 +1,6 @@
 mod get;
 mod insert;
+mod latest;
 mod new;
 
 use super::RepositoryName;
