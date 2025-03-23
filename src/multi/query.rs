@@ -3,7 +3,7 @@ mod insert;
 mod latest;
 mod new;
 
-pub use insert::InsertError;
+pub use insert::{InsertError, InsertNewerReturn};
 
 use super::RepositoryName;
 use crate::misc::Attached;
