@@ -28,7 +28,7 @@ impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
         GetName: FnOnce(&mut Querier) -> Option<Name<'a>>,
     {
         let name = get_name(&mut querier).ok_or(InsertError::NoName)?;
-        self.internal.insert(name.as_str(), querier).pipe(Ok)
+        self.internal.insert(&name, querier).pipe(Ok)
     }
 
     /// Add an [immutable querier](Query) of a `desc` file to the database.
@@ -91,7 +91,7 @@ impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
     {
         let name = get_name(&mut querier).ok_or(InsertNewerError::NoName)?;
         let Some(existing) = self.internal.get_mut(name.as_str()) else {
-            self.internal.insert(name.as_str(), querier);
+            self.internal.insert(&name, querier);
             return Ok(InsertNewerReturn::Unoccupied);
         };
 
