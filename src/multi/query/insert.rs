@@ -7,7 +7,7 @@ use arch_pkg_text::{
 use derive_more::{Display, Error};
 use pipe_trait::Pipe;
 
-/// Error type of [`QueryDatabase::insert`].
+/// Error type of [`MultiQueryDatabase::insert`] and [`MultiQueryDatabase::insert_mut`].
 #[derive(Debug, Display, Error)]
 pub enum InsertError<'a> {
     #[display("Querier does not provide a name")]

@@ -13,7 +13,7 @@ pub enum TextCollectionParseError<ParseError> {
     Insert(InsertError),
 }
 
-/// Return type of [`TextCollection::parse`].
+/// Return type of [`TextCollection::parse`] and [`TextCollection::parse_mut`].
 type ParseResult<'a, Querier> = Result<
     QueryDatabase<'a, Querier>,
     TextCollectionParseError<<&'a str as TryInto<Querier>>::Error>,

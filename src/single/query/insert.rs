@@ -8,7 +8,7 @@ use core::mem::replace;
 use derive_more::{Display, Error};
 use pipe_trait::Pipe;
 
-/// Error type of [`QueryDatabase::insert`].
+/// Error type of [`QueryDatabase::insert`] and [`QueryDatabase::insert_mut`].
 #[derive(Debug, Display, Error)]
 pub enum InsertError {
     #[display("Querier could not provide a name")]
