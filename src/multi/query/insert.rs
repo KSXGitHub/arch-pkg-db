@@ -8,7 +8,7 @@ use derive_more::{Display, Error};
 use pipe_trait::Pipe;
 
 /// Error type of [`MultiQueryDatabase::insert`] and [`MultiQueryDatabase::insert_mut`].
-#[derive(Debug, Display, Error)]
+#[derive(Debug, Display, Clone, Error)]
 pub enum InsertError<'a> {
     #[display("Querier does not provide a name")]
     NoName,

@@ -9,7 +9,7 @@ use derive_more::{Display, Error};
 use pipe_trait::Pipe;
 
 /// Error type of [`QueryDatabase::insert`] and [`QueryDatabase::insert_mut`].
-#[derive(Debug, Display, Error)]
+#[derive(Debug, Display, Clone, Copy, Error)]
 pub enum InsertError {
     #[display("Querier could not provide a name")]
     NoName,
