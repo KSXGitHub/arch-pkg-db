@@ -1,9 +1,14 @@
 mod get;
 mod insert;
+mod iter;
 mod latest;
 mod new;
 
 pub use insert::{InsertError, InsertNewerReturn};
+pub use iter::{
+    Entries, EntriesMut, MultiEntries, MultiEntriesMut, MultiQueriers, MultiQueriersMut, Names,
+    Queriers, QueriersMut, RepositoryNames,
+};
 
 use super::RepositoryName;
 use crate::misc::Attached;
