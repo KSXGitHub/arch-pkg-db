@@ -1,6 +1,7 @@
-use crate::{MultiQueryDatabase, multi::MultiQuerier};
+use crate::multi::{MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest};
 use arch_pkg_text::value::Name;
 use core::iter::FusedIterator;
+use core::ops::Deref;
 use std::collections::hash_map::Keys;
 
 /// [Iterator] over all [package names](Name) in a [`MultiQueryDatabase`].
@@ -30,5 +31,15 @@ impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
         Names {
             internal: self.internal.keys(),
         }
+    }
+}
+
+impl<Ref> MultiQueryDatabaseLatest<Ref> {
+    /// Get an iterator over all [package names](Name).
+    pub fn names<'a, Querier>(&self) -> Names<'_, 'a, Querier>
+    where
+        Ref: Deref<Target = MultiQueryDatabase<'a, Querier>>,
+    {
+        self.base.names()
     }
 }
