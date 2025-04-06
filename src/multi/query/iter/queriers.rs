@@ -4,6 +4,7 @@ use crate::multi::{
 };
 use arch_pkg_text::desc::Query;
 use core::{iter::FusedIterator, ops::Deref};
+use pipe_trait::Pipe;
 use std::collections::hash_map::{Values, ValuesMut};
 
 /// [Iterator] over all immutable queriers in a [`MultiQueryDatabase`].
@@ -136,7 +137,7 @@ impl<'r, 'query, Querier: Query<'query>> Iterator for LatestQueriers<'r, 'query,
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
-        self.internal.size_hint()
+        (0, self.internal.len().pipe(Some))
     }
 
     fn count(self) -> usize {
