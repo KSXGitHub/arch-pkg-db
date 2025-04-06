@@ -2,8 +2,11 @@ use crate::multi::{
     MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest,
     query::{LatestQuerier, WithVersion},
 };
-use arch_pkg_text::desc::Query;
-use core::{iter::FusedIterator, ops::Deref};
+use arch_pkg_text::desc::{Query, QueryMut};
+use core::{
+    iter::FusedIterator,
+    ops::{Deref, DerefMut},
+};
 use pipe_trait::Pipe;
 use std::collections::hash_map::{Values, ValuesMut};
 
@@ -78,6 +81,20 @@ impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
     /// Get an iterator over all mutable queriers.
     pub fn queriers_mut(&mut self) -> MultiQueriersMut<'_, 'a, Querier> {
         MultiQueriersMut {
+            internal: self.internal.values_mut(),
+        }
+    }
+
+    /// Get an iterator over all immutable queriers of the latest versions of each package.
+    pub fn latest_queriers(&self) -> LatestQueriers<'_, 'a, Querier> {
+        LatestQueriers {
+            internal: self.internal.values(),
+        }
+    }
+
+    /// Get an iterator over all mutable queriers of the latest versions of each package.
+    pub fn latest_queriers_mut(&mut self) -> LatestQueriersMut<'_, 'a, Querier> {
+        LatestQueriersMut {
             internal: self.internal.values_mut(),
         }
     }
@@ -213,9 +230,7 @@ impl<Ref> MultiQueryDatabaseLatest<Ref> {
     where
         Ref: Deref<Target = MultiQueryDatabase<'query, Querier>>,
     {
-        LatestQueriers {
-            internal: self.base.internal.values(),
-        }
+        self.base.latest_queriers()
     }
 
     /// Get an iterator over all mutable queriers.
@@ -223,8 +238,6 @@ impl<Ref> MultiQueryDatabaseLatest<Ref> {
     where
         Ref: DerefMut<Target = MultiQueryDatabase<'query, Querier>>,
     {
-        LatestQueriersMut {
-            internal: self.base.internal.values_mut(),
-        }
+        self.base.latest_queriers_mut()
     }
 }
