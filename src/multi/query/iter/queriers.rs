@@ -1,8 +1,9 @@
-use crate::{
-    MultiQueryDatabase,
-    multi::{MultiQuerier, query::WithVersion},
+use crate::multi::{
+    MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest,
+    query::{LatestQuerier, WithVersion},
 };
-use core::iter::FusedIterator;
+use arch_pkg_text::desc::Query;
+use core::{iter::FusedIterator, ops::Deref};
 use std::collections::hash_map::{Values, ValuesMut};
 
 /// [Iterator] over all immutable queriers in a [`MultiQueryDatabase`].
@@ -117,6 +118,42 @@ impl<'a, Querier> MultiQuerier<'a, Querier> {
     pub fn queriers_mut(&mut self) -> QueriersMut<'_, 'a, Querier> {
         QueriersMut {
             internal: self.internal.values_mut(),
+        }
+    }
+}
+
+/// [Iterator] over all immutable queriers in a [`MultiQueryDatabaseLatest`].
+#[derive(Debug, Clone)]
+pub struct LatestQueriers<'r, 'query, Querier> {
+    internal: Values<'r, &'query str, MultiQuerier<'query, Querier>>,
+}
+
+impl<'r, 'query, Querier: Query<'query>> Iterator for LatestQueriers<'r, 'query, Querier> {
+    type Item = LatestQuerier<'query, &'r Querier>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.internal.next()?.latest()
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
+    }
+}
+
+impl<'query, Querier: Query<'query>> FusedIterator for LatestQueriers<'_, 'query, Querier> {}
+
+impl<Ref> MultiQueryDatabaseLatest<Ref> {
+    /// Get an iterator over all immutable queriers.
+    pub fn queriers<'query, Querier>(&self) -> LatestQueriers<'_, 'query, Querier>
+    where
+        Ref: Deref<Target = MultiQueryDatabase<'query, Querier>>,
+    {
+        LatestQueriers {
+            internal: self.base.internal.values(),
         }
     }
 }
