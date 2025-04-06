@@ -183,6 +183,30 @@ impl<'r, 'query, Querier: Query<'query>> Iterator for LatestQueriers<'r, 'query,
 
 impl<'query, Querier: Query<'query>> FusedIterator for LatestQueriers<'_, 'query, Querier> {}
 
+/// [Iterator] over all mutable queriers in a [`MultiQueryDatabaseLatest`].
+#[derive(Debug)]
+pub struct LatestQueriersMut<'r, 'query, Querier> {
+    internal: ValuesMut<'r, &'query str, MultiQuerier<'query, Querier>>,
+}
+
+impl<'r, 'query, Querier: QueryMut<'query>> Iterator for LatestQueriersMut<'r, 'query, Querier> {
+    type Item = LatestQuerier<'query, &'r mut Querier>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.internal.next()?.latest_mut()
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        (0, self.internal.len().pipe(Some))
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
+    }
+}
+
+impl<'query, Querier: QueryMut<'query>> FusedIterator for LatestQueriersMut<'_, 'query, Querier> {}
+
 impl<Ref> MultiQueryDatabaseLatest<Ref> {
     /// Get an iterator over all immutable queriers.
     pub fn queriers<'query, Querier>(&self) -> LatestQueriers<'_, 'query, Querier>
@@ -191,6 +215,16 @@ impl<Ref> MultiQueryDatabaseLatest<Ref> {
     {
         LatestQueriers {
             internal: self.base.internal.values(),
+        }
+    }
+
+    /// Get an iterator over all mutable queriers.
+    pub fn queriers_mut<'query, Querier>(&mut self) -> LatestQueriersMut<'_, 'query, Querier>
+    where
+        Ref: DerefMut<Target = MultiQueryDatabase<'query, Querier>>,
+    {
+        LatestQueriersMut {
+            internal: self.base.internal.values_mut(),
         }
     }
 }
