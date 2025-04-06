@@ -10,8 +10,17 @@ pub struct Queriers<'r, 'name, Querier> {
 
 impl<'r, Querier> Iterator for Queriers<'r, '_, Querier> {
     type Item = &'r Querier;
+
     fn next(&mut self) -> Option<Self::Item> {
         self.internal.next()
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 
@@ -31,8 +40,17 @@ pub struct QueriersMut<'r, 'name, Querier> {
 
 impl<'r, Querier> Iterator for QueriersMut<'r, '_, Querier> {
     type Item = &'r mut Querier;
+
     fn next(&mut self) -> Option<Self::Item> {
         self.internal.next()
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 

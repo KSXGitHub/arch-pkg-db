@@ -9,8 +9,17 @@ pub struct RepositoryNames<'r, 'query, Querier> {
 
 impl<'query, Querier> Iterator for RepositoryNames<'_, 'query, Querier> {
     type Item = RepositoryName<'query>;
+
     fn next(&mut self) -> Option<Self::Item> {
         self.internal.next().copied().map(RepositoryName)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 

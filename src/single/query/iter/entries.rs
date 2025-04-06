@@ -11,9 +11,18 @@ pub struct Entries<'r, 'name, Querier> {
 
 impl<'r, 'name, Querier> Iterator for Entries<'r, 'name, Querier> {
     type Item = (Name<'name>, &'r Querier);
+
     fn next(&mut self) -> Option<Self::Item> {
         let (name, querier) = self.internal.next()?;
         Some((Name(name), querier))
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 
@@ -33,9 +42,18 @@ pub struct EntriesMut<'r, 'name, Querier> {
 
 impl<'r, 'name, Querier> Iterator for EntriesMut<'r, 'name, Querier> {
     type Item = (Name<'name>, &'r mut Querier);
+
     fn next(&mut self) -> Option<Self::Item> {
         let (name, querier) = self.internal.next()?;
         Some((Name(name), querier))
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 

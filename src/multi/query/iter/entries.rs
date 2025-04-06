@@ -14,9 +14,18 @@ pub struct MultiEntries<'r, 'query, Querier> {
 
 impl<'r, 'query, Querier> Iterator for MultiEntries<'r, 'query, Querier> {
     type Item = (Name<'query>, &'r MultiQuerier<'query, Querier>);
+
     fn next(&mut self) -> Option<Self::Item> {
         let (name, querier) = self.internal.next()?;
         Some((Name(name), querier))
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 
@@ -36,9 +45,18 @@ pub struct MultiEntriesMut<'r, 'query, Querier> {
 
 impl<'r, 'query, Querier> Iterator for MultiEntriesMut<'r, 'query, Querier> {
     type Item = (Name<'query>, &'r mut MultiQuerier<'query, Querier>);
+
     fn next(&mut self) -> Option<Self::Item> {
         let (name, querier) = self.internal.next()?;
         Some((Name(name), querier))
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 
@@ -74,9 +92,18 @@ pub struct Entries<'r, 'query, Querier> {
 
 impl<'r, 'query, Querier> Iterator for Entries<'r, 'query, Querier> {
     type Item = (RepositoryName<'query>, &'r Querier);
+
     fn next(&mut self) -> Option<Self::Item> {
         let (name, querier) = self.internal.next()?;
         Some((RepositoryName(name), querier))
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 
@@ -96,9 +123,18 @@ pub struct EntriesMut<'r, 'query, Querier> {
 
 impl<'r, 'query, Querier> Iterator for EntriesMut<'r, 'query, Querier> {
     type Item = (RepositoryName<'query>, &'r mut WithVersion<'query, Querier>);
+
     fn next(&mut self) -> Option<Self::Item> {
         let (name, querier) = self.internal.next()?;
         Some((RepositoryName(name), querier))
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 

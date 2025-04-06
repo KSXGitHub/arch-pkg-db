@@ -10,9 +10,18 @@ pub struct OwnedEntries<'name, Querier> {
 
 impl<'name, Querier> Iterator for OwnedEntries<'name, Querier> {
     type Item = (Name<'name>, Querier);
+
     fn next(&mut self) -> Option<Self::Item> {
         let (name, querier) = self.internal.next()?;
         Some((Name(name), querier))
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 

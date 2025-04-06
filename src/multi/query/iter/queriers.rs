@@ -15,8 +15,17 @@ pub struct MultiQueriers<'r, 'query, Querier> {
 
 impl<'r, 'query, Querier> Iterator for MultiQueriers<'r, 'query, Querier> {
     type Item = &'r MultiQuerier<'query, Querier>;
+
     fn next(&mut self) -> Option<Self::Item> {
         self.internal.next()
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 
@@ -36,8 +45,17 @@ pub struct MultiQueriersMut<'r, 'query, Querier> {
 
 impl<'r, 'query, Querier> Iterator for MultiQueriersMut<'r, 'query, Querier> {
     type Item = &'r mut MultiQuerier<'query, Querier>;
+
     fn next(&mut self) -> Option<Self::Item> {
         self.internal.next()
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 
@@ -73,8 +91,17 @@ pub struct Queriers<'r, 'query, Querier> {
 
 impl<'r, 'query, Querier> Iterator for Queriers<'r, 'query, Querier> {
     type Item = &'r WithVersion<'query, Querier>;
+
     fn next(&mut self) -> Option<Self::Item> {
         self.internal.next()
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 
@@ -94,8 +121,17 @@ pub struct QueriersMut<'r, 'query, Querier> {
 
 impl<'r, 'query, Querier> Iterator for QueriersMut<'r, 'query, Querier> {
     type Item = &'r mut WithVersion<'query, Querier>;
+
     fn next(&mut self) -> Option<Self::Item> {
         self.internal.next()
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 

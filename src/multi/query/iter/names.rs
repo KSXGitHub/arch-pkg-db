@@ -12,8 +12,17 @@ pub struct Names<'r, 'query, Querier> {
 
 impl<'query, Querier> Iterator for Names<'_, 'query, Querier> {
     type Item = Name<'query>;
+
     fn next(&mut self) -> Option<Self::Item> {
         self.internal.next().copied().map(Name)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.internal.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
     }
 }
 
