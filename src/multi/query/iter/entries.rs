@@ -1,7 +1,4 @@
-use crate::{
-    MultiQueryDatabase,
-    multi::{MultiQuerier, RepositoryName, query::WithVersion},
-};
+use crate::multi::{MultiQuerier, MultiQueryDatabase, RepositoryName, query::WithVersion};
 use arch_pkg_text::value::Name;
 use core::iter::FusedIterator;
 use std::collections::hash_map;
