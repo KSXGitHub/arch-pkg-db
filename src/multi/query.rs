@@ -6,8 +6,9 @@ mod new;
 
 pub use insert::{InsertError, InsertNewerReturn};
 pub use iter::{
-    Entries, EntriesMut, MultiEntries, MultiEntriesMut, MultiQueriers, MultiQueriersMut, Names,
-    Queriers, QueriersMut, RepositoryNames,
+    Entries, EntriesMut, LatestEntries, LatestEntriesMut, LatestQueriers, LatestQueriersMut,
+    MultiEntries, MultiEntriesMut, MultiQueriers, MultiQueriersMut, Names, Queriers, QueriersMut,
+    RepositoryNames,
 };
 
 use super::RepositoryName;
