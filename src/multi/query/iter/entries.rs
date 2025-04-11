@@ -1,6 +1,11 @@
-use crate::multi::{MultiQuerier, MultiQueryDatabase, RepositoryName, query::WithVersion};
+use crate::multi::{
+    MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest, RepositoryName,
+    query::{LatestQuerier, WithVersion},
+};
+use arch_pkg_text::desc::Query;
 use arch_pkg_text::value::Name;
-use core::iter::FusedIterator;
+use core::{iter::FusedIterator, ops::Deref};
+use pipe_trait::Pipe;
 use std::collections::hash_map;
 
 /// [Iterator] over all pairs of [package names](Name) and immutable queriers in a [`MultiQueryDatabase`].
@@ -77,6 +82,14 @@ impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
     pub fn entries_mut(&mut self) -> MultiEntriesMut<'_, 'a, Querier> {
         MultiEntriesMut {
             internal: self.internal.iter_mut(),
+        }
+    }
+
+    /// Get an iterator over all pairs of [package names](Name) and immutable queriers of
+    /// the latest versions of each package.
+    pub fn latest_entries(&self) -> LatestEntries<'_, 'a, Querier> {
+        LatestEntries {
+            internal: self.internal.iter(),
         }
     }
 }
@@ -156,5 +169,42 @@ impl<'a, Querier> MultiQuerier<'a, Querier> {
         EntriesMut {
             internal: self.internal.iter_mut(),
         }
+    }
+}
+
+/// [Iterator] over all pairs of [package names](Name) and immutable queriers in [`MultiQueryDatabaseLatest`].
+#[derive(Debug, Clone)]
+pub struct LatestEntries<'r, 'query, Querier> {
+    internal: hash_map::Iter<'r, &'query str, MultiQuerier<'query, Querier>>,
+}
+
+impl<'r, 'query, Querier: Query<'query>> Iterator for LatestEntries<'r, 'query, Querier> {
+    type Item = (Name<'query>, LatestQuerier<'query, &'r Querier>);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let (name, querier) = self.internal.next()?;
+        let name = Name(name);
+        let querier = querier.latest()?;
+        Some((name, querier))
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        (0, self.internal.len().pipe(Some))
+    }
+
+    fn count(self) -> usize {
+        self.internal.count()
+    }
+}
+
+impl<'query, Querier: Query<'query>> FusedIterator for LatestEntries<'_, 'query, Querier> {}
+
+impl<Ref> MultiQueryDatabaseLatest<Ref> {
+    /// Get an iterator over all pairs of [package names](Name) and immutable queriers.
+    pub fn entries<'query, Querier>(&self) -> LatestEntries<'_, 'query, Querier>
+    where
+        Ref: Deref<Target = MultiQueryDatabase<'query, Querier>>,
+    {
+        self.base.latest_entries()
     }
 }
