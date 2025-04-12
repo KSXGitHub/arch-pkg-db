@@ -1,6 +1,7 @@
 use crate::QueryDatabase;
 use arch_pkg_text::value::Name;
-use std::{collections::hash_map, iter::FusedIterator};
+use core::iter::FusedIterator;
+use std::collections::hash_map;
 
 /// [Iterator] over all pairs of [package names](Name) and owned queriers from a [`QueryDatabase`].
 #[derive(Debug)]
