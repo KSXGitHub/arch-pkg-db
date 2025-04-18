@@ -26,7 +26,7 @@ impl TextCollection {
         &'a str: TryInto<Querier>,
         Insert: FnMut(&mut QueryDatabase<'a, Querier>, Querier) -> Result<(), InsertError>,
     {
-        let mut db = QueryDatabase::new();
+        let mut db = QueryDatabase::with_capacity(self.internal.len());
 
         for text in &self.internal {
             let querier = text

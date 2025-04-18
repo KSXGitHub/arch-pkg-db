@@ -8,6 +8,13 @@ impl<Querier> QueryDatabase<'_, Querier> {
             internal: HashMap::new(),
         }
     }
+
+    /// Create an empty database with at least the specified capacity.
+    pub fn with_capacity(capacity: usize) -> Self {
+        QueryDatabase {
+            internal: HashMap::with_capacity(capacity),
+        }
+    }
 }
 
 impl<Querier> Default for QueryDatabase<'_, Querier> {
