@@ -78,7 +78,7 @@ pub enum InsertNewerError<'a> {
 
 impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
     /// Add a querier of a `desc` file to the database unless the entry was already occupied by a querier whose
-    /// package version is not older than the provided querier.
+    /// [package version](arch_pkg_text::value::Version) is not older than the provided querier.
     fn insert_newer_with<GetName, GetVersion>(
         &mut self,
         mut querier: Querier,
@@ -114,7 +114,7 @@ impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
     }
 
     /// Add an [immutable querier](Query) of a `desc` file to the database unless the entry was already occupied by a querier whose
-    /// package version is not older than the provided querier.
+    /// [package version](arch_pkg_text::value::Version) is not older than the provided querier.
     pub fn insert_newer(
         &mut self,
         querier: Querier,
@@ -130,7 +130,7 @@ impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
     }
 
     /// Add a [mutable querier](QueryMut) of a `desc` file to the database unless the entry was already occupied by a querier whose
-    /// package version is not older than the provided querier.
+    /// [package version](arch_pkg_text::value::Version) is not older than the provided querier.
     pub fn insert_newer_mut(
         &mut self,
         querier: Querier,
