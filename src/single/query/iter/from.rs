@@ -1,4 +1,4 @@
-use crate::single::query::{InsertError, QueryDatabase};
+use crate::single::query::{InsertError, InsertNewerError, QueryDatabase};
 use arch_pkg_text::{
     desc::{Query, QueryMut},
     misc::desc::ShouldReuse,
@@ -6,9 +6,7 @@ use arch_pkg_text::{
 
 impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
     /// Construct the database with an iterator of queriers of `desc` files.
-    ///
-    /// If there are collision between queriers regarding [name](arch_pkg_text::value::Name), the later querier would override the earlier.
-    fn from_queriers_with<QuerierIter, Insert, InsertSuccess>(
+    fn from_queriers_with<QuerierIter, Insert, InsertSuccess, InsertError>(
         queriers: QuerierIter,
         mut insert: Insert,
     ) -> Result<Self, InsertError>
@@ -47,5 +45,31 @@ impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
         QuerierIter: IntoIterator<Item = Querier>,
     {
         QueryDatabase::from_queriers_with(queriers, QueryDatabase::insert_mut)
+    }
+
+    /// Construct the database from an iterator of [immutable queriers](Query) of `desc` files as long as there was no existing `desc` file
+    /// whose [version](arch_pkg_text::value::Version) was not older than, and occupied the same [name](arch_pkg_text::value::Name) as
+    /// the inserting `desc` file.
+    pub fn from_newer_queriers<QuerierIter>(
+        queriers: QuerierIter,
+    ) -> Result<Self, InsertNewerError<'a>>
+    where
+        Querier: Query<'a>,
+        QuerierIter: IntoIterator<Item = Querier>,
+    {
+        QueryDatabase::from_queriers_with(queriers, QueryDatabase::insert_newer)
+    }
+
+    /// Construct the database from an iterator of [mutable queriers](QueryMut) of `desc` files as long as there was no existing `desc` file
+    /// whose [version](arch_pkg_text::value::Version) was not older than, and occupied the same [name](arch_pkg_text::value::Name) as
+    /// the inserting `desc` file.
+    pub fn from_newer_queriers_mut<QuerierIter>(
+        queriers: QuerierIter,
+    ) -> Result<Self, InsertNewerError<'a>>
+    where
+        Querier: QueryMut<'a>,
+        QuerierIter: IntoIterator<Item = Querier>,
+    {
+        QueryDatabase::from_queriers_with(queriers, QueryDatabase::insert_newer_mut)
     }
 }
