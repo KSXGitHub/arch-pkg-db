@@ -47,9 +47,10 @@ impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
         QueryDatabase::from_queriers_with(queriers, QueryDatabase::insert_mut)
     }
 
-    /// Construct the database from an iterator of [immutable queriers](Query) of `desc` files as long as there was no existing `desc` file
-    /// whose [version](arch_pkg_text::value::Version) was not older than, and occupied the same [name](arch_pkg_text::value::Name) as
-    /// the inserting `desc` file.
+    /// Construct the database from an iterator of [immutable queriers](Query) of `desc` files.
+    ///
+    /// If there are collision between queriers regarding [name](arch_pkg_text::value::Name), the one with newer
+    /// [package version](arch_pkg_text::value::Version) would override the older.
     pub fn from_newer_queriers<QuerierIter>(
         queriers: QuerierIter,
     ) -> Result<Self, InsertNewerError<'a>>
@@ -60,9 +61,10 @@ impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
         QueryDatabase::from_queriers_with(queriers, QueryDatabase::insert_newer)
     }
 
-    /// Construct the database from an iterator of [mutable queriers](QueryMut) of `desc` files as long as there was no existing `desc` file
-    /// whose [version](arch_pkg_text::value::Version) was not older than, and occupied the same [name](arch_pkg_text::value::Name) as
-    /// the inserting `desc` file.
+    /// Construct the database from an iterator of [mutable queriers](QueryMut) of `desc` files.
+    ///
+    /// If there are collision between queriers regarding [name](arch_pkg_text::value::Name), the one with newer
+    /// [package version](arch_pkg_text::value::Version) would override the older.
     pub fn from_newer_queriers_mut<QuerierIter>(
         queriers: QuerierIter,
     ) -> Result<Self, InsertNewerError<'a>>

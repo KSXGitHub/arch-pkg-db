@@ -47,9 +47,8 @@ impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
         self.extend_with(queriers, QueryDatabase::insert_mut)
     }
 
-    /// Extend the database with an iterator of [immutable queriers](Query) of `desc` files as long as there was no existing `desc` file
-    /// whose [version](arch_pkg_text::value::Version) was not older than, and occupied the same [name](arch_pkg_text::value::Name) as
-    /// the inserting `desc` file.
+    /// Extend the database with an iterator of [immutable queriers](Query) of `desc` files that don't share the same [name](arch_pkg_text::value::Name)
+    /// as an existing querier with a newer-or-equal [package version](arch_pkg_text::value::Version).
     pub fn extend_newer<QuerierIter>(
         &mut self,
         queriers: QuerierIter,
@@ -61,9 +60,8 @@ impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
         self.extend_with(queriers, QueryDatabase::insert_newer)
     }
 
-    /// Extend the database with an iterator of [mutable queriers](QueryMut) of `desc` files as long as there was no existing `desc` file
-    /// whose [version](arch_pkg_text::value::Version) was not older than, and occupied the same [name](arch_pkg_text::value::Name) as
-    /// the inserting `desc` file.
+    /// Extend the database with an iterator of [mutable queriers](QueryMut) of `desc` files that don't share the same [name](arch_pkg_text::value::Name)
+    /// as an existing querier with a newer-or-equal [package version](arch_pkg_text::value::Version).
     pub fn extend_newer_mut<QuerierIter>(
         &mut self,
         queriers: QuerierIter,
