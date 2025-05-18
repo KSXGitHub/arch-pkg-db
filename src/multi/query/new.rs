@@ -3,7 +3,7 @@ use std::collections::HashMap;
 
 impl<Querier> MultiQuerier<'_, Querier> {
     /// Create an empty queriers.
-    pub fn new() -> Self {
+    fn new() -> Self {
         MultiQuerier {
             internal: HashMap::new(),
         }
