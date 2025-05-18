@@ -23,6 +23,13 @@ impl<Querier> MultiQueryDatabase<'_, Querier> {
             internal: HashMap::new(),
         }
     }
+
+    /// Create an empty database with at least the specified capacity.
+    pub fn with_capacity(capacity: usize) -> Self {
+        MultiQueryDatabase {
+            internal: HashMap::with_capacity(capacity),
+        }
+    }
 }
 
 impl<Querier> Default for MultiQueryDatabase<'_, Querier> {
