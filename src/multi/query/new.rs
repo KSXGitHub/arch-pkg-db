@@ -2,7 +2,7 @@ use super::{MultiQuerier, MultiQueryDatabase};
 use std::collections::HashMap;
 
 impl<Querier> MultiQuerier<'_, Querier> {
-    /// Create an empty queriers.
+    /// Create an empty set of queriers.
     fn new() -> Self {
         MultiQuerier {
             internal: HashMap::new(),
