@@ -21,10 +21,14 @@ type ParseResult<'a, Querier> = Result<
 
 impl TextCollection {
     /// Parse a database of queriers.
-    fn parse_with<'a, Querier, Insert>(&'a self, mut insert: Insert) -> ParseResult<'a, Querier>
+    fn parse_with<'a, Querier, Insert, InsertSuccess>(
+        &'a self,
+        mut insert: Insert,
+    ) -> ParseResult<'a, Querier>
     where
         &'a str: TryInto<Querier>,
-        Insert: FnMut(&mut QueryDatabase<'a, Querier>, Querier) -> Result<(), InsertError>,
+        Insert:
+            FnMut(&mut QueryDatabase<'a, Querier>, Querier) -> Result<InsertSuccess, InsertError>,
     {
         let mut db = QueryDatabase::with_capacity(self.internal.len());
 
@@ -45,7 +49,7 @@ impl TextCollection {
         &'a str: TryInto<Querier>,
         Querier: Query<'a> + ShouldReuse,
     {
-        self.parse_with(|db, querier| db.insert(querier).map(drop))
+        self.parse_with(QueryDatabase::insert)
     }
 
     /// Parse a database of [mutable queriers](QueryMut).
@@ -54,7 +58,7 @@ impl TextCollection {
         &'a str: TryInto<Querier>,
         Querier: QueryMut<'a> + ShouldReuse,
     {
-        self.parse_with(|db, querier| db.insert_mut(querier).map(drop))
+        self.parse_with(QueryDatabase::insert_mut)
     }
 
     /// Parse a database of queriers in parallel.
