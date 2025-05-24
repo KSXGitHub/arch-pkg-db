@@ -6,8 +6,6 @@ use pipe_trait::Pipe;
 use rayon::prelude::*;
 
 /// Error type when trying to create a [`QueryDatabase`] from a [`TextCollection`].
-///
-/// [`QueryDatabase`]: crate::QueryDatabase
 #[derive(Debug, Display, Clone, Copy, Error)]
 #[display(bound(ParseError: Display))]
 pub enum TextCollectionParseError<ParseError> {
