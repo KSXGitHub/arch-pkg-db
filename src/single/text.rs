@@ -1,6 +1,7 @@
 mod extend;
 mod insert;
 mod item;
+mod iter;
 mod local;
 mod misc;
 mod new;
@@ -8,6 +9,7 @@ mod parse;
 
 pub mod archive;
 
+pub use iter::{TextIntoIter, TextIter, TextIterMut};
 pub use local::LoadLocalDbError;
 pub use parse::TextCollectionParseError;
 
