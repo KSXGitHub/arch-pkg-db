@@ -14,9 +14,8 @@ impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
         Insert: FnMut(&mut Self, RepositoryName<'a>, Querier) -> Result<InsertSuccess, InsertError>,
     {
         let pairs = pairs.into_iter();
-        if let (_, Some(cap)) = pairs.size_hint() {
-            self.internal.reserve(cap);
-        }
+        let (cap, _) = pairs.size_hint();
+        self.internal.reserve(cap);
         for (repo, querier) in pairs {
             insert(self, repo, querier)?;
         }

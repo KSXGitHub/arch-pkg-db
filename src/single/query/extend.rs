@@ -16,9 +16,8 @@ impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
         Insert: FnMut(&mut Self, Querier) -> Result<InsertSuccess, InsertError>,
     {
         let queriers = queriers.into_iter();
-        if let (_, Some(cap)) = queriers.size_hint() {
-            self.internal.reserve(cap);
-        }
+        let (cap, _) = queriers.size_hint();
+        self.internal.reserve(cap);
         for querier in queriers {
             insert(self, querier)?;
         }

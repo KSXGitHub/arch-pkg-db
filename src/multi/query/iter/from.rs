@@ -18,10 +18,8 @@ impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
         Insert: FnMut(&mut Self, RepositoryName<'a>, Querier) -> Result<InsertSuccess, InsertError>,
     {
         let pairs = pairs.into_iter();
-        let mut db = match pairs.size_hint() {
-            (_, Some(cap)) => MultiQueryDatabase::with_capacity(cap),
-            (_, None) => MultiQueryDatabase::new(),
-        };
+        let (cap, _) = pairs.size_hint();
+        let mut db = MultiQueryDatabase::with_capacity(cap);
         for (repo, querier) in pairs {
             insert(&mut db, repo, querier)?;
         }

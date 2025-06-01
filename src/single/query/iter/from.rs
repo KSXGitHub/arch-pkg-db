@@ -15,10 +15,8 @@ impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
         Insert: FnMut(&mut Self, Querier) -> Result<InsertSuccess, InsertError>,
     {
         let queriers = queriers.into_iter();
-        let mut db = match queriers.size_hint() {
-            (_, Some(cap)) => QueryDatabase::with_capacity(cap),
-            (_, None) => QueryDatabase::new(),
-        };
+        let (cap, _) = queriers.size_hint();
+        let mut db = QueryDatabase::with_capacity(cap);
         for querier in queriers {
             insert(&mut db, querier)?;
         }
