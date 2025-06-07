@@ -7,6 +7,7 @@ use arch_pkg_db::{
         Query,
         value::{Description, Name},
     },
+    single::query::Entry,
 };
 use itertools::Itertools;
 use pipe_trait::Pipe;
@@ -48,6 +49,7 @@ fn assert_bash_db(queriers: &EagerQueryDatabase<'_>) {
     assert_eq!(
         queriers
             .entries()
+            .map(Entry::into_tuple)
             .map(|(name, querier)| (name, querier.name()))
             .sorted()
             .collect::<Vec<_>>(),

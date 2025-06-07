@@ -7,6 +7,7 @@ use arch_pkg_db::{
         QueryMut,
         value::{Description, Name},
     },
+    single::query::Entry,
 };
 use itertools::Itertools;
 use pipe_trait::Pipe;
@@ -47,6 +48,7 @@ fn assert_bash_db(queriers: &mut MemoQueryDatabase<'_>) {
     assert_eq!(
         queriers
             .entries_mut()
+            .map(Entry::into_tuple)
             .map(|(name, querier)| (name, querier.name_mut()))
             .sorted()
             .collect::<Vec<_>>(),
