@@ -1,5 +1,7 @@
-use super::TextCollection;
+use super::{Text, TextCollection};
 use derive_more::{Display, Error};
+use pipe_trait::Pipe;
+use rayon::prelude::*;
 use std::{
     fs::{read_dir, read_to_string},
     io::{self, ErrorKind},
@@ -73,5 +75,61 @@ impl TextCollection {
     /// A local pacman database is a directory usually located at `$ARCH_ROOT/var/lib/pacman/local/`.
     pub fn from_local_db(local_db_path: &Path) -> Result<Self, LoadLocalDbError> {
         TextCollection::new().add_local_db(local_db_path)
+    }
+
+    /// Load data from a local pacman database in parallel.
+    ///
+    /// A local pacman database is a directory usually located at `$ARCH_ROOT/var/lib/pacman/local/`.
+    pub fn par_extend_from_local_db<'path>(
+        &mut self,
+        local_db_path: &'path Path,
+    ) -> Result<(), LoadLocalDbError<'path>> {
+        let texts = local_db_path
+            .pipe(read_dir)
+            .map_err(|error| LoadLocalDbError::ReadDir {
+                error,
+                path: local_db_path,
+            })?
+            .par_bridge()
+            .flatten()
+            .filter(|entry| {
+                entry
+                    .file_type()
+                    .ok()
+                    .map(|file_type| file_type.is_dir())
+                    .unwrap_or(false)
+            })
+            .map(|entry| -> Result<Option<String>, LoadLocalDbError> {
+                let file_path = entry.path().join("desc");
+                match read_to_string(&file_path) {
+                    Ok(text) => Ok(Some(text)),
+                    Err(error) if error.kind() == ErrorKind::NotFound => Ok(None),
+                    Err(error) => Err(LoadLocalDbError::ReadFile {
+                        error,
+                        path: file_path,
+                    }),
+                }
+            })
+            .collect::<Result<Vec<Option<String>>, LoadLocalDbError>>()?
+            .into_iter()
+            .flatten()
+            .map(Text::from);
+        self.extend(texts);
+        Ok(())
+    }
+
+    /// Load data from a local pacman database in parallel.
+    ///
+    /// A local pacman database is a directory usually located at `$ARCH_ROOT/var/lib/pacman/local/`.
+    pub fn par_add_local_db(mut self, local_db_path: &Path) -> Result<Self, LoadLocalDbError> {
+        self.par_extend_from_local_db(local_db_path)?;
+        Ok(self)
+    }
+
+    /// Load data from a local pacman database in parallel.
+    ///
+    /// A local pacman database is a directory usually located at `$ARCH_ROOT/var/lib/pacman/local/`.
+    pub fn par_from_local_db(local_db_path: &Path) -> Result<Self, LoadLocalDbError> {
+        TextCollection::new().par_add_local_db(local_db_path)
     }
 }
