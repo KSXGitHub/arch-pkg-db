@@ -1,5 +1,5 @@
+use super::Entry;
 use crate::QueryDatabase;
-use arch_pkg_text::value::Name;
 use core::iter::FusedIterator;
 use std::collections::hash_map;
 
@@ -10,11 +10,11 @@ pub struct OwnedEntries<'name, Querier> {
 }
 
 impl<'name, Querier> Iterator for OwnedEntries<'name, Querier> {
-    type Item = (Name<'name>, Querier);
+    type Item = Entry<'name, Querier>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let (name, querier) = self.internal.next()?;
-        Some((Name(name), querier))
+        Some(Entry::new_unchecked(name, querier))
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
@@ -36,7 +36,7 @@ impl<Querier> FusedIterator for OwnedEntries<'_, Querier> {}
 
 impl<'a, Querier> IntoIterator for QueryDatabase<'a, Querier> {
     type IntoIter = OwnedEntries<'a, Querier>;
-    type Item = (Name<'a>, Querier);
+    type Item = Entry<'a, Querier>;
     fn into_iter(self) -> Self::IntoIter {
         OwnedEntries {
             internal: self.internal.into_iter(),

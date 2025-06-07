@@ -1,5 +1,5 @@
+use super::Entry;
 use crate::QueryDatabase;
-use arch_pkg_text::value::Name;
 use core::iter::FusedIterator;
 use std::collections::hash_map;
 
@@ -10,11 +10,11 @@ pub struct Entries<'r, 'name, Querier> {
 }
 
 impl<'r, 'name, Querier> Iterator for Entries<'r, 'name, Querier> {
-    type Item = (Name<'name>, &'r Querier);
+    type Item = Entry<'name, &'r Querier>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let (name, querier) = self.internal.next()?;
-        Some((Name(name), querier))
+        Some(Entry::new_unchecked(name, querier))
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
@@ -41,11 +41,11 @@ pub struct EntriesMut<'r, 'name, Querier> {
 }
 
 impl<'r, 'name, Querier> Iterator for EntriesMut<'r, 'name, Querier> {
-    type Item = (Name<'name>, &'r mut Querier);
+    type Item = Entry<'name, &'r mut Querier>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let (name, querier) = self.internal.next()?;
-        Some((Name(name), querier))
+        Some(Entry::new_unchecked(name, querier))
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
