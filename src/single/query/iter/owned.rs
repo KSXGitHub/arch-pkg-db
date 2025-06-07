@@ -3,7 +3,7 @@ use crate::QueryDatabase;
 use core::iter::FusedIterator;
 use std::collections::hash_map;
 
-/// [Iterator] over all pairs of [package names](Name) and owned queriers from a [`QueryDatabase`].
+/// [Iterator] over all pairs of [package names](arch_pkg_text::value::Name) and owned queriers from a [`QueryDatabase`].
 #[derive(Debug)]
 pub struct OwnedEntries<'name, Querier> {
     internal: hash_map::IntoIter<&'name str, Querier>,
