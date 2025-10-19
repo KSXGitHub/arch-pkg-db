@@ -96,7 +96,7 @@ impl Temp {
         use core::fmt::Write;
         let mut name = String::with_capacity(name_prefix.len() + Self::SUFFIX_LEN);
         name.write_str(name_prefix).unwrap();
-        for code in rng().sample_iter(Alphanumeric).take(15) {
+        for code in rng().sample_iter(Alphanumeric).take(Self::SUFFIX_LEN) {
             name.write_char(code.into()).unwrap();
         }
         let path = temp_dir().join(name);
