@@ -6,5 +6,5 @@ fn main() {
         .pipe_as_ref(TextCollection::from_local_db)
         .expect("load text collection");
     let db = texts.par_parse::<EagerQuerier>().expect("parse queriers");
-    dbg!(&db);
+    dbg!(&db); // TODO: do more
 }
