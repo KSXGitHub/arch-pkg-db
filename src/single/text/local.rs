@@ -65,7 +65,7 @@ impl TextCollection {
     /// Load data from a local pacman database.
     ///
     /// A local pacman database is a directory usually located at `$ARCH_ROOT/var/lib/pacman/local/`.
-    pub fn add_local_db(mut self, local_db_path: &Path) -> Result<Self, LoadLocalDbError> {
+    pub fn add_local_db(mut self, local_db_path: &'_ Path) -> Result<Self, LoadLocalDbError<'_>> {
         self.extend_from_local_db(local_db_path)?;
         Ok(self)
     }
@@ -73,7 +73,7 @@ impl TextCollection {
     /// Load data from a local pacman database.
     ///
     /// A local pacman database is a directory usually located at `$ARCH_ROOT/var/lib/pacman/local/`.
-    pub fn from_local_db(local_db_path: &Path) -> Result<Self, LoadLocalDbError> {
+    pub fn from_local_db(local_db_path: &'_ Path) -> Result<Self, LoadLocalDbError<'_>> {
         TextCollection::new().add_local_db(local_db_path)
     }
 
@@ -121,7 +121,10 @@ impl TextCollection {
     /// Load data from a local pacman database in parallel.
     ///
     /// A local pacman database is a directory usually located at `$ARCH_ROOT/var/lib/pacman/local/`.
-    pub fn par_add_local_db(mut self, local_db_path: &Path) -> Result<Self, LoadLocalDbError> {
+    pub fn par_add_local_db(
+        mut self,
+        local_db_path: &'_ Path,
+    ) -> Result<Self, LoadLocalDbError<'_>> {
         self.par_extend_from_local_db(local_db_path)?;
         Ok(self)
     }
@@ -129,7 +132,7 @@ impl TextCollection {
     /// Load data from a local pacman database in parallel.
     ///
     /// A local pacman database is a directory usually located at `$ARCH_ROOT/var/lib/pacman/local/`.
-    pub fn par_from_local_db(local_db_path: &Path) -> Result<Self, LoadLocalDbError> {
+    pub fn par_from_local_db(local_db_path: &Path) -> Result<Self, LoadLocalDbError<'_>> {
         TextCollection::new().par_add_local_db(local_db_path)
     }
 }

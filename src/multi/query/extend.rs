@@ -27,7 +27,7 @@ impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
     ///
     /// Old queriers which occupied the same pair of [repository](RepositoryName) and [name](arch_pkg_text::value::Name)
     /// would be replaced.
-    pub fn extend<PairIter>(&mut self, pairs: PairIter) -> Result<(), InsertError>
+    pub fn extend<PairIter>(&mut self, pairs: PairIter) -> Result<(), InsertError<'_>>
     where
         Querier: Query<'a>,
         PairIter: IntoIterator<Item = (RepositoryName<'a>, Querier)>,
@@ -40,7 +40,7 @@ impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
     ///
     /// Old queriers which occupied the same pair of [repository](RepositoryName) and [name](arch_pkg_text::value::Name)
     /// would be replaced.
-    pub fn extend_mut<PairIter>(&mut self, pairs: PairIter) -> Result<(), InsertError>
+    pub fn extend_mut<PairIter>(&mut self, pairs: PairIter) -> Result<(), InsertError<'_>>
     where
         Querier: QueryMut<'a>,
         PairIter: IntoIterator<Item = (RepositoryName<'a>, Querier)>,
@@ -54,7 +54,7 @@ impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
     /// An item from the iterator would replace an existing entry which occupied the same pair of [repository](RepositoryName)
     /// and [name](arch_pkg_text::value::Name) if the iterator's item has newer [version](arch_pkg_text::value::Version) than
     /// that of the existing entry.
-    pub fn extend_newer<PairIter>(&mut self, pairs: PairIter) -> Result<(), InsertError>
+    pub fn extend_newer<PairIter>(&mut self, pairs: PairIter) -> Result<(), InsertError<'_>>
     where
         Querier: Query<'a>,
         PairIter: IntoIterator<Item = (RepositoryName<'a>, Querier)>,
@@ -68,7 +68,7 @@ impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
     /// An item from the iterator would replace an existing entry which occupied the same pair of [repository](RepositoryName)
     /// and [name](arch_pkg_text::value::Name) if the iterator's item has newer [version](arch_pkg_text::value::Version) than
     /// that of the existing entry.
-    pub fn extend_newer_mut<PairIter>(&mut self, pairs: PairIter) -> Result<(), InsertError>
+    pub fn extend_newer_mut<PairIter>(&mut self, pairs: PairIter) -> Result<(), InsertError<'_>>
     where
         Querier: QueryMut<'a>,
         PairIter: IntoIterator<Item = (RepositoryName<'a>, Querier)>,

@@ -23,7 +23,7 @@ impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
 
 impl<Querier> MultiQuerier<'_, Querier> {
     /// Get an immutable reference to a querier by repository name.
-    pub fn get(&self, repository: RepositoryName) -> Option<WithVersion<&Querier>> {
+    pub fn get(&self, repository: RepositoryName) -> Option<WithVersion<'_, &Querier>> {
         self.internal
             .get(repository.as_str())
             .map(AttachedUtils::as_deref)
@@ -31,7 +31,7 @@ impl<Querier> MultiQuerier<'_, Querier> {
     }
 
     /// Get a mutable reference to a querier by repository name.
-    pub fn get_mut(&mut self, repository: RepositoryName) -> Option<WithVersion<&mut Querier>> {
+    pub fn get_mut(&mut self, repository: RepositoryName) -> Option<WithVersion<'_, &mut Querier>> {
         self.internal
             .get_mut(repository.as_str())
             .map(AttachedUtils::as_deref_mut)

@@ -39,7 +39,7 @@ impl FusedIterator for TextIter<'_> {}
 
 impl TextCollection {
     /// Iterate over immutable references to the items inside.
-    pub fn iter(&self) -> TextIter {
+    pub fn iter(&self) -> TextIter<'_> {
         TextIter {
             internal: self.internal.iter(),
         }
@@ -92,7 +92,7 @@ impl FusedIterator for TextIterMut<'_> {}
 
 impl TextCollection {
     /// Iterate over mutable references to the items inside.
-    pub fn iter_mut(&mut self) -> TextIterMut {
+    pub fn iter_mut(&mut self) -> TextIterMut<'_> {
         TextIterMut {
             internal: self.internal.iter_mut(),
         }

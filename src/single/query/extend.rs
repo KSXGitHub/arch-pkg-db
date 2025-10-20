@@ -51,7 +51,7 @@ impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
     pub fn extend_newer<QuerierIter>(
         &mut self,
         queriers: QuerierIter,
-    ) -> Result<(), InsertNewerError>
+    ) -> Result<(), InsertNewerError<'_>>
     where
         Querier: Query<'a>,
         QuerierIter: IntoIterator<Item = Querier>,
@@ -64,7 +64,7 @@ impl<'a, Querier: ShouldReuse> QueryDatabase<'a, Querier> {
     pub fn extend_newer_mut<QuerierIter>(
         &mut self,
         queriers: QuerierIter,
-    ) -> Result<(), InsertNewerError>
+    ) -> Result<(), InsertNewerError<'_>>
     where
         Querier: QueryMut<'a>,
         QuerierIter: IntoIterator<Item = Querier>,
