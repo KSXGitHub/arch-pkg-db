@@ -27,7 +27,10 @@ fn main() -> ExitCode {
     }
 
     let mut name = String::new();
-    stdin().read_line(&mut name).expect("read line");
+    if let Err(error) = stdin().read_line(&mut name) {
+        eprintln!("error: Can't read from stdin: {error}");
+        return ExitCode::FAILURE;
+    }
     let name = name.trim().pipe(Name);
 
     let Some(pkg) = db.get(name) else {
