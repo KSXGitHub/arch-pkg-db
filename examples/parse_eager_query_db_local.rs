@@ -7,12 +7,26 @@ use arch_pkg_db::{
 };
 use pipe_trait::Pipe;
 use std::{
+    fs::metadata,
     io::{IsTerminal, Write, stdin, stdout},
     process::ExitCode,
 };
 
 fn main() -> ExitCode {
-    let texts = "/var/lib/pacman/local/"
+    let db_path = "/var/lib/pacman/local/";
+    let db_path_exists = db_path
+        .pipe(metadata)
+        .map(|stats| stats.is_dir())
+        .unwrap_or(false);
+
+    if !db_path_exists {
+        eprintln!(
+            "error: The path {db_path:?} either does not exist in your filesystem or is not a directory"
+        );
+        return ExitCode::FAILURE;
+    }
+
+    let texts = db_path
         .pipe_as_ref(TextCollection::from_local_db)
         .expect("load text collection");
     let db = texts.par_parse::<EagerQuerier>().expect("parse queriers");
