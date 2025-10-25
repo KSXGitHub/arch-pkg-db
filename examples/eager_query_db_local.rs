@@ -54,6 +54,8 @@ fn main() -> ExitCode {
         eprintln!("---");
     }
 
+    let mut failures: u64 = 0;
+
     loop {
         if stdin().is_terminal() {
             eprint!("Enter a package name: ");
@@ -76,7 +78,8 @@ fn main() -> ExitCode {
 
         let Some(pkg) = db.get(name) else {
             eprintln!("error: No package with name {name}");
-            return ExitCode::FAILURE;
+            failures += 1;
+            continue;
         };
 
         println!("Package Name: {}", pkg.name().unwrap_or(Name("-")));
@@ -99,6 +102,11 @@ fn main() -> ExitCode {
         }
 
         println!("---");
+    }
+
+    if failures != 0 {
+        eprintln!("info: {failures} queries failed");
+        return ExitCode::FAILURE;
     }
 
     ExitCode::SUCCESS
