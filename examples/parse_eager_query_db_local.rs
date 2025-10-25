@@ -1,3 +1,11 @@
+//! This example demonstrates eagerly loading and parsing descriptions from pacman packages that have been installed into the current system.
+//!
+//! **What it does:**
+//! * Eagerly loading all desc files from `/var/lib/pacman/local/` with [`arch_pkg_db::TextCollection::par_from_local_db`].
+//! * Eagerly parsing all loaded desc texts with [`arch_pkg_db::TextCollection::par_parse`].
+//! * Asking for a package by name, looking it up using [`arch_pkg_db::QueryDatabase::get`].
+//! * Displaying some information of the queried package using methods in [`arch_pkg_db::desc::Query`].
+
 use arch_pkg_db::{
     TextCollection,
     desc::{
