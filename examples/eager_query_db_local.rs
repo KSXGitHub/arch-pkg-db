@@ -51,40 +51,54 @@ fn main() -> ExitCode {
 
     if stdin().is_terminal() {
         eprintln!("info: Parsed {} desc files", db.len());
-
-        eprint!("Enter a package name: ");
-        stdout().flush().ok();
+        eprintln!("---");
     }
 
-    let mut name = String::new();
-    if let Err(error) = stdin().read_line(&mut name) {
-        eprintln!("error: Can't read from stdin: {error}");
-        return ExitCode::FAILURE;
-    }
-    let name = name.trim().pipe(Name);
+    loop {
+        if stdin().is_terminal() {
+            eprint!("Enter a package name: ");
+            stdout().flush().ok();
+        }
 
-    let Some(pkg) = db.get(name) else {
-        eprintln!("error: No package with name {name}");
-        return ExitCode::FAILURE;
-    };
+        let mut name = String::new();
+        if let Err(error) = stdin().read_line(&mut name) {
+            eprintln!("error: Can't read from stdin: {error}");
+            return ExitCode::FAILURE;
+        }
+        let name = name.trim().pipe(Name);
 
-    println!("Package Name: {}", pkg.name().unwrap_or(Name("-")));
-    println!("Package Base: {}", pkg.base().unwrap_or(Base("-")));
-    println!("Version: {}", pkg.version().unwrap_or(Version("-")));
-    println!(
-        "Description: {}",
-        pkg.description().unwrap_or(Description("-")),
-    );
-    println!("URL: {}", pkg.url().unwrap_or(Url("-")));
+        if name.is_empty() {
+            if stdin().is_terminal() {
+                eprintln!("Exiting...");
+            }
+            break;
+        }
 
-    let provides = pkg.provides();
-    let provides: Vec<Dependency> = provides.iter().flat_map(DependencyList::iter).collect();
-    println!(
-        "Also provide features for: {} additional package(s)",
-        provides.len(),
-    );
-    for provide in provides {
-        println!("\t{provide}");
+        let Some(pkg) = db.get(name) else {
+            eprintln!("error: No package with name {name}");
+            return ExitCode::FAILURE;
+        };
+
+        println!("Package Name: {}", pkg.name().unwrap_or(Name("-")));
+        println!("Package Base: {}", pkg.base().unwrap_or(Base("-")));
+        println!("Version: {}", pkg.version().unwrap_or(Version("-")));
+        println!(
+            "Description: {}",
+            pkg.description().unwrap_or(Description("-")),
+        );
+        println!("URL: {}", pkg.url().unwrap_or(Url("-")));
+
+        let provides = pkg.provides();
+        let provides: Vec<Dependency> = provides.iter().flat_map(DependencyList::iter).collect();
+        println!(
+            "Also provide features for: {} additional package(s)",
+            provides.len(),
+        );
+        for provide in provides {
+            println!("\t{provide}");
+        }
+
+        println!("---");
     }
 
     ExitCode::SUCCESS
