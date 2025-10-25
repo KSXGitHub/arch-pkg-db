@@ -2,7 +2,7 @@
 //!
 //! **What it does:**
 //! * Eagerly loading all desc files from `/var/lib/pacman/local/` with [`arch_pkg_db::TextCollection::par_from_local_db`].
-//! * Eagerly parsing all loaded desc texts with [`arch_pkg_db::TextCollection::par_parse`].
+//! * Eagerly parsing all loaded desc texts with [`arch_pkg_db::TextCollection::par_parse`] into [`arch_pkg_db::desc::EagerQuerier`] objects.
 //! * Asking for a package by name, looking it up using [`arch_pkg_db::QueryDatabase::get`].
 //! * Displaying some information of the queried package using methods in [`arch_pkg_db::desc::Query`].
 
