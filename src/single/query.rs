@@ -2,6 +2,7 @@ mod extend;
 mod get;
 mod insert;
 mod iter;
+mod misc;
 mod new;
 
 pub use insert::{InsertError, InsertNewerError, InsertNewerReturn};

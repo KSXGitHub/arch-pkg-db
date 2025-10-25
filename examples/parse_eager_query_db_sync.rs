@@ -44,12 +44,19 @@ fn main() -> ExitCode {
         }
     }
 
+    if texts.is_empty() {
+        eprintln!("error: No desc files were found");
+        return ExitCode::FAILURE;
+    }
+
+    if stdin().is_terminal() {
+        eprintln!("info: Loaded {} desc files", texts.len());
+    }
+
     let db = texts.par_parse::<EagerQuerier>().expect("parse queriers");
 
     if stdin().is_terminal() {
-        // TODO: implement the ability to get the number of texts
-        // TODO: implement the ability to get the number of parsed entries
-        // TODO: display them here
+        eprintln!("info: Parsed {} desc files", db.len());
 
         eprint!("Enter a package name: ");
         stdout().flush().ok();
