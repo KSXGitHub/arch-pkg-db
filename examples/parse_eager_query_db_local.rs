@@ -10,7 +10,7 @@ use arch_pkg_db::{
     TextCollection,
     desc::{
         EagerQuerier, Query,
-        value::{Base, Description, Name, Url, Version},
+        value::{Base, Dependency, DependencyList, Description, Name, Url, Version},
     },
 };
 use pipe_trait::Pipe;
@@ -76,6 +76,16 @@ fn main() -> ExitCode {
         pkg.description().unwrap_or(Description("-")),
     );
     println!("URL: {}", pkg.url().unwrap_or(Url("-")));
+
+    let provides = pkg.provides();
+    let provides: Vec<Dependency> = provides.iter().flat_map(DependencyList::iter).collect();
+    println!(
+        "Also provide features for: {} additional package(s)",
+        provides.len(),
+    );
+    for provide in provides {
+        println!("\t{provide}");
+    }
 
     ExitCode::SUCCESS
 }
