@@ -112,7 +112,7 @@ pub struct Entries<'r, 'query, Querier> {
 }
 
 impl<'r, 'query, Querier> Iterator for Entries<'r, 'query, Querier> {
-    type Item = (RepositoryName<'query>, &'r Querier);
+    type Item = (RepositoryName<'query>, &'r WithVersion<'query, Querier>);
 
     fn next(&mut self) -> Option<Self::Item> {
         let (name, querier) = self.internal.next()?;

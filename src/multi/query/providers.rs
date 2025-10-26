@@ -41,7 +41,7 @@ impl<'r, 'query, 'name, Querier> AlternativeProviders<'r, 'query, 'name, Querier
 impl<'r, 'query, 'name, Querier: Query<'r>> Iterator
     for AlternativeProviders<'r, 'query, 'name, Querier>
 {
-    type Item = (RepositoryName<'query>, &'r Querier);
+    type Item = (RepositoryName<'query>, &'r WithVersion<'query, Querier>);
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             if cfg!(debug_assertions) && self.current.is_none() && self.queriers.next().is_some() {
