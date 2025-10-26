@@ -1,4 +1,5 @@
-//! This example demonstrates eagerly loading and parsing descriptions from pacman's sync databases (repository packages).
+//! This example demonstrates eagerly loading and parsing descriptions from pacman's sync databases (repository packages) and querying them
+//! by `provides`.
 //!
 //! **What it does:**
 //! * Eagerly loading desc files from repository databases (`core.db`, `extra.db`, `multilib.db`) in `/var/lib/pacman/sync/`
