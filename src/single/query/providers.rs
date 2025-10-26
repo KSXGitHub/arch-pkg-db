@@ -52,18 +52,15 @@ impl<'r, 'name, Querier: QueryMut<'r>> Iterator for AlternativeProvidersMut<'r, 
     type Item = &'r mut Querier;
 
     fn next(&mut self) -> Option<Self::Item> {
-        for querier in self.queriers.by_ref() {
-            let found = querier
+        self.queriers.find_map(|querier| {
+            querier
                 .provides_mut()
                 .into_iter()
                 .flatten()
                 .map(|provide| provide.components())
-                .any(|(name, _)| name == self.target);
-            if found {
-                return Some(querier);
-            }
-        }
-        None
+                .any(|(name, _)| name == self.target)
+                .then_some(querier)
+        })
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
