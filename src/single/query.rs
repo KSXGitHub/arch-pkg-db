@@ -4,9 +4,11 @@ mod insert;
 mod iter;
 mod misc;
 mod new;
+mod providers;
 
 pub use insert::{InsertError, InsertNewerError, InsertNewerReturn};
 pub use iter::{Entries, EntriesMut, Entry, Names, OwnedEntries, Queriers, QueriersMut};
+pub use providers::{AlternativeProviders, AlternativeProvidersMut};
 
 use arch_pkg_text::desc::{EagerQuerier, MemoQuerier};
 use std::collections::HashMap;
