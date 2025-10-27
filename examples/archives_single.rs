@@ -2,7 +2,7 @@
 //!
 //! **What it does:**
 //! * Eagerly loading desc files from repository databases (`core.db`, `extra.db`, `multilib.db`) in `/var/lib/pacman/sync/` using
-//!   [`arch_pkg_db::TextCollection::extend_from_archive`] to extract archives (with automatic MIME type detection) into a single merged
+//!   [`arch_pkg_db::TextCollection::extend_from_archive`] to extract archives (with automatic MIME type detection) into a repository-unaware
 //!   database object of type [`arch_pkg_db::QueryDatabase`].
 //! * Eagerly parsing all loaded desc texts with [`arch_pkg_db::TextCollection::par_parse`] into [`arch_pkg_db::desc::EagerQuerier`] objects.
 //! * Asking for a package by name, looking it up using [`arch_pkg_db::QueryDatabase::get`].
