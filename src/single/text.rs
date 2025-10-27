@@ -1,6 +1,5 @@
 mod extend;
 mod insert;
-mod item;
 mod iter;
 mod local;
 mod misc;
@@ -13,11 +12,7 @@ pub use iter::{TextIntoIter, TextIter, TextIterMut};
 pub use local::LoadLocalDbError;
 pub use parse::TextCollectionParseError;
 
-use derive_more::{Display, From, Into};
-
-/// Owned string type inside [`TextCollection`].
-#[derive(Debug, Display, Clone, From, Into, PartialEq, Eq, PartialOrd, Ord)]
-pub struct Text(Box<str>);
+use crate::misc::Text;
 
 /// Collection of all `desc` texts from which queriers may access data.
 #[derive(Debug, Default, Clone)]

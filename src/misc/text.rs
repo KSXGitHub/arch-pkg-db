@@ -1,8 +1,12 @@
-use super::Text;
 use core::{
     borrow::{Borrow, BorrowMut},
     ops::{Deref, DerefMut},
 };
+use derive_more::{Display, From, Into};
+
+/// Owned string type inside [`TextCollection`].
+#[derive(Debug, Display, Clone, From, Into, PartialEq, Eq, PartialOrd, Ord)]
+pub struct Text(Box<str>);
 
 impl Text {
     /// Extract the string slice containing the entire string.
