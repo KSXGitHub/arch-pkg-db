@@ -81,12 +81,12 @@ impl<Querier> QueryDatabase<'_, Querier> {
     /// This method is prefixed with "alternative" because a package doesn't usually list itself in its own `provides`,
     /// and consequently, would usually be excluded from this iterator. Beware that if it does list itself, its own
     /// name would be included.
-    pub fn alternative_providers<'r: 'name, 'name>(
-        &'r self,
-        target: DependencyName<'name>,
-    ) -> AlternativeProviders<'r, 'name, Querier>
+    pub fn alternative_providers<'a>(
+        &'a self,
+        target: DependencyName<'a>,
+    ) -> AlternativeProviders<'a, 'a, Querier>
     where
-        Querier: Query<'r>,
+        Querier: Query<'a>,
     {
         let queriers = self.queriers();
         AlternativeProviders { target, queriers }
@@ -98,12 +98,12 @@ impl<Querier> QueryDatabase<'_, Querier> {
     /// This method is prefixed with "alternative" because a package doesn't usually list itself in its own `provides`,
     /// and consequently, would usually be excluded from this iterator. Beware that if it does list itself, its own
     /// name would be included.
-    pub fn alternative_providers_mut<'r: 'name, 'name>(
-        &'r mut self,
-        target: DependencyName<'name>,
-    ) -> AlternativeProvidersMut<'r, 'name, Querier>
+    pub fn alternative_providers_mut<'a>(
+        &'a mut self,
+        target: DependencyName<'a>,
+    ) -> AlternativeProvidersMut<'a, 'a, Querier>
     where
-        Querier: QueryMut<'r>,
+        Querier: QueryMut<'a>,
     {
         let queriers = self.queriers_mut();
         AlternativeProvidersMut { target, queriers }
