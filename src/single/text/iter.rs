@@ -1,4 +1,5 @@
-use super::{Text, TextCollection};
+use super::TextCollection;
+use crate::misc::Text;
 use std::{iter::FusedIterator, slice, vec};
 
 /// [Iterator] over immutable references to all items inside a [`TextCollection`].

@@ -1,4 +1,5 @@
-use super::{Text, TextCollection};
+use super::TextCollection;
+use crate::misc::Text;
 
 impl Extend<Text> for TextCollection {
     fn extend<Iter: IntoIterator<Item = Text>>(&mut self, iter: Iter) {
