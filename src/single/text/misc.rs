@@ -6,7 +6,7 @@ impl TextCollection {
         self.internal.shrink_to_fit()
     }
 
-    /// The number of [`Text`](super::Text)s within the collection.
+    /// The number of [`Text`](crate::misc::Text)s within the collection.
     pub fn len(&self) -> usize {
         self.internal.len()
     }
