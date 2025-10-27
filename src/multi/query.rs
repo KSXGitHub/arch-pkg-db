@@ -39,6 +39,9 @@ pub struct MultiQuerier<'a, Querier> {
 }
 
 /// Database to lookup queriers from their package names and repositories.
+///
+/// This type of database is designed for repository-aware use cases.
+/// For example: Multiple repositories whose packages may have duplicated names.
 #[derive(Debug, Clone)]
 pub struct MultiQueryDatabase<'a, Querier> {
     /// Map package names to their multi-queriers.

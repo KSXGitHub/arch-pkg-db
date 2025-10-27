@@ -14,6 +14,11 @@ use arch_pkg_text::desc::{EagerQuerier, MemoQuerier};
 use std::collections::HashMap;
 
 /// Database to lookup queriers from their package names.
+///
+/// This type of database is designed for repository-unaware use cases such as:
+/// * Local packages: Packages that have been installed into the system.
+/// * Single repository archive.
+/// * Merging multiple repository archives where duplications don't exist.
 #[derive(Debug, Clone)]
 pub struct QueryDatabase<'a, Querier> {
     /// Map package names to their queriers.
