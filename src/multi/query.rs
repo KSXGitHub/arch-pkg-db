@@ -3,6 +3,7 @@ mod get;
 mod insert;
 mod iter;
 mod latest;
+mod misc;
 mod new;
 mod providers;
 
