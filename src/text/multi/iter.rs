@@ -1,8 +1,8 @@
 use super::MultiTextCollection;
 use crate::{
     Text, TextCollection,
-    value::RepositoryName,
     text::iter::{TextIntoIter, TextIter, TextIterMut},
+    value::RepositoryName,
 };
 use core::{iter::FusedIterator, slice};
 use std::vec;
