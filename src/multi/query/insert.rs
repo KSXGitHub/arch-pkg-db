@@ -1,7 +1,7 @@
 use super::{MultiQueryDatabase, WithVersion};
 use crate::{
+    desc::value::RepositoryName,
     misc::{Attached, AttachedUtils, IntoAttached},
-    multi::RepositoryName,
 };
 use arch_pkg_text::{
     desc::{Query, QueryMut, misc::ShouldReuse},

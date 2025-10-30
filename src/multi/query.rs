@@ -15,8 +15,7 @@ pub use iter::{
 };
 pub use providers::AlternativeProviders;
 
-use super::RepositoryName;
-use crate::misc::Attached;
+use crate::{desc::value::RepositoryName, misc::Attached};
 use arch_pkg_text::{
     desc::{EagerQuerier, MemoQuerier},
     value::ParsedVersion,

@@ -1,7 +1,7 @@
 use super::{MultiQueryDatabase, WithVersion};
-use crate::multi::{
-    RepositoryName,
-    query::{Entries, EntriesMut, MultiQuerier, MultiQueriers, MultiQueriersMut},
+use crate::{
+    desc::value::RepositoryName,
+    multi::query::{Entries, EntriesMut, MultiQuerier, MultiQueriers, MultiQueriersMut},
 };
 use arch_pkg_text::{
     desc::{Query, QueryMut},

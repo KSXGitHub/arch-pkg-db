@@ -1,7 +1,7 @@
 use super::{LatestQuerier, MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest};
 use crate::{
+    desc::value::RepositoryName,
     misc::{AttachedUtils, IntoAttached},
-    multi::RepositoryName,
 };
 use arch_pkg_text::desc::{Query, QueryMut};
 

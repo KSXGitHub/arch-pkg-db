@@ -1,5 +1,5 @@
 use super::{InsertError, MultiQueryDatabase};
-use crate::multi::RepositoryName;
+use crate::desc::value::RepositoryName;
 use arch_pkg_text::desc::{Query, QueryMut, misc::ShouldReuse};
 
 impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {

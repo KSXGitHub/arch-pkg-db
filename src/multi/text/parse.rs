@@ -1,7 +1,7 @@
 use super::MultiTextCollection;
 use crate::{
-    MultiQueryDatabase,
-    multi::{RepositoryName, query::InsertError},
+    desc::value::RepositoryName,
+    {MultiQueryDatabase, multi::query::InsertError},
 };
 use arch_pkg_text::desc::{Query, QueryMut, misc::ShouldReuse};
 use core::error::Error;

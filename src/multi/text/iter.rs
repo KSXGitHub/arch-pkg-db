@@ -1,5 +1,5 @@
 use super::MultiTextCollection;
-use crate::{misc::Text, multi::RepositoryName};
+use crate::{desc::value::RepositoryName, misc::Text};
 use std::{iter::FusedIterator, slice, vec};
 
 /// [Iterator] over immutable references to all items inside a [`MultiTextCollection`].

@@ -1,5 +1,5 @@
 use super::MultiTextCollection;
-use crate::{misc::Text, multi::RepositoryName};
+use crate::{desc::value::RepositoryName, misc::Text};
 
 impl<'a> Extend<(RepositoryName<'a>, Text)> for MultiTextCollection<'a> {
     fn extend<Iter: IntoIterator<Item = (RepositoryName<'a>, Text)>>(&mut self, iter: Iter) {

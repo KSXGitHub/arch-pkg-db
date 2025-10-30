@@ -1,4 +1,7 @@
-use crate::multi::{MultiQuerier, RepositoryName, query::WithVersion};
+use crate::{
+    desc::value::RepositoryName,
+    multi::{MultiQuerier, query::WithVersion},
+};
 use std::{collections::hash_map::Keys, iter::FusedIterator};
 
 /// [Iterator] over [repository names](RepositoryName) in a [`MultiQuerier`].

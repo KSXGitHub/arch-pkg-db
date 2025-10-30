@@ -5,8 +5,7 @@ mod misc;
 mod new;
 mod parse;
 
-use super::RepositoryName;
-use crate::misc::Text;
+use crate::{desc::value::RepositoryName, misc::Text};
 
 pub use iter::{MultiTextIntoIter, MultiTextIter, MultiTextIterMut};
 pub use parse::MultiTextCollectionParseError;

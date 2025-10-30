@@ -13,6 +13,13 @@ pub mod desc {
             DescParseError, DescParseIssue, ParseWithIssues, ParsedDesc, PartialParse,
             PartialParseResult,
         },
-        value,
     };
+
+    pub mod value {
+        //! Value types used by the database.
+        mod repository;
+
+        pub use arch_pkg_text::value::*;
+        pub use repository::RepositoryName;
+    }
 }
