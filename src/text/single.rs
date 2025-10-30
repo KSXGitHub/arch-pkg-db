@@ -1,7 +1,6 @@
 mod extend;
 mod insert;
 mod iter;
-mod local; // TODO: move this to the same level as archive
 mod misc;
 mod new;
 mod parse;
