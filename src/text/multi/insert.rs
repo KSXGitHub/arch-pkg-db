@@ -7,9 +7,12 @@ impl<'a> MultiTextCollection<'a> {
         self.internal.push((repository, collection));
     }
 
-    // TODO: also rename `TextCollection::add_item` to this as well.
     /// Add data into the multi-collection.
-    pub fn add(mut self, repository: RepositoryName<'a>, collection: TextCollection) -> Self {
+    pub fn add_collection(
+        mut self,
+        repository: RepositoryName<'a>,
+        collection: TextCollection,
+    ) -> Self {
         self.insert(repository, collection);
         self
     }
