@@ -15,6 +15,7 @@ pub enum MultiTextCollectionParseError<'a, ParseError> {
 }
 
 // We implement Error manually because derive_more::Error was unable to handle it.
+// Issue: <https://github.com/JelteF/derive_more/issues/511>
 impl<'a, ParseError: Error> Error for MultiTextCollectionParseError<'a, ParseError> {
     fn source(&self) -> Option<&(dyn Error + 'static)> {
         match self {
