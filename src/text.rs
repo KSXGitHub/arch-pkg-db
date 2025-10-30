@@ -7,4 +7,4 @@ pub mod local;
 
 pub use item::Text;
 pub use multi::MultiTextCollection;
-pub use single::TextCollection;
+pub use single::{TextCollection, TextIntoIter, TextIter, TextIterMut};

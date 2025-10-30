@@ -6,6 +6,8 @@ mod misc;
 mod new;
 mod parse;
 
+pub use iter::{TextIntoIter, TextIter, TextIterMut};
+
 /// Collection of all `desc` texts from which queriers may access data.
 #[derive(Debug, Default, Clone)]
 pub struct TextCollection {
