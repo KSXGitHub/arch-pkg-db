@@ -1,9 +1,8 @@
 use crate::{
-    value::RepositoryName,
     multi::{
-        MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest,
-        query::{LatestQuerier, WithVersion},
+        LatestQuerier, MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest, WithVersion,
     },
+    value::RepositoryName,
 };
 use arch_pkg_text::desc::{Query, QueryMut};
 use arch_pkg_text::value::Name;

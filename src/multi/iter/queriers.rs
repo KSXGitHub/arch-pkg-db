@@ -1,6 +1,5 @@
 use crate::multi::{
-    MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest,
-    query::{LatestQuerier, WithVersion},
+    LatestQuerier, MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest, WithVersion,
 };
 use arch_pkg_text::desc::{Query, QueryMut};
 use core::{

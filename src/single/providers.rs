@@ -1,5 +1,5 @@
 use super::QueryDatabase;
-use crate::single::query::{Queriers, QueriersMut};
+use crate::single::{Queriers, QueriersMut};
 use arch_pkg_text::{
     desc::{Query, QueryMut},
     value::DependencyName,

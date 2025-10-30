@@ -1,6 +1,6 @@
 use crate::{
+    multi::{InsertError, MultiQueryDatabase},
     value::RepositoryName,
-    multi::query::{InsertError, MultiQueryDatabase},
 };
 use arch_pkg_text::{
     desc::{Query, QueryMut},

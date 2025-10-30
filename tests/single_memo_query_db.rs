@@ -4,7 +4,7 @@ pub use _utils::*;
 use arch_pkg_db::{
     MemoQueryDatabase, TextCollection,
     desc::QueryMut,
-    single::query::Entry,
+    single::Entry,
     value::{Description, Name},
 };
 use itertools::Itertools;

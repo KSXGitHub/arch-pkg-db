@@ -4,7 +4,7 @@ pub use _utils::*;
 use arch_pkg_db::{
     EagerQueryDatabase, TextCollection,
     desc::Query,
-    single::query::Entry,
+    single::Entry,
     value::{Description, Name},
 };
 use itertools::Itertools;

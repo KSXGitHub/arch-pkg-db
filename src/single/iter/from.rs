@@ -1,4 +1,4 @@
-use crate::single::query::{InsertError, InsertNewerError, QueryDatabase};
+use crate::single::{InsertError, InsertNewerError, QueryDatabase};
 use arch_pkg_text::{
     desc::{Query, QueryMut},
     misc::desc::ShouldReuse,

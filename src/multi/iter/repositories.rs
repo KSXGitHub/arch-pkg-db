@@ -1,6 +1,6 @@
 use crate::{
+    multi::{MultiQuerier, WithVersion},
     value::RepositoryName,
-    multi::{MultiQuerier, query::WithVersion},
 };
 use std::{collections::hash_map::Keys, iter::FusedIterator};
 

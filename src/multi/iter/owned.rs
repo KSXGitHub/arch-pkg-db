@@ -1,6 +1,6 @@
 use crate::{
+    multi::{MultiQuerier, MultiQueryDatabase, WithVersion},
     value::RepositoryName,
-    multi::{MultiQuerier, MultiQueryDatabase, query::WithVersion},
 };
 use arch_pkg_text::value::Name;
 use core::iter::FusedIterator;

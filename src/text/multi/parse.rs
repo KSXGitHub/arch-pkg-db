@@ -1,5 +1,5 @@
 use super::MultiTextCollection;
-use crate::{MultiQueryDatabase, Text, multi::query::InsertError, value::RepositoryName};
+use crate::{MultiQueryDatabase, Text, multi::InsertError, value::RepositoryName};
 use arch_pkg_text::desc::{Query, QueryMut, misc::ShouldReuse};
 use core::error::Error;
 use derive_more::Display;
