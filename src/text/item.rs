@@ -4,7 +4,7 @@ use core::{
 };
 use derive_more::{Display, From, Into};
 
-/// Owned string type inside [`crate::TextCollection`] and [`crate::multi::MultiTextCollection`].
+/// Owned string type inside [`crate::TextCollection`] and [`crate::MultiTextCollection`].
 #[derive(Debug, Display, Clone, From, Into, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Text(Box<str>);
 

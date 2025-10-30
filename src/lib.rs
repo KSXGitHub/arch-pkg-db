@@ -5,7 +5,7 @@ pub mod text;
 
 pub use multi::{EagerMultiQueryDatabase, MemoMultiQueryDatabase, MultiQueryDatabase};
 pub use single::{EagerQueryDatabase, MemoQueryDatabase, QueryDatabase};
-pub use text::{Text, TextCollection};
+pub use text::{MultiTextCollection, Text, TextCollection};
 
 pub mod desc {
     //! Fields, queriers, and parser of the text format of `desc` files.
