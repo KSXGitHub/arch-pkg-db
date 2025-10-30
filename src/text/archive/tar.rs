@@ -1,5 +1,5 @@
 use super::{LoadArchiveError, LoadUncompressedArchiveError};
-use crate::TextCollection;
+use crate::{MultiTextCollection, TextCollection, desc::value::RepositoryName};
 use derive_more::{Display, Error};
 use pipe_trait::Pipe;
 use std::{
@@ -48,6 +48,37 @@ impl TextCollection {
     /// Traverse a tar archive and add contents from `desc` files to the text collection.
     pub fn from_tar<Bytes: Read>(bytes: Bytes) -> Result<Self, LoadTarError> {
         TextCollection::new().add_tar(bytes)
+    }
+}
+
+impl<'a> MultiTextCollection<'a> {
+    /// Extract a tar archive and add contents from its `desc` files to the multi-collection.
+    pub fn extend_from_tar<Bytes: Read>(
+        &mut self,
+        repository: RepositoryName<'a>,
+        bytes: Bytes,
+    ) -> Result<(), LoadArchiveError> {
+        let collection = TextCollection::from_tar(bytes)?;
+        self.insert(repository, collection);
+        Ok(())
+    }
+
+    /// Extract a tar archive and add contents from its `desc` files to the multi-collection.
+    pub fn add_tar<Bytes: Read>(
+        mut self,
+        repository: RepositoryName<'a>,
+        bytes: Bytes,
+    ) -> Result<Self, LoadArchiveError> {
+        self.extend_from_tar(repository, bytes)?;
+        Ok(self)
+    }
+
+    /// Extract a tar archive and add contents from its `desc` files to the multi-collection.
+    pub fn from_tar<Bytes: Read>(
+        repository: RepositoryName<'a>,
+        bytes: Bytes,
+    ) -> Result<Self, LoadArchiveError> {
+        MultiTextCollection::with_capacity(1).add_tar(repository, bytes)
     }
 }
 

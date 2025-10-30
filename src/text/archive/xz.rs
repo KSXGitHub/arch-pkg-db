@@ -1,4 +1,5 @@
-use super::{LoadArchiveError, LoadUncompressedArchiveError, LzmaError, TextCollection};
+use super::{LoadArchiveError, LoadUncompressedArchiveError, LzmaError};
+use crate::{MultiTextCollection, TextCollection, desc::value::RepositoryName};
 use derive_more::{Display, Error};
 use lzma_rs::xz_decompress;
 use std::io::{BufReader, Read};
@@ -31,6 +32,37 @@ impl TextCollection {
     /// Extract an xz archive and add contents from its `desc` files to the text collection.
     pub fn from_xz<Bytes: Read>(bytes: Bytes) -> Result<Self, LoadXzError> {
         TextCollection::new().add_xz(bytes)
+    }
+}
+
+impl<'a> MultiTextCollection<'a> {
+    /// Extract an xz archive and add contents from its `desc` files to the multi-collection.
+    pub fn extend_from_xz<Bytes: Read>(
+        &mut self,
+        repository: RepositoryName<'a>,
+        bytes: Bytes,
+    ) -> Result<(), LoadArchiveError> {
+        let collection = TextCollection::from_xz(bytes)?;
+        self.insert(repository, collection);
+        Ok(())
+    }
+
+    /// Extract an xz archive and add contents from its `desc` files to the multi-collection.
+    pub fn add_xz<Bytes: Read>(
+        mut self,
+        repository: RepositoryName<'a>,
+        bytes: Bytes,
+    ) -> Result<Self, LoadArchiveError> {
+        self.extend_from_xz(repository, bytes)?;
+        Ok(self)
+    }
+
+    /// Extract an xz archive and add contents from its `desc` files to the multi-collection.
+    pub fn from_xz<Bytes: Read>(
+        repository: RepositoryName<'a>,
+        bytes: Bytes,
+    ) -> Result<Self, LoadArchiveError> {
+        MultiTextCollection::with_capacity(1).add_xz(repository, bytes)
     }
 }
 

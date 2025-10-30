@@ -1,4 +1,5 @@
-use super::{LoadArchiveError, LoadUncompressedArchiveError, TextCollection};
+use super::{LoadArchiveError, LoadUncompressedArchiveError};
+use crate::{MultiTextCollection, TextCollection, desc::value::RepositoryName};
 use derive_more::{Display, Error};
 use libflate::gzip::Decoder;
 use pipe_trait::Pipe;
@@ -32,6 +33,37 @@ impl TextCollection {
     /// Extract a gzipped archive and add contents from its `desc` files to the text collection.
     pub fn from_gz<Bytes: Read>(bytes: Bytes) -> Result<Self, LoadGzError> {
         TextCollection::new().add_gz(bytes)
+    }
+}
+
+impl<'a> MultiTextCollection<'a> {
+    /// Extract a gzipped archive and add contents from its `desc` files to the multi-collection.
+    pub fn extend_from_gz<Bytes: Read>(
+        &mut self,
+        repository: RepositoryName<'a>,
+        bytes: Bytes,
+    ) -> Result<(), LoadArchiveError> {
+        let collection = TextCollection::from_gz(bytes)?;
+        self.insert(repository, collection);
+        Ok(())
+    }
+
+    /// Extract a gzipped archive and add contents from its `desc` files to the multi-collection.
+    pub fn add_gz<Bytes: Read>(
+        mut self,
+        repository: RepositoryName<'a>,
+        bytes: Bytes,
+    ) -> Result<Self, LoadArchiveError> {
+        self.extend_from_gz(repository, bytes)?;
+        Ok(self)
+    }
+
+    /// Extract a gzipped archive and add contents from its `desc` files to the multi-collection.
+    pub fn from_gz<Bytes: Read>(
+        repository: RepositoryName<'a>,
+        bytes: Bytes,
+    ) -> Result<Self, LoadArchiveError> {
+        MultiTextCollection::with_capacity(1).add_gz(repository, bytes)
     }
 }
 

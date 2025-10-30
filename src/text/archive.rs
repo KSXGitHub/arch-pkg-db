@@ -10,7 +10,8 @@ pub use tar::LoadTarError;
 pub use uncompressed::LoadUncompressedArchiveError;
 pub use xz::LoadXzError;
 
-use super::TextCollection;
+use super::{MultiTextCollection, TextCollection};
+use crate::desc::value::RepositoryName;
 use derive_more::{Display, Error};
 use mime::SupportedCompressedArchiveType;
 use std::io;
@@ -53,5 +54,36 @@ impl TextCollection {
     /// Detect mime type of an archive, extract it, and add contents from `desc` files to the text collection.
     pub fn from_archive(bytes: &[u8]) -> Result<Self, LoadArchiveError> {
         TextCollection::new().add_archive(bytes)
+    }
+}
+
+impl<'a> MultiTextCollection<'a> {
+    /// Detect mime type of an archive, extract it, and add contents from `desc` files to the multi-collection.
+    pub fn extend_from_archive(
+        &mut self,
+        repository: RepositoryName<'a>,
+        bytes: &[u8],
+    ) -> Result<(), LoadArchiveError> {
+        let collection = TextCollection::from_archive(bytes)?;
+        self.insert(repository, collection);
+        Ok(())
+    }
+
+    /// Detect mime type of an archive, extract it, and add contents from `desc` files to the multi-collection.
+    pub fn add_archive(
+        mut self,
+        repository: RepositoryName<'a>,
+        bytes: &[u8],
+    ) -> Result<Self, LoadArchiveError> {
+        self.extend_from_archive(repository, bytes)?;
+        Ok(self)
+    }
+
+    /// Detect mime type of an archive, extract it, and add contents from `desc` files to the multi-collection.
+    pub fn from_archive(
+        repository: RepositoryName<'a>,
+        bytes: &[u8],
+    ) -> Result<Self, LoadArchiveError> {
+        MultiTextCollection::with_capacity(1).add_archive(repository, bytes)
     }
 }
