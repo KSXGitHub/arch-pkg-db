@@ -1,5 +1,5 @@
 use super::MultiTextCollection;
-use crate::{desc::value::RepositoryName, misc::Text};
+use crate::{Text, desc::value::RepositoryName};
 
 impl<'a> MultiTextCollection<'a> {
     /// Add data to the text collection.

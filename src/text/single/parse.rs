@@ -1,5 +1,5 @@
 use super::TextCollection;
-use crate::{QueryDatabase, misc::Text, single::query::InsertError};
+use crate::{QueryDatabase, Text, single::query::InsertError};
 use arch_pkg_text::desc::{Query, QueryMut, misc::ShouldReuse};
 use derive_more::{Display, Error};
 use pipe_trait::Pipe;

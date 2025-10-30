@@ -1,5 +1,5 @@
 use super::TextCollection;
-use crate::misc::Text;
+use crate::Text;
 use derive_more::{Display, Error};
 use pipe_trait::Pipe;
 use rayon::prelude::*;

@@ -1,5 +1,5 @@
 use super::{LoadArchiveError, LoadUncompressedArchiveError};
-use crate::single::TextCollection;
+use crate::TextCollection;
 use derive_more::{Display, Error};
 use pipe_trait::Pipe;
 use std::{

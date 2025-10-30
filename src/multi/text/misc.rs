@@ -6,7 +6,7 @@ impl MultiTextCollection<'_> {
         self.internal.shrink_to_fit()
     }
 
-    /// The number of [`Text`](crate::misc::Text)s within the collection.
+    /// The number of [`Text`](crate::Text)s within the collection.
     pub fn len(&self) -> usize {
         self.internal.len()
     }

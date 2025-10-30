@@ -1,5 +1,5 @@
 use super::{mime::SupportedUncompressedArchiveType, tar::LoadTarError};
-use crate::single::TextCollection;
+use crate::TextCollection;
 use derive_more::{Display, Error};
 
 /// Error when trying to load data from an uncompressed archive.

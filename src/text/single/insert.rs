@@ -1,5 +1,5 @@
 use super::TextCollection;
-use crate::misc::Text;
+use crate::Text;
 
 impl TextCollection {
     /// Add data into the text collection.
