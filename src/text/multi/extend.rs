@@ -25,7 +25,7 @@ impl<'a> Extend<(RepositoryName<'a>, Text)> for MultiTextCollection<'a> {
                 group
                     .inspect(|(expected, _)| debug_assert_eq!(&repository, expected))
                     .map(|(_, text)| text)
-                    .fold(TextCollection::new(), TextCollection::add_item), // TODO: implement FromIterator and use .collect
+                    .collect::<TextCollection>(),
             )
         });
         self.extend(iter);

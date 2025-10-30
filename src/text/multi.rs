@@ -1,3 +1,4 @@
+mod collect;
 mod extend;
 mod insert;
 mod misc;
