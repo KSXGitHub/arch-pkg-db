@@ -6,8 +6,16 @@ pub mod archive;
 pub mod local;
 
 pub use item::Text;
-pub use multi::{
-    MultiTextCollection, MultiTextCollectionParseError, MultiTextIntoIter, MultiTextIter,
-    MultiTextIterMut,
-};
-pub use single::{TextCollection, TextCollectionParseError, TextIntoIter, TextIter, TextIterMut};
+pub use multi::MultiTextCollection;
+pub use single::TextCollection;
+
+pub mod iter {
+    pub use super::{
+        multi::{MultiTextIntoIter, MultiTextIter, MultiTextIterMut},
+        single::{TextIntoIter, TextIter, TextIterMut},
+    };
+}
+
+pub mod parse {
+    pub use super::{multi::MultiTextCollectionParseError, single::TextCollectionParseError};
+}

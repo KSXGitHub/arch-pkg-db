@@ -2,7 +2,7 @@ use super::MultiTextCollection;
 use crate::{
     Text, TextCollection,
     desc::value::RepositoryName,
-    text::{TextIntoIter, TextIter, TextIterMut},
+    text::iter::{TextIntoIter, TextIter, TextIterMut},
 };
 use core::{iter::FusedIterator, slice};
 use std::vec;
