@@ -5,19 +5,24 @@ mod utils;
 pub use into::IntoAttached;
 pub use utils::AttachedUtils;
 
-use derive_more::{AsMut, AsRef, Deref, DerefMut};
+use core::fmt::Display;
+use derive_more::{AsMut, AsRef, Deref, DerefMut, Display, Error};
 
 /// Pair of main data and attached metadata.
-#[derive(Debug, Clone, Copy, AsRef, AsMut, Deref, DerefMut)]
+#[derive(Debug, Display, Clone, Copy, AsRef, AsMut, Deref, DerefMut, Error)]
+#[display(bound(Main: Display))]
+#[display("{main}")]
 pub struct Attached<Main, Attachment> {
     /// Main data.
     #[deref]
     #[deref_mut]
+    #[error(source)]
     main: Main,
 
     /// Attached metadata.
     #[as_ref(skip)]
     #[as_mut(skip)]
+    #[error(not(source))]
     attachment: Attachment,
 }
 
