@@ -1,3 +1,5 @@
+//! Collections of `desc` texts from which queriers may access data.
+
 mod item;
 mod multi;
 mod single;
