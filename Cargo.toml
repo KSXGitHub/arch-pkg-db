@@ -27,7 +27,7 @@ default = []
 parking_lot = ["arch-pkg-text/parking_lot"]
 
 [dependencies]
-arch-pkg-text = "0.9.3"
+arch-pkg-text = "0.9.4"
 derive_more = { version = "2.0.1", default-features = false, features = ["as_ref", "deref", "deref_mut", "display", "error", "from", "into"] }
 infer = "0.19.0"
 libflate = "2.1.0"
