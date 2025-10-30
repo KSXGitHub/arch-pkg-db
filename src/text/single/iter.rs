@@ -1,6 +1,7 @@
 use super::TextCollection;
 use crate::Text;
-use std::{iter::FusedIterator, slice, vec};
+use core::{iter::FusedIterator, slice};
+use std::vec;
 
 /// [Iterator] over immutable references to all items inside a [`TextCollection`].
 #[derive(Debug, Clone)]
