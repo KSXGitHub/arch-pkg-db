@@ -1,5 +1,5 @@
 use super::{LoadArchiveError, LoadUncompressedArchiveError, LzmaError};
-use crate::{MultiTextCollection, TextCollection, desc::value::RepositoryName};
+use crate::{MultiTextCollection, TextCollection, value::RepositoryName};
 use derive_more::{Display, Error};
 use lzma_rs::xz_decompress;
 use std::io::{BufReader, Read};

@@ -16,12 +16,12 @@ pub mod desc {
             PartialParseResult,
         },
     };
+}
 
-    pub mod value {
-        //! Value types used by the database.
-        mod repository;
+pub mod value {
+    //! Value types used by the database.
+    mod repository;
 
-        pub use arch_pkg_text::value::*;
-        pub use repository::RepositoryName;
-    }
+    pub use arch_pkg_text::value::*;
+    pub use repository::RepositoryName;
 }

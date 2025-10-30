@@ -1,7 +1,7 @@
 use super::MultiTextCollection;
 use crate::{
     Text, TextCollection,
-    desc::value::RepositoryName,
+    value::RepositoryName,
     text::iter::{TextIntoIter, TextIter, TextIterMut},
 };
 use core::{iter::FusedIterator, slice};

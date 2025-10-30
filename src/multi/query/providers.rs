@@ -1,6 +1,6 @@
 use super::{MultiQueryDatabase, WithVersion};
 use crate::{
-    desc::value::RepositoryName,
+    value::RepositoryName,
     multi::query::{Entries, EntriesMut, MultiQuerier, MultiQueriers, MultiQueriersMut},
 };
 use arch_pkg_text::{

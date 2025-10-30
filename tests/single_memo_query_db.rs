@@ -3,11 +3,9 @@ pub use _utils::*;
 
 use arch_pkg_db::{
     MemoQueryDatabase, TextCollection,
-    desc::{
-        QueryMut,
-        value::{Description, Name},
-    },
+    desc::QueryMut,
     single::query::Entry,
+    value::{Description, Name},
 };
 use itertools::Itertools;
 use pipe_trait::Pipe;

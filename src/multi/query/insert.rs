@@ -1,6 +1,6 @@
 use super::{MultiQueryDatabase, WithVersion};
 use crate::{
-    desc::value::RepositoryName,
+    value::RepositoryName,
     misc::{Attached, AttachedUtils, IntoAttached},
 };
 use arch_pkg_text::{

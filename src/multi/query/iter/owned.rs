@@ -1,5 +1,5 @@
 use crate::{
-    desc::value::RepositoryName,
+    value::RepositoryName,
     multi::{MultiQuerier, MultiQueryDatabase, query::WithVersion},
 };
 use arch_pkg_text::value::Name;

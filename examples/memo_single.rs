@@ -8,10 +8,8 @@
 
 use arch_pkg_db::{
     TextCollection,
-    desc::{
-        MemoQuerier, QueryMut,
-        value::{Base, Dependency, DependencyList, Description, Name, Url, Version},
-    },
+    desc::{MemoQuerier, QueryMut},
+    value::{Base, Dependency, DependencyList, Description, Name, Url, Version},
 };
 use pipe_trait::Pipe;
 use std::{

@@ -1,5 +1,5 @@
 use super::{LoadArchiveError, LoadUncompressedArchiveError};
-use crate::{MultiTextCollection, TextCollection, desc::value::RepositoryName};
+use crate::{MultiTextCollection, TextCollection, value::RepositoryName};
 use derive_more::{Display, Error};
 use libflate::gzip::Decoder;
 use pipe_trait::Pipe;

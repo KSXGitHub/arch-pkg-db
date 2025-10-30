@@ -12,12 +12,8 @@
 
 use arch_pkg_db::{
     TextCollection,
-    desc::{
-        EagerQuerier, Query,
-        value::{
-            Base, Dependency, DependencyList, DependencyName, Description, Name, Url, Version,
-        },
-    },
+    desc::{EagerQuerier, Query},
+    value::{Base, Dependency, DependencyList, DependencyName, Description, Name, Url, Version},
 };
 use pipe_trait::Pipe;
 use std::{

@@ -1,5 +1,5 @@
 use crate::{
-    desc::value::RepositoryName,
+    value::RepositoryName,
     multi::query::{InsertError, MultiQueryDatabase},
 };
 use arch_pkg_text::{

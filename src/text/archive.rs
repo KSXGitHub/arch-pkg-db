@@ -11,7 +11,7 @@ pub use uncompressed::LoadUncompressedArchiveError;
 pub use xz::LoadXzError;
 
 use super::{MultiTextCollection, TextCollection};
-use crate::desc::value::RepositoryName;
+use crate::value::RepositoryName;
 use derive_more::{Display, Error};
 use mime::SupportedCompressedArchiveType;
 use std::io;

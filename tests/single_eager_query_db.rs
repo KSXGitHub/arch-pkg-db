@@ -3,11 +3,9 @@ pub use _utils::*;
 
 use arch_pkg_db::{
     EagerQueryDatabase, TextCollection,
-    desc::{
-        Query,
-        value::{Description, Name},
-    },
+    desc::Query,
     single::query::Entry,
+    value::{Description, Name},
 };
 use itertools::Itertools;
 use pipe_trait::Pipe;

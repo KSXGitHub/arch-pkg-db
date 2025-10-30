@@ -1,5 +1,5 @@
 use super::MultiTextCollection;
-use crate::{Text, TextCollection, desc::value::RepositoryName};
+use crate::{Text, TextCollection, value::RepositoryName};
 use itertools::Itertools;
 
 impl<'a> Extend<(RepositoryName<'a>, TextCollection)> for MultiTextCollection<'a> {

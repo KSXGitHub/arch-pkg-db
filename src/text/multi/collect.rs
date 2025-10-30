@@ -1,5 +1,5 @@
 use super::MultiTextCollection;
-use crate::{Text, TextCollection, desc::value::RepositoryName};
+use crate::{Text, TextCollection, value::RepositoryName};
 
 impl<'a> FromIterator<(RepositoryName<'a>, TextCollection)> for MultiTextCollection<'a> {
     fn from_iter<Iter: IntoIterator<Item = (RepositoryName<'a>, TextCollection)>>(
