@@ -65,9 +65,9 @@ struct RepositorySpec<'a>(RepositoryName<'a>, PathBuf);
 enum ParseArgExit<'a> {
     #[display("{HELP}")]
     Help,
-    #[display("Unknown flag: {_0}")]
+    #[display("Unknown flag: {_0:?}")]
     UnsupportedFlag(&'a str),
-    #[display("Invalid repository name: {_0}")]
+    #[display("Invalid repository name: {_0:?}")]
     InvalidRepositoryName(&'a str),
     #[display("Repository {_0} requires {DB_PATH_STR} which doesn't exist as a directory")]
     RequiredDatabaseNotFound(RepositoryName<'a>),
