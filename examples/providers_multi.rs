@@ -1,10 +1,8 @@
-//! This example demonstrates eagerly loading and parsing descriptions from pacman's sync databases (repository packages) and querying them
-//! by `provides`.
+//! This example demonstrates eagerly loading and parsing descriptions from pacman's sync database archives and querying them by `provides`.
 //!
 //! **What it does:**
-//! * Eagerly loading desc files from repository databases (`core.db`, `extra.db`, `multilib.db`) in `/var/lib/pacman/sync/` using
-//!   [`arch_pkg_db::MultiTextCollection::extend_from_archive`] to extract archives (with automatic MIME type detection) into a repository-aware
-//!   database object of type [`arch_pkg_db::MultiQueryDatabase`].
+//! * Eagerly loading desc files from repository databases of user's choices using [`arch_pkg_db::MultiTextCollection::extend_from_archive`]
+//!   to extract archives (with automatic MIME type detection) into a repository-aware database object of type [`arch_pkg_db::MultiQueryDatabase`].
 //! * Eagerly parsing all loaded desc texts with [`arch_pkg_db::MultiTextCollection::par_parse`] into [`arch_pkg_db::desc::EagerQuerier`] objects.
 //! * Asking for a package by name or provide, looking it up using [`arch_pkg_db::MultiQueryDatabase::get`] and
 //!   [`arch_pkg_db::MultiQueryDatabase::alternative_providers`].
