@@ -55,6 +55,9 @@ fn main() -> ExitCode {
     let mut multi_collection = MultiTextCollection::new();
     for repository in ["core", "extra", "multilib"].map(RepositoryName) {
         let archive_path = repository_path(repository);
+        if stdin().is_terminal() {
+            eprintln!("info: Loading {}...", archive_path.to_string_lossy());
+        }
         let archive = match read(&archive_path) {
             Ok(archive) => archive,
             Err(error) => {

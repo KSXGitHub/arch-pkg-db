@@ -39,6 +39,9 @@ fn main() -> ExitCode {
 
     let mut texts = TextCollection::new();
     for repository in ["core.db", "extra.db", "multilib.db"] {
+        if stdin().is_terminal() {
+            eprintln!("info: Loading {}...", repository);
+        }
         let archive = match read(db_path.join(repository)) {
             Ok(archive) => archive,
             Err(error) => {
