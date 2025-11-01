@@ -101,6 +101,9 @@ fn parse_arg(arg: &str) -> Result<Arg<'_>, ParseArgExit<'_>> {
     }
 
     fn validate_repository_name(repository: &str) -> Result<RepositoryName<'_>, &str> {
+        if repository.is_empty() {
+            return Err(repository);
+        }
         let valid_char = |char| matches!(char, 'a'..='z' | 'A'..='Z' | '0'..='9' | '_' | '-' | '.');
         repository
             .chars()
