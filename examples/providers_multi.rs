@@ -147,10 +147,6 @@ fn parse_arg(arg: &str) -> Result<Arg<'_>, ParseArgErrorMessage<'_>> {
 }
 
 fn main() -> ExitCode {
-    if cfg!(debug_assertions) {
-        eprintln!("warning: The archive extraction processes may be slow on debug build");
-    }
-
     let args: Vec<_> = args().skip(1).collect();
     let parse_args_result: Result<Vec<Arg>, ParseArgErrorMessage> =
         args.iter().map(String::as_str).map(parse_arg).collect();
@@ -167,6 +163,10 @@ fn main() -> ExitCode {
             return message.exit_code();
         }
     };
+
+    if cfg!(debug_assertions) {
+        eprintln!("warning: The archive extraction processes may be slow on debug build");
+    }
 
     let mut multi_collection = MultiTextCollection::new();
     for Arg(repository, archive_path) in repositories {
