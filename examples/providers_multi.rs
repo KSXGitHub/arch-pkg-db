@@ -63,7 +63,7 @@ fn main() -> ExitCode {
             }
         };
         if let Err(error) = multi_collection.extend_from_archive(repository, &archive) {
-            eprintln!("warning: Cannot extract {repository:?} as an archive: {error}");
+            eprintln!("warning: Cannot extract {archive_path:?} as an archive: {error}");
             continue;
         }
     }
