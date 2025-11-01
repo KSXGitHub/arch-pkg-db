@@ -32,7 +32,7 @@ version = "0.0.0"
 dependencies = [
  "arch-pkg-text",
  "build-fs-tree",
- "derive_more 2.0.1",
+ "derive_more",
  "infer",
  "is_type",
  "itertools",
@@ -44,7 +44,7 @@ dependencies = [
  "rayon",
  "strum",
  "tar",
- "text-block-macros 0.2.0",
+ "text-block-macros",
 ]
 
 [[package]]
@@ -53,7 +53,7 @@ version = "0.9.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "57f376e56df027986700533291cf4cc0a61fdadc3654d4e409a8a36b7429ad06"
 dependencies = [
- "derive_more 2.0.1",
+ "derive_more",
  "indexmap",
  "iter-scan",
  "lines-inclusive",
@@ -71,15 +71,15 @@ checksum = "812e12b5285cc515a9c72a5c1d3b6d46a19dac5acfef5265968c166106e31dd3"
 
 [[package]]
 name = "build-fs-tree"
-version = "0.7.1"
+version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "790713a24ee86ed258a0894a564f5ffd729b9d191c4960309926561173da7cf6"
+checksum = "e498c7ccbdde9f82e90826b8ffa37853d63c25ae75435a26ffcdb6ea8b9922ea"
 dependencies = [
- "derive_more 1.0.0",
+ "derive_more",
  "pipe-trait",
  "serde",
  "serde_yaml",
- "text-block-macros 0.1.1",
+ "text-block-macros",
 ]
 
 [[package]]
@@ -177,32 +177,11 @@ checksum = "06d2e3287df1c007e74221c49ca10a95d557349e54b3a75dc2fb14712c751f04"
 
 [[package]]
 name = "derive_more"
-version = "1.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a9b99b9cbbe49445b21764dc0625032a89b145a2642e67603e1c936f5458d05"
-dependencies = [
- "derive_more-impl 1.0.0",
-]
-
-[[package]]
-name = "derive_more"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "093242cf7570c207c83073cf82f79706fe7b8317e98620a47d5be7c3d8497678"
 dependencies = [
- "derive_more-impl 2.0.1",
-]
-
-[[package]]
-name = "derive_more-impl"
-version = "1.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cb7330aeadfbe296029522e6c40f315320aba36fc43a5b3632f3795348f3bd22"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
- "unicode-xid",
+ "derive_more-impl",
 ]
 
 [[package]]
@@ -766,12 +745,6 @@ dependencies = [
  "libc",
  "xattr",
 ]
-
-[[package]]
-name = "text-block-macros"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f8b59b4da1c1717deaf1de80f0179a9d8b4ac91c986d5fd9f4a8ff177b84049"
 
 [[package]]
 name = "text-block-macros"
