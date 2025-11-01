@@ -59,7 +59,7 @@ static HELP: &str = text_block! {
 };
 
 #[derive(Debug)]
-struct Arg<'a>(RepositoryName<'a>, PathBuf);
+struct RepositorySpec<'a>(RepositoryName<'a>, PathBuf);
 
 #[derive(Debug, Display)]
 enum ParseArgExit<'a> {
@@ -91,7 +91,7 @@ impl ParseArgExit<'_> {
     }
 }
 
-fn parse_arg(arg: &str) -> Result<Arg<'_>, ParseArgExit<'_>> {
+fn parse_arg(arg: &str) -> Result<RepositorySpec<'_>, ParseArgExit<'_>> {
     if matches!(arg, "-h" | "--help") {
         return Err(ParseArgExit::Help);
     }
@@ -117,7 +117,7 @@ fn parse_arg(arg: &str) -> Result<Arg<'_>, ParseArgExit<'_>> {
             .pipe(validate_repository_name)
             .map_err(ParseArgExit::InvalidRepositoryName)?;
         let archive_path = PathBuf::from(archive_path);
-        return Ok(Arg(repository, archive_path));
+        return Ok(RepositorySpec(repository, archive_path));
     }
 
     if validate_repository_name(arg).is_ok() {
@@ -126,7 +126,7 @@ fn parse_arg(arg: &str) -> Result<Arg<'_>, ParseArgExit<'_>> {
             .as_ref()
             .ok_or(ParseArgExit::RequiredDatabaseNotFound(repository))?
             .join(format!("{repository}.db"));
-        return Ok(Arg(repository, archive_path));
+        return Ok(RepositorySpec(repository, archive_path));
     }
 
     let archive_path: &Path = arg.as_ref();
@@ -146,12 +146,12 @@ fn parse_arg(arg: &str) -> Result<Arg<'_>, ParseArgExit<'_>> {
         .unwrap_or(file_name)
         .pipe(validate_repository_name)
         .map_err(ParseArgExit::InvalidRepositoryName)?;
-    Ok(Arg(repository, archive_path.to_path_buf()))
+    Ok(RepositorySpec(repository, archive_path.to_path_buf()))
 }
 
 fn main() -> ExitCode {
     let args: Vec<_> = args().skip(1).collect();
-    let parse_args_result: Result<Vec<Arg>, ParseArgExit> =
+    let parse_args_result: Result<Vec<RepositorySpec>, ParseArgExit> =
         args.iter().map(String::as_str).map(parse_arg).collect();
 
     let repositories = match parse_args_result {
@@ -172,7 +172,7 @@ fn main() -> ExitCode {
     }
 
     let mut multi_collection = MultiTextCollection::new();
-    for Arg(repository, archive_path) in &repositories {
+    for RepositorySpec(repository, archive_path) in &repositories {
         if stdin().is_terminal() {
             eprintln!(
                 "info: Loading {repository} from {}...",
