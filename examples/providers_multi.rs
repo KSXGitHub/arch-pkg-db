@@ -62,7 +62,7 @@ static HELP: &str = text_block! {
 struct Arg<'a>(RepositoryName<'a>, PathBuf);
 
 #[derive(Debug, Display)]
-enum ParseArgErrorMessage<'a> {
+enum ParseArgExit<'a> {
     #[display("{HELP}")]
     Help,
     #[display("Unknown flag: {_0}")]
@@ -75,29 +75,29 @@ enum ParseArgErrorMessage<'a> {
     NoFileName(&'a str),
 }
 
-impl ParseArgErrorMessage<'_> {
+impl ParseArgExit<'_> {
     fn display(&self) {
         match self {
-            ParseArgErrorMessage::Help => println!("{self}"),
+            ParseArgExit::Help => println!("{self}"),
             _ => eprintln!("{self}"),
         }
     }
 
-    fn exit_code(&self) -> ExitCode {
+    fn code(&self) -> ExitCode {
         match self {
-            ParseArgErrorMessage::Help => ExitCode::SUCCESS,
+            ParseArgExit::Help => ExitCode::SUCCESS,
             _ => ExitCode::FAILURE,
         }
     }
 }
 
-fn parse_arg(arg: &str) -> Result<Arg<'_>, ParseArgErrorMessage<'_>> {
+fn parse_arg(arg: &str) -> Result<Arg<'_>, ParseArgExit<'_>> {
     if matches!(arg, "-h" | "--help") {
-        return Err(ParseArgErrorMessage::Help);
+        return Err(ParseArgExit::Help);
     }
 
     if arg.starts_with('-') {
-        return Err(ParseArgErrorMessage::UnsupportedFlag(arg));
+        return Err(ParseArgExit::UnsupportedFlag(arg));
     }
 
     fn validate_repository_name(repository: &str) -> Result<RepositoryName<'_>, &str> {
@@ -112,7 +112,7 @@ fn parse_arg(arg: &str) -> Result<Arg<'_>, ParseArgErrorMessage<'_>> {
     if let Some((repository, archive_path)) = arg.split_once(':') {
         let repository = repository
             .pipe(validate_repository_name)
-            .map_err(ParseArgErrorMessage::InvalidRepositoryName)?;
+            .map_err(ParseArgExit::InvalidRepositoryName)?;
         let archive_path = PathBuf::from(archive_path);
         return Ok(Arg(repository, archive_path));
     }
@@ -121,7 +121,7 @@ fn parse_arg(arg: &str) -> Result<Arg<'_>, ParseArgErrorMessage<'_>> {
         let repository = RepositoryName(arg);
         let archive_path = DB_PATH
             .as_ref()
-            .ok_or(ParseArgErrorMessage::RequiredDatabaseNotFound(repository))?
+            .ok_or(ParseArgExit::RequiredDatabaseNotFound(repository))?
             .join(format!("{repository}.db"));
         return Ok(Arg(repository, archive_path));
     }
@@ -130,7 +130,7 @@ fn parse_arg(arg: &str) -> Result<Arg<'_>, ParseArgErrorMessage<'_>> {
     let file_name = archive_path
         .file_name()
         .and_then(OsStr::to_str)
-        .ok_or(ParseArgErrorMessage::NoFileName(arg))?;
+        .ok_or(ParseArgExit::NoFileName(arg))?;
     let repository = file_name
         .strip_suffix(".db")
         .or_else(|| file_name.strip_suffix(".tar.gz"))
@@ -142,13 +142,13 @@ fn parse_arg(arg: &str) -> Result<Arg<'_>, ParseArgErrorMessage<'_>> {
         .or_else(|| file_name.strip_suffix(".xz"))
         .unwrap_or(file_name)
         .pipe(validate_repository_name)
-        .map_err(ParseArgErrorMessage::InvalidRepositoryName)?;
+        .map_err(ParseArgExit::InvalidRepositoryName)?;
     Ok(Arg(repository, archive_path.to_path_buf()))
 }
 
 fn main() -> ExitCode {
     let args: Vec<_> = args().skip(1).collect();
-    let parse_args_result: Result<Vec<Arg>, ParseArgErrorMessage> =
+    let parse_args_result: Result<Vec<Arg>, ParseArgExit> =
         args.iter().map(String::as_str).map(parse_arg).collect();
 
     let repositories = match parse_args_result {
@@ -158,9 +158,9 @@ fn main() -> ExitCode {
             return ExitCode::FAILURE;
         }
         Ok(repositories) => repositories,
-        Err(message) => {
-            message.display();
-            return message.exit_code();
+        Err(exit) => {
+            exit.display();
+            return exit.code();
         }
     };
 
