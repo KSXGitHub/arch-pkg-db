@@ -44,6 +44,7 @@ dependencies = [
  "rayon",
  "strum",
  "tar",
+ "text-block-macros 0.2.0",
 ]
 
 [[package]]
@@ -78,7 +79,7 @@ dependencies = [
  "pipe-trait",
  "serde",
  "serde_yaml",
- "text-block-macros",
+ "text-block-macros 0.1.1",
 ]
 
 [[package]]
@@ -771,6 +772,12 @@ name = "text-block-macros"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f8b59b4da1c1717deaf1de80f0179a9d8b4ac91c986d5fd9f4a8ff177b84049"
+
+[[package]]
+name = "text-block-macros"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f1ecd6317fa97541e6cfcdf79c1917ccb8f7a10ec9ece27aaadf5b2b6ccad3e8"
 
 [[package]]
 name = "typebool"

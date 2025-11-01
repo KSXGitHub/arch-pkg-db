@@ -20,47 +20,161 @@ use arch_pkg_db::{
         Version,
     },
 };
+use derive_more::Display;
 use pipe_trait::Pipe;
 use std::{
+    env::args,
+    ffi::OsStr,
     fs::{metadata, read},
     io::{IsTerminal, Write, stdin, stdout},
-    path::PathBuf,
+    path::{Path, PathBuf},
     process::ExitCode,
+    sync::LazyLock,
 };
+use text_block_macros::text_block;
 
-fn main() -> ExitCode {
-    let db_path = "/var/lib/pacman/sync/";
+static DB_PATH_STR: &str = "/var/lib/pacman/sync/";
+static DB_PATH: LazyLock<Option<PathBuf>> = LazyLock::new(|| {
+    let db_path = PathBuf::from(DB_PATH_STR);
     let db_path_exists = db_path
-        .pipe(metadata)
+        .pipe_ref(metadata)
         .map(|stats| stats.is_dir())
         .unwrap_or(false);
+    db_path_exists.then_some(db_path)
+});
 
-    if !db_path_exists {
-        eprintln!(
-            "error: The path {db_path:?} either does not exist in your filesystem or is not a directory"
-        );
-        return ExitCode::FAILURE;
+static HELP: &str = text_block! {
+    "Usage:"
+    "  cargo run [--release] --example=providers_multi -- [REPOSITORIES]..."
+    ""
+    "Syntax to specify a repository:"
+    "  * <REPOSITORY_NAME>:<ARCHIVE_PATH>"
+    "  * <REPOSITORY_NAME>"
+    "  * <ARCHIVE_PATH>"
+    ""
+    "Examples:"
+    "  cargo run --release --example=providers_multi -- core multilib extra endeavouros chaotic-aur"
+    "  cargo run --release --example=providers_multi -- core:/mnt/ARCH/var/lib/pacman/sync/core.db"
+    "  cargo run --release --example=providers_multi -- /mnt/ARCH/var/lib/pacman/sync/core.db"
+};
+
+#[derive(Debug)]
+struct Arg<'a>(RepositoryName<'a>, PathBuf);
+
+#[derive(Debug, Display)]
+enum ParseArgErrorMessage<'a> {
+    #[display("{HELP}")]
+    Help,
+    #[display("Unknown flag: {_0}")]
+    UnsupportedFlag(&'a str),
+    #[display("Invalid repository name: {_0}")]
+    InvalidRepositoryName(&'a str),
+    #[display("Repository {_0} requires {DB_PATH_STR} which doesn't exist as a directory")]
+    RequiredDatabaseNotFound(RepositoryName<'a>),
+    #[display("Path does not contain a filename: {_0:?}")]
+    NoFileName(&'a str),
+}
+
+impl ParseArgErrorMessage<'_> {
+    fn display(&self) {
+        match self {
+            ParseArgErrorMessage::Help => println!("{self}"),
+            _ => eprintln!("{self}"),
+        }
     }
 
+    fn exit_code(&self) -> ExitCode {
+        match self {
+            ParseArgErrorMessage::Help => ExitCode::SUCCESS,
+            _ => ExitCode::FAILURE,
+        }
+    }
+}
+
+fn parse_arg(arg: &str) -> Result<Arg<'_>, ParseArgErrorMessage<'_>> {
+    if matches!(arg, "-h" | "--help") {
+        return Err(ParseArgErrorMessage::Help);
+    }
+
+    if arg.starts_with('-') {
+        return Err(ParseArgErrorMessage::UnsupportedFlag(arg));
+    }
+
+    fn validate_repository_name(repository: &str) -> Result<RepositoryName<'_>, &str> {
+        let valid_char = |char| matches!(char, 'a'..='z' | 'A'..='Z' | '0'..='9' | '_' | '-' | '.');
+        repository
+            .chars()
+            .all(valid_char)
+            .then_some(RepositoryName(repository))
+            .ok_or(repository)
+    }
+
+    if let Some((repository, archive_path)) = arg.split_once(':') {
+        let repository = repository
+            .pipe(validate_repository_name)
+            .map_err(ParseArgErrorMessage::InvalidRepositoryName)?;
+        let archive_path = PathBuf::from(archive_path);
+        return Ok(Arg(repository, archive_path));
+    }
+
+    if validate_repository_name(arg).is_ok() {
+        let repository = RepositoryName(arg);
+        let archive_path = DB_PATH
+            .as_ref()
+            .ok_or(ParseArgErrorMessage::RequiredDatabaseNotFound(repository))?
+            .join(format!("{repository}.db"));
+        return Ok(Arg(repository, archive_path));
+    }
+
+    let archive_path: &Path = arg.as_ref();
+    let file_name = archive_path
+        .file_name()
+        .and_then(OsStr::to_str)
+        .ok_or(ParseArgErrorMessage::NoFileName(arg))?;
+    let repository = file_name
+        .strip_suffix(".db")
+        .or_else(|| file_name.strip_suffix(".tar.gz"))
+        .or_else(|| file_name.strip_suffix(".tar.xz"))
+        .or_else(|| file_name.strip_suffix(".tgz"))
+        .or_else(|| file_name.strip_suffix(".txz"))
+        .or_else(|| file_name.strip_suffix(".tar"))
+        .or_else(|| file_name.strip_suffix(".gz"))
+        .or_else(|| file_name.strip_suffix(".xz"))
+        .unwrap_or(file_name)
+        .pipe(validate_repository_name)
+        .map_err(ParseArgErrorMessage::InvalidRepositoryName)?;
+    Ok(Arg(repository, archive_path.to_path_buf()))
+}
+
+fn main() -> ExitCode {
     if cfg!(debug_assertions) {
         eprintln!("warning: The archive extraction processes may be slow on debug build");
     }
 
-    let db_path = PathBuf::from(db_path);
-    let repository_path = |name: RepositoryName| -> PathBuf {
-        debug_assert!(
-            !name.ends_with(".db"),
-            "Repository name shouldn't have an extension"
-        );
-        let name = format!("{name}.db");
-        db_path.join(name)
+    let args: Vec<_> = args().skip(1).collect();
+    let parse_args_result: Result<Vec<Arg>, ParseArgErrorMessage> =
+        args.iter().map(String::as_str).map(parse_arg).collect();
+
+    let repositories = match parse_args_result {
+        Ok(repositories) if repositories.is_empty() => {
+            eprintln!("error: No repository specified");
+            eprintln!("hint: Run with --help to see usage");
+            return ExitCode::FAILURE;
+        }
+        Ok(repositories) => repositories,
+        Err(message) => {
+            message.display();
+            return message.exit_code();
+        }
     };
 
     let mut multi_collection = MultiTextCollection::new();
-    for repository in ["core", "extra", "multilib"].map(RepositoryName) {
-        let archive_path = repository_path(repository);
+    for Arg(repository, archive_path) in repositories {
         if stdin().is_terminal() {
-            eprintln!("info: Loading {}...", archive_path.to_string_lossy());
+            eprintln!(
+                "info: Loading {repository} from {}...",
+                archive_path.to_string_lossy(),
+            );
         }
         let archive = match read(&archive_path) {
             Ok(archive) => archive,
