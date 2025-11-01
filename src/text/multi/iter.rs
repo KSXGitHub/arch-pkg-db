@@ -50,6 +50,7 @@ impl<'a> Iterator for MultiTextIter<'a> {
                 return Some((*repository, text));
             }
 
+            self.current = None;
             self.next_stage();
         }
     }
@@ -110,6 +111,7 @@ impl<'a> Iterator for MultiTextIterMut<'a> {
                 return Some((*repository, text));
             }
 
+            self.current = None;
             self.next_stage();
         }
     }
@@ -170,6 +172,7 @@ impl<'a> Iterator for MultiTextIntoIter<'a> {
                 return Some((*repository, text));
             }
 
+            self.current = None;
             self.next_stage();
         }
     }
