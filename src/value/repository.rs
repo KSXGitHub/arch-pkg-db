@@ -9,4 +9,10 @@ impl<'a> RepositoryName<'a> {
     pub fn as_str(&self) -> &'a str {
         self.0
     }
+
+    /// Whether this name is a valid name.
+    pub fn is_valid(&self) -> bool {
+        let valid_char = |char| matches!(char, 'a'..='z' | 'A'..='Z' | '0'..='9' | '_' | '-' | '.');
+        !self.is_empty() && self.chars().all(valid_char)
+    }
 }

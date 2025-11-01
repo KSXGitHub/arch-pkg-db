@@ -100,16 +100,9 @@ fn parse_arg(arg: &str) -> Result<RepositorySpec<'_>, ParseArgExit<'_>> {
         return Err(ParseArgExit::UnsupportedFlag(arg));
     }
 
-    fn validate_repository_name(repository: &str) -> Result<RepositoryName<'_>, &str> {
-        if repository.is_empty() {
-            return Err(repository);
-        }
-        let valid_char = |char| matches!(char, 'a'..='z' | 'A'..='Z' | '0'..='9' | '_' | '-' | '.');
-        repository
-            .chars()
-            .all(valid_char)
-            .then_some(RepositoryName(repository))
-            .ok_or(repository)
+    fn validate_repository_name(candidate: &str) -> Result<RepositoryName<'_>, &str> {
+        let repository = RepositoryName(candidate);
+        repository.is_valid().then_some(repository).ok_or(candidate)
     }
 
     if let Some((repository, archive_path)) = arg.split_once(':') {
