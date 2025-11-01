@@ -169,21 +169,21 @@ fn main() -> ExitCode {
     }
 
     let mut multi_collection = MultiTextCollection::new();
-    for Arg(repository, archive_path) in repositories {
+    for Arg(repository, archive_path) in &repositories {
         if stdin().is_terminal() {
             eprintln!(
                 "info: Loading {repository} from {}...",
                 archive_path.to_string_lossy(),
             );
         }
-        let archive = match read(&archive_path) {
+        let archive = match read(archive_path) {
             Ok(archive) => archive,
             Err(error) => {
                 eprintln!("warning: Cannot read {archive_path:?}: {error}");
                 continue;
             }
         };
-        if let Err(error) = multi_collection.extend_from_archive(repository, &archive) {
+        if let Err(error) = multi_collection.extend_from_archive(*repository, &archive) {
             eprintln!("warning: Cannot extract {archive_path:?} as an archive: {error}");
             continue;
         }
@@ -195,9 +195,7 @@ fn main() -> ExitCode {
     }
 
     if stdin().is_terminal() {
-        // NOTE: I see now that `len` and `iter().count()` are different
-        // TODO: Rename `len` to something else
-        let archives = multi_collection.len();
+        let archives = repositories.len();
         let texts = multi_collection.iter().count();
         eprintln!("info: Loaded {texts} desc files from {archives} archives");
     }
