@@ -42,6 +42,10 @@ fn main() -> ExitCode {
         return ExitCode::FAILURE;
     }
 
+    if cfg!(debug_assertions) {
+        eprintln!("warning: The archive extraction processes may be slow on debug build");
+    }
+
     let db_path = PathBuf::from(db_path);
     let repository_path = |name: RepositoryName| -> PathBuf {
         debug_assert!(
