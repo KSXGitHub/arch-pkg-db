@@ -1,0 +1,19 @@
+[package]
+name = "_utils"
+description = "Common utilities for use in development environment such as tests and examples"
+version = "0.0.0"
+edition = "2024"
+
+[lib]
+name = "_utils"
+path = "lib.rs"
+
+[dependencies]
+build-fs-tree = "0.8.1"
+derive_more = { version = "2.0.1", default-features = false, features = ["as_ref", "deref"] }
+libflate = "2.1.0"
+lzma-rs = "0.3.0"
+pipe-trait = "0.4.0"
+rand = "0.9.0"
+tar = "0.4.44"
+text-block-macros = "0.2.0"

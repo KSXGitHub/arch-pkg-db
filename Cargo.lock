@@ -3,6 +3,20 @@
 version = 4
 
 [[package]]
+name = "_utils"
+version = "0.0.0"
+dependencies = [
+ "build-fs-tree",
+ "derive_more",
+ "libflate",
+ "lzma-rs",
+ "pipe-trait",
+ "rand",
+ "tar",
+ "text-block-macros",
+]
+
+[[package]]
 name = "adler32"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -18,8 +32,8 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 name = "arch-pkg-db"
 version = "0.0.0"
 dependencies = [
+ "_utils",
  "arch-pkg-text",
- "build-fs-tree",
  "derive_more",
  "infer",
  "is_type",
@@ -28,7 +42,6 @@ dependencies = [
  "lzma-rs",
  "pipe-trait",
  "pretty_assertions",
- "rand",
  "rayon",
  "strum",
  "tar",

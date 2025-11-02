@@ -1,6 +1,4 @@
-pub mod _utils;
-pub use _utils::*;
-
+use _utils::{BASH_TAR, BASH_TGZ, BASH_TXZ, Temp};
 use arch_pkg_db::{
     EagerQueryDatabase, TextCollection,
     desc::Query,
