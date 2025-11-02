@@ -13,8 +13,8 @@ use std::{
     sync::LazyLock,
 };
 
-pub const BASH: &str = include_str!("fixtures/bash.desc");
-pub const BASH_COMPLETION: &str = include_str!("fixtures/bash-completion.desc");
+pub static BASH: &str = include_str!("fixtures/bash.desc");
+pub static BASH_COMPLETION: &str = include_str!("fixtures/bash-completion.desc");
 
 pub static BASH_DB_TREE: LazyLock<FileSystemTree<&str, &str>> = LazyLock::new(|| {
     dir! {
