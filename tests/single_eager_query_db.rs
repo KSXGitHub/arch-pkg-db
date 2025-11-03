@@ -1,4 +1,7 @@
-use _utils::{BASH_TAR, BASH_TGZ, BASH_TXZ, Temp};
+use _utils::{
+    fixtures::{BASH_TAR, BASH_TGZ, BASH_TXZ},
+    temp::Temp,
+};
 use arch_pkg_db::{
     EagerQueryDatabase, TextCollection,
     desc::Query,
