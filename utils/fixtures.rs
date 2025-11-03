@@ -1,8 +1,8 @@
-use crate::archive::tar_from_tree;
 use build_fs_tree::{FileSystemTree, dir, file};
 use libflate::gzip;
 use lzma_rs::xz_compress;
 use std::{io::Write, sync::LazyLock};
+use tree_to_archive::BuildTar;
 
 pub static BASH: &str = include_str!("fixtures/bash.desc");
 pub static BASH_COMPLETION: &str = include_str!("fixtures/bash-completion.desc");
@@ -18,7 +18,7 @@ pub static BASH_DB_TREE: LazyLock<FileSystemTree<&str, &str>> = LazyLock::new(||
     }
 });
 
-pub static BASH_TAR: LazyLock<Vec<u8>> = LazyLock::new(|| tar_from_tree(&BASH_DB_TREE).unwrap());
+pub static BASH_TAR: LazyLock<Vec<u8>> = LazyLock::new(|| BASH_DB_TREE.build_tar().unwrap());
 
 pub static BASH_TGZ: LazyLock<Vec<u8>> = LazyLock::new(|| {
     let mut encoder = gzip::Encoder::new(Vec::new()).unwrap();

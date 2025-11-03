@@ -14,6 +14,7 @@ dependencies = [
  "rand",
  "tar",
  "text-block-macros",
+ "tree-to-archive",
 ]
 
 [[package]]
@@ -747,6 +748,17 @@ name = "text-block-macros"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f1ecd6317fa97541e6cfcdf79c1917ccb8f7a10ec9ece27aaadf5b2b6ccad3e8"
+
+[[package]]
+name = "tree-to-archive"
+version = "0.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1dbd8a7804055d75c91eb216534e268cdf24019ce64b6dd8901334abd3008e5e"
+dependencies = [
+ "build-fs-tree",
+ "pipe-trait",
+ "tar",
+]
 
 [[package]]
 name = "typebool"
