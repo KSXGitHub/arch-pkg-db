@@ -1,19 +1,19 @@
+pub mod core;
+pub mod extra;
+
 use build_fs_tree::{FileSystemTree, dir, file};
 use libflate::gzip;
 use lzma_rs::xz_compress;
 use std::{io::Write, sync::LazyLock};
 use tree_to_archive::BuildTar;
 
-pub static BASH: &str = include_str!("fixtures/bash.desc");
-pub static BASH_COMPLETION: &str = include_str!("fixtures/bash-completion.desc");
-
 pub static BASH_DB_TREE: LazyLock<FileSystemTree<&str, &str>> = LazyLock::new(|| {
     dir! {
         "bash-5.2.026-2" => dir! {
-            "desc" => file!(BASH),
+            "desc" => file!(core::BASH),
         },
         "bash-completion-2.14.0-2" => dir! {
-            "desc" => file!(BASH_COMPLETION),
+            "desc" => file!(extra::BASH_COMPLETION),
         },
     }
 });
