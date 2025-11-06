@@ -1,7 +1,4 @@
-use crate::fixtures::bash::BASH_DB_TREE;
-use build_fs_tree::{Build, MergeableFileSystemTree};
 use derive_more::{AsRef, Deref};
-use pipe_trait::Pipe;
 use rand::{Rng, distr::Alphanumeric, rng};
 use std::{
     env::temp_dir,
@@ -29,17 +26,6 @@ impl Temp {
         let path = temp_dir().join(name);
         create_dir_all(&path).unwrap();
         Temp(path)
-    }
-
-    /// Create a local db for bash packages.
-    pub fn bash_db() -> Self {
-        let temp = Temp::new("testing-bash-local-db-");
-        BASH_DB_TREE
-            .clone()
-            .pipe(MergeableFileSystemTree::from)
-            .build(&temp)
-            .unwrap();
-        temp
     }
 }
 

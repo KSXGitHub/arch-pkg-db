@@ -1,8 +1,9 @@
 use super::{core::BASH, extra::BASH_COMPLETION};
-
-use build_fs_tree::{FileSystemTree, dir, file};
+use crate::temp::Temp;
+use build_fs_tree::{Build, FileSystemTree, MergeableFileSystemTree, dir, file};
 use libflate::gzip;
 use lzma_rs::xz_compress;
+use pipe_trait::Pipe;
 use std::{io::Write, sync::LazyLock};
 use tree_to_archive::BuildTar;
 
@@ -35,3 +36,16 @@ pub use DB_TREE as BASH_DB_TREE;
 pub use TAR as BASH_TAR;
 pub use TGZ as BASH_TGZ;
 pub use TXZ as BASH_TXZ;
+
+impl Temp {
+    /// Create a local db for bash packages.
+    pub fn bash_db() -> Self {
+        let temp = Temp::new("testing-bash-local-db-");
+        BASH_DB_TREE
+            .clone()
+            .pipe(MergeableFileSystemTree::from)
+            .build(&temp)
+            .unwrap();
+        temp
+    }
+}
