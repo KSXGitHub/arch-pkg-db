@@ -1,5 +1,5 @@
 use _utils::{
-    fixtures::{BASH_TAR, BASH_TGZ, BASH_TXZ},
+    fixtures::bash::{BASH_TAR, BASH_TGZ, BASH_TXZ},
     temp::Temp,
 };
 use arch_pkg_db::{

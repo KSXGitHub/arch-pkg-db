@@ -1,4 +1,4 @@
-use crate::fixtures::BASH_DB_TREE;
+use crate::fixtures::bash::BASH_DB_TREE;
 use build_fs_tree::{Build, MergeableFileSystemTree};
 use derive_more::{AsRef, Deref};
 use pipe_trait::Pipe;
