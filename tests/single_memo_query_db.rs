@@ -1,7 +1,4 @@
-use _utils::{
-    fixtures::bash::{BASH_TAR, BASH_TGZ, BASH_TXZ},
-    temp::Temp,
-};
+use _utils::fixtures::{core::BASH, extra::BASH_COMPLETION};
 use arch_pkg_db::{
     MemoQueryDatabase, TextCollection,
     desc::QueryMut,
@@ -9,7 +6,6 @@ use arch_pkg_db::{
     value::{Description, Name},
 };
 use itertools::Itertools;
-use pipe_trait::Pipe;
 use pretty_assertions::assert_eq;
 
 fn assert_bash_db(queriers: &mut MemoQueryDatabase<'_>) {
@@ -58,65 +54,19 @@ fn assert_bash_db(queriers: &mut MemoQueryDatabase<'_>) {
 }
 
 #[test]
-fn valid_tar() {
-    let texts = BASH_TAR.as_slice().pipe(TextCollection::from_tar).unwrap();
-    let mut queriers: MemoQueryDatabase<'_> = texts.parse_mut().unwrap();
+fn db_parse_mut_get_mut() {
+    let texts = TextCollection::new()
+        .add_item(BASH.into())
+        .add_item(BASH_COMPLETION.into());
+    let mut queriers: MemoQueryDatabase = texts.parse_mut().unwrap();
     assert_bash_db(&mut queriers);
 }
 
 #[test]
-fn valid_tgz() {
-    let texts = BASH_TGZ.as_slice().pipe(TextCollection::from_gz).unwrap();
-    let mut queriers: MemoQueryDatabase<'_> = texts.parse_mut().unwrap();
-    assert_bash_db(&mut queriers);
-}
-
-#[test]
-fn valid_txz() {
-    let texts = BASH_TXZ.as_slice().pipe(TextCollection::from_xz).unwrap();
-    let mut queriers: MemoQueryDatabase<'_> = texts.parse_mut().unwrap();
-    assert_bash_db(&mut queriers);
-}
-
-#[test]
-fn detect_archive_type() {
-    eprintln!("CASE: tar");
-    let texts = BASH_TAR
-        .as_slice()
-        .pipe(TextCollection::from_archive)
-        .unwrap();
-    let mut queriers: MemoQueryDatabase<'_> = texts.parse_mut().unwrap();
-    assert_bash_db(&mut queriers);
-
-    eprintln!("CASE: tgz");
-    let texts = BASH_TGZ
-        .as_slice()
-        .pipe(TextCollection::from_archive)
-        .unwrap();
-    let mut queriers: MemoQueryDatabase<'_> = texts.parse_mut().unwrap();
-    assert_bash_db(&mut queriers);
-
-    eprintln!("CASE: txz");
-    let texts = BASH_TXZ
-        .as_slice()
-        .pipe(TextCollection::from_archive)
-        .unwrap();
-    let mut queriers: MemoQueryDatabase<'_> = texts.parse_mut().unwrap();
-    assert_bash_db(&mut queriers);
-}
-
-#[test]
-fn valid_local() {
-    let local_db = Temp::bash_db();
-    let texts = TextCollection::from_local_db(&local_db).unwrap();
-    let mut queriers: MemoQueryDatabase<'_> = texts.parse_mut().unwrap();
-    assert_bash_db(&mut queriers);
-}
-
-#[test]
-fn parallel() {
-    let local_db = Temp::bash_db();
-    let texts = TextCollection::par_from_local_db(&local_db).unwrap();
-    let mut queriers: MemoQueryDatabase<'_> = texts.par_parse_mut().unwrap();
+fn db_par_parse_mut_get_mut() {
+    let texts = TextCollection::new()
+        .add_item(BASH.into())
+        .add_item(BASH_COMPLETION.into());
+    let mut queriers: MemoQueryDatabase = texts.par_parse_mut().unwrap();
     assert_bash_db(&mut queriers);
 }

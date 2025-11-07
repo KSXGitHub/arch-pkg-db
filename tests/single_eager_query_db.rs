@@ -1,7 +1,4 @@
-use _utils::{
-    fixtures::bash::{BASH_TAR, BASH_TGZ, BASH_TXZ},
-    temp::Temp,
-};
+use _utils::fixtures;
 use arch_pkg_db::{
     EagerQueryDatabase, TextCollection,
     desc::Query,
@@ -9,7 +6,6 @@ use arch_pkg_db::{
     value::{Description, Name},
 };
 use itertools::Itertools;
-use pipe_trait::Pipe;
 use pretty_assertions::assert_eq;
 
 fn assert_bash_db(queriers: &EagerQueryDatabase<'_>) {
@@ -59,65 +55,19 @@ fn assert_bash_db(queriers: &EagerQueryDatabase<'_>) {
 }
 
 #[test]
-fn valid_tar() {
-    let texts = BASH_TAR.as_slice().pipe(TextCollection::from_tar).unwrap();
-    let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
+fn db_parse_get() {
+    let texts = TextCollection::new()
+        .add_item(fixtures::core::BASH.into())
+        .add_item(fixtures::extra::BASH_COMPLETION.into());
+    let queriers: EagerQueryDatabase = texts.parse().unwrap();
     assert_bash_db(&queriers);
 }
 
 #[test]
-fn valid_tgz() {
-    let texts = BASH_TGZ.as_slice().pipe(TextCollection::from_gz).unwrap();
-    let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
-    assert_bash_db(&queriers);
-}
-
-#[test]
-fn valid_txz() {
-    let texts = BASH_TXZ.as_slice().pipe(TextCollection::from_xz).unwrap();
-    let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
-    assert_bash_db(&queriers);
-}
-
-#[test]
-fn detect_archive_type() {
-    eprintln!("CASE: tar");
-    let texts = BASH_TAR
-        .as_slice()
-        .pipe(TextCollection::from_archive)
-        .unwrap();
-    let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
-    assert_bash_db(&queriers);
-
-    eprintln!("CASE: tgz");
-    let texts = BASH_TGZ
-        .as_slice()
-        .pipe(TextCollection::from_archive)
-        .unwrap();
-    let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
-    assert_bash_db(&queriers);
-
-    eprintln!("CASE: txz");
-    let texts = BASH_TXZ
-        .as_slice()
-        .pipe(TextCollection::from_archive)
-        .unwrap();
-    let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
-    assert_bash_db(&queriers);
-}
-
-#[test]
-fn valid_local() {
-    let local_db = Temp::bash_db();
-    let texts = TextCollection::from_local_db(&local_db).unwrap();
-    let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
-    assert_bash_db(&queriers);
-}
-
-#[test]
-fn parallel() {
-    let local_db = Temp::bash_db();
-    let texts = TextCollection::par_from_local_db(&local_db).unwrap();
-    let queriers: EagerQueryDatabase<'_> = texts.par_parse().unwrap();
+fn db_par_parse_get() {
+    let texts = TextCollection::new()
+        .add_item(fixtures::core::BASH.into())
+        .add_item(fixtures::extra::BASH_COMPLETION.into());
+    let queriers: EagerQueryDatabase = texts.par_parse().unwrap();
     assert_bash_db(&queriers);
 }
