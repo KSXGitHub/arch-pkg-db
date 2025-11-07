@@ -118,8 +118,17 @@ fn assert_paru(multi_querier: &MultiQuerier<EagerQuerier>) {
 }
 
 #[test]
-fn db_get() {
+fn db_parse_get() {
     let db: EagerMultiQueryDatabase = MULTI_TEXTS.parse().unwrap();
+    assert_db_get(&db, Name("bash"), assert_bash);
+    assert_db_get(&db, Name("bash-completion"), assert_bash_completion);
+    assert_db_get(&db, Name("parallel-disk-usage"), assert_parallel_disk_usage);
+    assert_db_get(&db, Name("paru"), assert_paru);
+}
+
+#[test]
+fn db_par_parse_get() {
+    let db: EagerMultiQueryDatabase = MULTI_TEXTS.par_parse().unwrap();
     assert_db_get(&db, Name("bash"), assert_bash);
     assert_db_get(&db, Name("bash-completion"), assert_bash_completion);
     assert_db_get(&db, Name("parallel-disk-usage"), assert_parallel_disk_usage);

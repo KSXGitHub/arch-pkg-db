@@ -113,3 +113,11 @@ fn valid_local() {
     let queriers: EagerQueryDatabase<'_> = texts.parse().unwrap();
     assert_bash_db(&queriers);
 }
+
+#[test]
+fn parallel() {
+    let local_db = Temp::bash_db();
+    let texts = TextCollection::par_from_local_db(&local_db).unwrap();
+    let queriers: EagerQueryDatabase<'_> = texts.par_parse().unwrap();
+    assert_bash_db(&queriers);
+}

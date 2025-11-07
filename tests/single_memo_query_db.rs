@@ -112,3 +112,11 @@ fn valid_local() {
     let mut queriers: MemoQueryDatabase<'_> = texts.parse_mut().unwrap();
     assert_bash_db(&mut queriers);
 }
+
+#[test]
+fn parallel() {
+    let local_db = Temp::bash_db();
+    let texts = TextCollection::par_from_local_db(&local_db).unwrap();
+    let mut queriers: MemoQueryDatabase<'_> = texts.par_parse_mut().unwrap();
+    assert_bash_db(&mut queriers);
+}
