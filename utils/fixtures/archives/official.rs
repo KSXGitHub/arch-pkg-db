@@ -29,6 +29,18 @@ pub static DB_TREE: LazyLock<FileSystemTree<&str, &str>> = LazyLock::new(|| {
     }
 });
 
+pub static DB_TEXTS: LazyLock<Vec<&str>> = LazyLock::new(|| {
+    DB_TREE
+        .dir_content()
+        .unwrap()
+        .values()
+        .flat_map(|subtree| subtree.dir_content())
+        .flat_map(|subtree| subtree.get("desc"))
+        .flat_map(|desc| desc.file_content())
+        .copied()
+        .collect()
+});
+
 pub static TAR: LazyLock<Vec<u8>> = LazyLock::new(|| DB_TREE.build_tar().unwrap());
 
 pub static TGZ: LazyLock<Vec<u8>> = LazyLock::new(|| {

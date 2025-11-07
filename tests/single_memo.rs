@@ -1,6 +1,6 @@
-use _utils::fixtures::{core::BASH, extra::BASH_COMPLETION};
+use _utils::fixtures::archives::official::DB_TEXTS;
 use arch_pkg_db::{
-    MemoQueryDatabase, TextCollection,
+    MemoQueryDatabase, Text, TextCollection,
     desc::QueryMut,
     single::Entry,
     value::{Description, Name},
@@ -8,8 +8,10 @@ use arch_pkg_db::{
 use itertools::Itertools;
 use pretty_assertions::assert_eq;
 
-fn assert_bash_db(queriers: &mut MemoQueryDatabase<'_>) {
+fn assert_official_db(queriers: &mut MemoQueryDatabase<'_>) {
     dbg!(&queriers);
+
+    let all_names = ["bash", "bash-completion", "parallel-disk-usage"].map(Name);
 
     let querier = queriers.get_mut(Name("bash")).unwrap();
     assert_eq!(querier.name_mut(), Some(Name("bash")));
@@ -26,10 +28,7 @@ fn assert_bash_db(queriers: &mut MemoQueryDatabase<'_>) {
     );
 
     assert!(queriers.get_mut(Name("not-exist")).is_none());
-    assert_eq!(
-        queriers.names().sorted().collect::<Vec<_>>(),
-        ["bash", "bash-completion"].map(Name),
-    );
+    assert_eq!(queriers.names().sorted().collect::<Vec<_>>(), all_names,);
 
     assert_eq!(
         queriers
@@ -37,7 +36,7 @@ fn assert_bash_db(queriers: &mut MemoQueryDatabase<'_>) {
             .map(QueryMut::name_mut)
             .sorted()
             .collect::<Vec<_>>(),
-        ["bash", "bash-completion"].map(Name).map(Some),
+        all_names.map(Some),
     );
 
     assert_eq!(
@@ -47,26 +46,20 @@ fn assert_bash_db(queriers: &mut MemoQueryDatabase<'_>) {
             .map(|(name, querier)| (name, querier.name_mut()))
             .sorted()
             .collect::<Vec<_>>(),
-        ["bash", "bash-completion"]
-            .map(Name)
-            .map(|name| (name, Some(name))),
+        all_names.map(|name| (name, Some(name))),
     )
 }
 
 #[test]
 fn db_parse_mut_get_mut() {
-    let texts = TextCollection::new()
-        .add_item(BASH.into())
-        .add_item(BASH_COMPLETION.into());
+    let texts: TextCollection = DB_TEXTS.iter().copied().map(Text::from).collect();
     let mut queriers: MemoQueryDatabase = texts.parse_mut().unwrap();
-    assert_bash_db(&mut queriers);
+    assert_official_db(&mut queriers);
 }
 
 #[test]
 fn db_par_parse_mut_get_mut() {
-    let texts = TextCollection::new()
-        .add_item(BASH.into())
-        .add_item(BASH_COMPLETION.into());
+    let texts: TextCollection = DB_TEXTS.iter().copied().map(Text::from).collect();
     let mut queriers: MemoQueryDatabase = texts.par_parse_mut().unwrap();
-    assert_bash_db(&mut queriers);
+    assert_official_db(&mut queriers);
 }
