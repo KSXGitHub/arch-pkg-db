@@ -1,5 +1,5 @@
 pub mod bash;
 pub mod core;
-pub mod endeavouros;
+pub mod derivative;
 pub mod extra;
-pub mod khai;
+pub mod personal;
