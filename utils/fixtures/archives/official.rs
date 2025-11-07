@@ -1,5 +1,10 @@
-use super::{core::BASH, extra::BASH_COMPLETION};
-use crate::temp::Temp;
+use crate::{
+    fixtures::{
+        core::BASH,
+        extra::{BASH_COMPLETION, PARALLEL_DISK_USAGE},
+    },
+    temp::Temp,
+};
 use build_fs_tree::{Build, FileSystemTree, MergeableFileSystemTree, dir, file};
 use libflate::gzip;
 use lzma_rs::xz_compress;
@@ -9,11 +14,17 @@ use tree_to_archive::BuildTar;
 
 pub static DB_TREE: LazyLock<FileSystemTree<&str, &str>> = LazyLock::new(|| {
     dir! {
+        // core
         "bash-5.2.026-2" => dir! {
             "desc" => file!(BASH),
         },
+
+        // extra
         "bash-completion-2.14.0-2" => dir! {
             "desc" => file!(BASH_COMPLETION),
+        },
+        "parallel-disk-usage-parallel-disk-usage-0.21.1-1" => dir! {
+            "desc" => file!(PARALLEL_DISK_USAGE),
         },
     }
 });
@@ -32,16 +43,11 @@ pub static TXZ: LazyLock<Vec<u8>> = LazyLock::new(|| {
     xz
 });
 
-pub use DB_TREE as BASH_DB_TREE;
-pub use TAR as BASH_TAR;
-pub use TGZ as BASH_TGZ;
-pub use TXZ as BASH_TXZ;
-
 impl Temp {
-    /// Create a local db for bash packages.
-    pub fn bash_db() -> Self {
-        let temp = Temp::new("testing-bash-local-db-");
-        BASH_DB_TREE
+    /// Create a local db for official packages.
+    pub fn official_db() -> Self {
+        let temp = Temp::new("testing-official-local-db-");
+        DB_TREE
             .clone()
             .pipe(MergeableFileSystemTree::from)
             .build(&temp)
