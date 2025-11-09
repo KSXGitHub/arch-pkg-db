@@ -12,7 +12,18 @@ use pretty_assertions::assert_eq;
 fn assert_official_db(queriers: &EagerQueryDatabase<'_>) {
     dbg!(&queriers);
 
-    let all_names = ["bash", "bash-completion", "parallel-disk-usage"].map(Name);
+    let all_names = [
+        "bash",
+        "bash-completion",
+        "glibc",
+        "ncurses",
+        "pacman",
+        "parallel-disk-usage",
+        "readline",
+        "rust",
+        "rustup",
+    ]
+    .map(Name);
 
     let querier = queriers.get(Name("bash")).unwrap();
     assert_eq!(querier.name(), Some(Name("bash")));

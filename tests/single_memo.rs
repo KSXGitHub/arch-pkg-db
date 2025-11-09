@@ -11,7 +11,18 @@ use pretty_assertions::assert_eq;
 fn assert_official_db(queriers: &mut MemoQueryDatabase<'_>) {
     dbg!(&queriers);
 
-    let all_names = ["bash", "bash-completion", "parallel-disk-usage"].map(Name);
+    let all_names = [
+        "bash",
+        "bash-completion",
+        "glibc",
+        "ncurses",
+        "pacman",
+        "parallel-disk-usage",
+        "readline",
+        "rust",
+        "rustup",
+    ]
+    .map(Name);
 
     let querier = queriers.get_mut(Name("bash")).unwrap();
     assert_eq!(querier.name_mut(), Some(Name("bash")));

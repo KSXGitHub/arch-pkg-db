@@ -1,7 +1,7 @@
 use crate::{
     fixtures::{
-        core::BASH,
-        extra::{BASH_COMPLETION, PARALLEL_DISK_USAGE},
+        core::{BASH, GLIBC, NCURSES, PACMAN, READLINE},
+        extra::{BASH_COMPLETION, PARALLEL_DISK_USAGE, RUST, RUSTUP},
     },
     temp::Temp,
 };
@@ -18,6 +18,18 @@ pub static DB_TREE: LazyLock<FileSystemTree<&str, &str>> = LazyLock::new(|| {
         "bash-5.2.026-2" => dir! {
             "desc" => file!(BASH),
         },
+        "glibc-2.42+r17+gd7274d718e6f-1" => dir! {
+            "desc" => file!(GLIBC),
+        },
+        "ncurses-6.5-4" => dir! {
+            "desc" => file!(NCURSES),
+        },
+        "pacman-7.0.0.r6.gc685ae6-6" => dir! {
+            "desc" => file!(PACMAN),
+        },
+        "readline-8.3.001-1" => dir! {
+            "desc" => file!(READLINE),
+        },
 
         // extra
         "bash-completion-2.14.0-2" => dir! {
@@ -25,6 +37,12 @@ pub static DB_TREE: LazyLock<FileSystemTree<&str, &str>> = LazyLock::new(|| {
         },
         "parallel-disk-usage-parallel-disk-usage-0.21.1-1" => dir! {
             "desc" => file!(PARALLEL_DISK_USAGE),
+        },
+        "rust-1:1.90.0-3" => dir! {
+            "desc" => file!(RUST),
+        },
+        "rustup-1.28.2-3" => dir! {
+            "desc" => file!(RUSTUP),
         },
     }
 });
