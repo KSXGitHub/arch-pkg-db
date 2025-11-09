@@ -4,9 +4,9 @@ use _utils::{MULTI_TEXTS, fixtures};
 use arch_pkg_db::{
     EagerMultiQueryDatabase,
     desc::{EagerQuerier, Query},
-    misc::AttachedUtils,
+    misc::{Attached, AttachedUtils},
     multi::MultiQuerier,
-    value::{Name, RepositoryName, Version},
+    value::{Name, ParsedVersion, RepositoryName, Version},
 };
 use itertools::Itertools;
 use pipe_trait::Pipe;
@@ -39,14 +39,11 @@ fn assert_repositories<const LEN: usize>(
 }
 
 fn assert_package(
-    multi_querier: &MultiQuerier<EagerQuerier>,
-    repository: RepositoryName,
+    actual_pkg: &Attached<&EagerQuerier, ParsedVersion>,
     expected_desc: &'static str,
     expected_name: Name<'static>,
     expected_version: Version<'static>,
 ) {
-    eprintln!("REPOSITORY/PACKAGE: {repository}/{expected_name}");
-    let actual_pkg = multi_querier.get(repository).unwrap();
     let expected_pkg = expected_desc.pipe(EagerQuerier::parse).unwrap();
     assert_eq!(actual_pkg.name(), Some(expected_name));
     assert_eq!(actual_pkg.name(), expected_pkg.name());
@@ -59,9 +56,21 @@ fn assert_package(
     assert_eq!(*actual_pkg.attachment(), actual_version.parse().unwrap());
 }
 
+fn assert_multi_querier_get(
+    multi_querier: &MultiQuerier<EagerQuerier>,
+    repository: RepositoryName,
+    expected_desc: &'static str,
+    expected_name: Name<'static>,
+    expected_version: Version<'static>,
+) {
+    eprintln!("REPOSITORY/PACKAGE: {repository}/{expected_name}");
+    let actual_pkg = multi_querier.get(repository).unwrap();
+    assert_package(&actual_pkg, expected_desc, expected_name, expected_version);
+}
+
 fn assert_bash(multi_querier: &MultiQuerier<EagerQuerier>) {
     assert_repositories(multi_querier, ["core"]);
-    assert_package(
+    assert_multi_querier_get(
         multi_querier,
         RepositoryName("core"),
         fixtures::core::BASH,
@@ -72,7 +81,7 @@ fn assert_bash(multi_querier: &MultiQuerier<EagerQuerier>) {
 
 fn assert_bash_completion(multi_querier: &MultiQuerier<EagerQuerier>) {
     assert_repositories(multi_querier, ["extra"]);
-    assert_package(
+    assert_multi_querier_get(
         multi_querier,
         RepositoryName("extra"),
         fixtures::extra::BASH_COMPLETION,
@@ -83,14 +92,14 @@ fn assert_bash_completion(multi_querier: &MultiQuerier<EagerQuerier>) {
 
 fn assert_parallel_disk_usage(multi_querier: &MultiQuerier<EagerQuerier>) {
     assert_repositories(multi_querier, ["extra", "personal"]);
-    assert_package(
+    assert_multi_querier_get(
         multi_querier,
         RepositoryName("extra"),
         fixtures::extra::PARALLEL_DISK_USAGE,
         Name("parallel-disk-usage"),
         Version("0.21.1-1"),
     );
-    assert_package(
+    assert_multi_querier_get(
         multi_querier,
         RepositoryName("personal"),
         fixtures::personal::PARALLEL_DISK_USAGE,
@@ -101,14 +110,14 @@ fn assert_parallel_disk_usage(multi_querier: &MultiQuerier<EagerQuerier>) {
 
 fn assert_paru(multi_querier: &MultiQuerier<EagerQuerier>) {
     assert_repositories(multi_querier, ["derivative", "personal"]);
-    assert_package(
+    assert_multi_querier_get(
         multi_querier,
         RepositoryName("derivative"),
         fixtures::derivative::PARU,
         Name("paru"),
         Version("2.1.0-1"),
     );
-    assert_package(
+    assert_multi_querier_get(
         multi_querier,
         RepositoryName("personal"),
         fixtures::personal::PARU,
