@@ -35,7 +35,7 @@ x86_64
 1711186772
 
 %PACKAGER%
-Hoàng Văn Khải <hvksmr1996@gmail.com>
+Fictional packager of personal packages <email@example.org>
 
 %MAKEDEPENDS%
 cargo

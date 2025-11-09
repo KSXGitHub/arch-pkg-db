@@ -38,7 +38,7 @@ x86_64
 1756835759
 
 %PACKAGER%
-Orhun Parmaksız <orhun@archlinux.org>
+Fictional packager of PDU <email@example.org>
 
 %DEPENDS%
 gcc-libs

@@ -35,7 +35,7 @@ x86_64
 1711186453
 
 %PACKAGER%
-Hoàng Văn Khải <hvksmr1996@gmail.com>
+Fictional packager of personal packages <email@example.org>
 
 %DEPENDS%
 git
@@ -48,4 +48,3 @@ devtools: build in chroot and downloading pkgbuilds
 
 %MAKEDEPENDS%
 cargo
-
