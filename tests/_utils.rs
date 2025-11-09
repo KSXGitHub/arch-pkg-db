@@ -29,8 +29,8 @@ macro_rules! multi_text {
 
 pub static MULTI_TEXTS: LazyLock<MultiTextCollection> = LazyLock::new(|| {
     multi_text!(
-        core::[BASH],
-        extra::[BASH_COMPLETION, PARALLEL_DISK_USAGE],
+        core::[BASH, GLIBC, NCURSES, PACMAN, READLINE],
+        extra::[BASH_COMPLETION, PARALLEL_DISK_USAGE, RUST, RUSTUP],
         derivative::[PARU],
         personal::[PARALLEL_DISK_USAGE, PARU],
     )
