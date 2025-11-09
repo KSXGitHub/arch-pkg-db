@@ -35,7 +35,7 @@ fn assert_alternative_providers(
 ) {
     eprintln!();
     eprintln!("============");
-    eprintln!("PROVIDE: {target}");
+    eprintln!("PROVIDES: {target}");
     let providers: Vec<_> = db
         .alternative_providers(target)
         .sorted_by_key(|(repository, pkg)| {
