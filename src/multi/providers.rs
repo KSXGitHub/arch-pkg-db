@@ -141,10 +141,7 @@ impl<'query, Querier> MultiQueryDatabase<'query, Querier> {
     pub fn alternative_providers<'r, 'name>(
         &'r self,
         target: DependencyName<'name>,
-    ) -> AlternativeProviders<'r, 'query, 'name, Querier>
-    where
-        Querier: Query<'r>,
-    {
+    ) -> AlternativeProviders<'r, 'query, 'name, Querier> {
         AlternativeProviders::new(target, self.queriers())
     }
 
@@ -157,10 +154,7 @@ impl<'query, Querier> MultiQueryDatabase<'query, Querier> {
     pub fn alternative_providers_mut<'r, 'name>(
         &'r mut self,
         target: DependencyName<'name>,
-    ) -> AlternativeProvidersMut<'r, 'query, 'name, Querier>
-    where
-        Querier: QueryMut<'r>,
-    {
+    ) -> AlternativeProvidersMut<'r, 'query, 'name, Querier> {
         AlternativeProvidersMut::new(target, self.queriers_mut())
     }
 }

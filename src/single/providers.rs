@@ -84,10 +84,7 @@ impl<Querier> QueryDatabase<'_, Querier> {
     pub fn alternative_providers<'a>(
         &'a self,
         target: DependencyName<'a>,
-    ) -> AlternativeProviders<'a, 'a, Querier>
-    where
-        Querier: Query<'a>,
-    {
+    ) -> AlternativeProviders<'a, 'a, Querier> {
         let queriers = self.queriers();
         AlternativeProviders { target, queriers }
     }
@@ -101,10 +98,7 @@ impl<Querier> QueryDatabase<'_, Querier> {
     pub fn alternative_providers_mut<'a>(
         &'a mut self,
         target: DependencyName<'a>,
-    ) -> AlternativeProvidersMut<'a, 'a, Querier>
-    where
-        Querier: QueryMut<'a>,
-    {
+    ) -> AlternativeProvidersMut<'a, 'a, Querier> {
         let queriers = self.queriers_mut();
         AlternativeProvidersMut { target, queriers }
     }

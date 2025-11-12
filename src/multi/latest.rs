@@ -3,14 +3,10 @@ use crate::{
     misc::{AttachedUtils, IntoAttached},
     value::RepositoryName,
 };
-use arch_pkg_text::desc::{Query, QueryMut};
 
 impl<'a, Querier> MultiQuerier<'a, Querier> {
     /// Get an immutable reference to a querier whose package's version is greatest.
-    pub fn latest<'query>(&self) -> Option<LatestQuerier<'a, &Querier>>
-    where
-        Querier: Query<'query>,
-    {
+    pub fn latest(&self) -> Option<LatestQuerier<'a, &Querier>> {
         self.internal
             .iter()
             .max_by_key(|(_, querier)| querier.attachment())
@@ -23,10 +19,7 @@ impl<'a, Querier> MultiQuerier<'a, Querier> {
     }
 
     /// Get a mutable reference to a querier whose package's version is greatest.
-    pub fn latest_mut<'query>(&mut self) -> Option<LatestQuerier<'a, &mut Querier>>
-    where
-        Querier: QueryMut<'query>,
-    {
+    pub fn latest_mut(&mut self) -> Option<LatestQuerier<'a, &mut Querier>> {
         self.internal
             .iter_mut()
             .max_by_key(|(_, querier)| *querier.attachment())

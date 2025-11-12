@@ -2,10 +2,7 @@ use super::{
     LatestQuerier, MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest, WithVersion,
 };
 use crate::{misc::AttachedUtils, value::RepositoryName};
-use arch_pkg_text::{
-    desc::{Query, QueryMut},
-    value::Name,
-};
+use arch_pkg_text::value::Name;
 
 impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
     /// Get an immutable reference to a set of queriers of packages from different repositories
@@ -41,20 +38,14 @@ impl<Querier> MultiQuerier<'_, Querier> {
 
 impl<'r, 'a, Querier> MultiQueryDatabaseLatest<&'r MultiQueryDatabase<'a, Querier>> {
     /// Get an immutable reference to the querier of the latest version of a package by its name.
-    pub fn get<'query>(&self, name: Name) -> Option<LatestQuerier<'a, &'r Querier>>
-    where
-        Querier: Query<'query>,
-    {
+    pub fn get(&self, name: Name) -> Option<LatestQuerier<'a, &'r Querier>> {
         self.base.get(name)?.latest()
     }
 }
 
 impl<'a, Querier> MultiQueryDatabaseLatest<&mut MultiQueryDatabase<'a, Querier>> {
     /// Get an mutable reference to the querier of the latest version of a package by its name.
-    pub fn get_mut<'query>(&mut self, name: Name) -> Option<LatestQuerier<'a, &mut Querier>>
-    where
-        Querier: QueryMut<'query>,
-    {
+    pub fn get_mut(&mut self, name: Name) -> Option<LatestQuerier<'a, &mut Querier>> {
         self.base.get_mut(name)?.latest_mut()
     }
 }

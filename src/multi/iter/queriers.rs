@@ -1,7 +1,6 @@
 use crate::multi::{
     LatestQuerier, MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest, WithVersion,
 };
-use arch_pkg_text::desc::{Query, QueryMut};
 use core::{
     iter::FusedIterator,
     ops::{Deref, DerefMut},
@@ -181,7 +180,7 @@ pub struct LatestQueriers<'r, 'query, Querier> {
     internal: Values<'r, &'query str, MultiQuerier<'query, Querier>>,
 }
 
-impl<'r, 'query, Querier: Query<'query>> Iterator for LatestQueriers<'r, 'query, Querier> {
+impl<'r, 'query, Querier> Iterator for LatestQueriers<'r, 'query, Querier> {
     type Item = LatestQuerier<'query, &'r Querier>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -197,7 +196,7 @@ impl<'r, 'query, Querier: Query<'query>> Iterator for LatestQueriers<'r, 'query,
     }
 }
 
-impl<'query, Querier: Query<'query>> FusedIterator for LatestQueriers<'_, 'query, Querier> {}
+impl<'query, Querier> FusedIterator for LatestQueriers<'_, 'query, Querier> {}
 
 /// [Iterator] over all mutable queriers in a [`MultiQueryDatabaseLatest`].
 #[derive(Debug)]
@@ -205,7 +204,7 @@ pub struct LatestQueriersMut<'r, 'query, Querier> {
     internal: ValuesMut<'r, &'query str, MultiQuerier<'query, Querier>>,
 }
 
-impl<'r, 'query, Querier: QueryMut<'query>> Iterator for LatestQueriersMut<'r, 'query, Querier> {
+impl<'r, 'query, Querier> Iterator for LatestQueriersMut<'r, 'query, Querier> {
     type Item = LatestQuerier<'query, &'r mut Querier>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -221,7 +220,7 @@ impl<'r, 'query, Querier: QueryMut<'query>> Iterator for LatestQueriersMut<'r, '
     }
 }
 
-impl<'query, Querier: QueryMut<'query>> FusedIterator for LatestQueriersMut<'_, 'query, Querier> {}
+impl<'query, Querier> FusedIterator for LatestQueriersMut<'_, 'query, Querier> {}
 
 impl<Ref> MultiQueryDatabaseLatest<Ref> {
     /// Get an iterator over all immutable queriers.
