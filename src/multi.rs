@@ -15,7 +15,7 @@ pub use iter::{
     MultiEntries, MultiEntriesMut, MultiOwnedEntries, MultiQueriers, MultiQueriersMut, Names,
     OwnedEntries, Queriers, QueriersMut, RepositoryNames,
 };
-pub use providers::AlternativeProviders;
+pub use providers::{AlternativeProviders, AlternativeProvidersMut};
 
 use crate::{misc::Attached, value::RepositoryName};
 use arch_pkg_text::{
