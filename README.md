@@ -1,6 +1,6 @@
 # arch-pkg-db
 
-Pure Rust library to read Arch Linux's package database archives.
+Pure Rust library to read Arch Linux's package database archives. "Pure Rust" means not needing `libalpm`.
 
 ## Description
 
@@ -9,6 +9,14 @@ This is a collection of APIs that allow for loading a database of pacman package
 The database could be a local database of installed packages or a sync database of all installable packages.
 
 The sync database may or may not contain non-official repositories, with duplicated package names.
+
+## Why not `libalpm`?
+
+Relying on `libalpm` has 2 limitations:
+* The program would only work on Arch Linux.
+* Every time `libalpm` updates, the program would need to be recompiled. And since Arch Linux is rolling release, `libalpm` would update frequently, forcing the program to recompile frequently.
+
+This library aims to provide the means to query pacman packages without the above limitations.
 
 ## Documentation
 
