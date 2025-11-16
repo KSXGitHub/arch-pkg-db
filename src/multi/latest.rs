@@ -15,6 +15,7 @@ impl<'a, Querier> MultiQuerier<'a, Querier> {
                     .as_deref()
                     .copied_attachment()
                     .into_attached(RepositoryName(repository))
+                    .flatten()
             })
     }
 
@@ -28,6 +29,7 @@ impl<'a, Querier> MultiQuerier<'a, Querier> {
                     .as_deref_mut()
                     .copied_attachment()
                     .into_attached(RepositoryName(repository))
+                    .flatten()
             })
     }
 }

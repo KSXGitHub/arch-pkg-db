@@ -27,11 +27,8 @@ use std::collections::HashMap;
 /// Querier attached to a version.
 type WithVersion<'a, Querier> = Attached<Querier, ParsedVersion<'a>>;
 
-/// Querier attached to a repository name.
-type WithRepository<'a, Querier> = Attached<Querier, RepositoryName<'a>>;
-
 /// Return type of [`MultiQuerier::latest`] and [`MultiQuerier::latest_mut`].
-type LatestQuerier<'a, Querier> = WithRepository<'a, WithVersion<'a, Querier>>;
+type LatestQuerier<'a, Querier> = Attached<Querier, (RepositoryName<'a>, ParsedVersion<'a>)>;
 
 /// Queriers of multiple same-name packages from different repositories.
 #[derive(Debug, Clone)]
