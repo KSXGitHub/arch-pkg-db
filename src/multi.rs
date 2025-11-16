@@ -22,24 +22,17 @@ pub use iter::{
 };
 pub use providers::{AlternativeProviders, AlternativeProvidersMut};
 
-use crate::{misc::Attached, value::RepositoryName};
-use arch_pkg_text::{
-    desc::{EagerQuerier, MemoQuerier},
-    value::ParsedVersion,
-};
+use arch_pkg_text::desc::{EagerQuerier, MemoQuerier};
 use std::collections::HashMap;
 
-/// Querier attached to a version.
-type WithVersion<'a, Querier> = Attached<Querier, ParsedVersion<'a>>;
-
 /// Return type of [`MultiQuerier::latest`] and [`MultiQuerier::latest_mut`].
-type LatestQuerier<'a, Querier> = Attached<Querier, (RepositoryName<'a>, ParsedVersion<'a>)>;
+type LatestQuerier<'a, Querier> = WithRepositoryName<'a, WithParsedVersion<'a, Querier>>;
 
 /// Queriers of multiple same-name packages from different repositories.
 #[derive(Debug, Clone)]
 pub struct MultiQuerier<'a, Querier> {
     /// Map repository names to their queriers.
-    internal: HashMap<&'a str, WithVersion<'a, Querier>>,
+    internal: HashMap<&'a str, WithParsedVersion<'a, Querier>>,
 }
 
 /// Database to lookup queriers from their package names and repositories.

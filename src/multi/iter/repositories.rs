@@ -1,5 +1,5 @@
 use crate::{
-    multi::{MultiQuerier, WithVersion},
+    multi::{MultiQuerier, WithParsedVersion},
     value::RepositoryName,
 };
 use std::{collections::hash_map::Keys, iter::FusedIterator};
@@ -7,7 +7,7 @@ use std::{collections::hash_map::Keys, iter::FusedIterator};
 /// [Iterator] over [repository names](RepositoryName) in a [`MultiQuerier`].
 #[derive(Debug, Clone)]
 pub struct RepositoryNames<'r, 'query, Querier> {
-    internal: Keys<'r, &'query str, WithVersion<'query, Querier>>,
+    internal: Keys<'r, &'query str, WithParsedVersion<'query, Querier>>,
 }
 
 impl<'query, Querier> Iterator for RepositoryNames<'_, 'query, Querier> {

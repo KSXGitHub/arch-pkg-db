@@ -1,6 +1,7 @@
 use crate::{
     multi::{
-        LatestQuerier, MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest, WithVersion,
+        LatestQuerier, MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest,
+        WithParsedVersion,
     },
     value::RepositoryName,
 };
@@ -109,11 +110,14 @@ impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
 /// [Iterator] over all pairs of [repository names](RepositoryName) and immutable queriers in a [`MultiQuerier`].
 #[derive(Debug, Clone)]
 pub struct Entries<'r, 'query, Querier> {
-    internal: hash_map::Iter<'r, &'query str, WithVersion<'query, Querier>>,
+    internal: hash_map::Iter<'r, &'query str, WithParsedVersion<'query, Querier>>,
 }
 
 impl<'r, 'query, Querier> Iterator for Entries<'r, 'query, Querier> {
-    type Item = (RepositoryName<'query>, &'r WithVersion<'query, Querier>);
+    type Item = (
+        RepositoryName<'query>,
+        &'r WithParsedVersion<'query, Querier>,
+    );
 
     fn next(&mut self) -> Option<Self::Item> {
         let (name, querier) = self.internal.next()?;
@@ -140,11 +144,14 @@ impl<Querier> FusedIterator for Entries<'_, '_, Querier> {}
 /// [Iterator] over all pairs of [repository names](RepositoryName) and mutable queriers in a [`MultiQuerier`].
 #[derive(Debug)]
 pub struct EntriesMut<'r, 'query, Querier> {
-    internal: hash_map::IterMut<'r, &'query str, WithVersion<'query, Querier>>,
+    internal: hash_map::IterMut<'r, &'query str, WithParsedVersion<'query, Querier>>,
 }
 
 impl<'r, 'query, Querier> Iterator for EntriesMut<'r, 'query, Querier> {
-    type Item = (RepositoryName<'query>, &'r mut WithVersion<'query, Querier>);
+    type Item = (
+        RepositoryName<'query>,
+        &'r mut WithParsedVersion<'query, Querier>,
+    );
 
     fn next(&mut self) -> Option<Self::Item> {
         let (name, querier) = self.internal.next()?;

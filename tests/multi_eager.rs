@@ -4,9 +4,8 @@ use _utils::{MULTI_TEXTS, fixtures};
 use arch_pkg_db::{
     EagerMultiQueryDatabase,
     desc::{EagerQuerier, Query},
-    misc::{Attached, AttachedUtils},
-    multi::MultiQuerier,
-    value::{DependencyName, Name, ParsedVersion, RepositoryName, Version},
+    multi::{MultiQuerier, WithParsedVersion, WithParsedVersionUtils},
+    value::{DependencyName, Name, RepositoryName, Version},
 };
 use itertools::Itertools;
 use pipe_trait::Pipe;
@@ -14,7 +13,7 @@ use pretty_assertions::assert_eq;
 
 type ProviderPair<'a> = (
     RepositoryName<'a>,
-    &'a Attached<EagerQuerier<'a>, ParsedVersion<'a>>,
+    &'a WithParsedVersion<'a, EagerQuerier<'a>>,
 );
 
 fn assert_db_get(
@@ -75,7 +74,7 @@ fn assert_repositories_packages<const LEN: usize>(
 }
 
 fn assert_package<'a, Querier: Query<'a>>(
-    actual_pkg: &Attached<Querier, ParsedVersion>,
+    actual_pkg: &WithParsedVersion<Querier>,
     expected_desc: &'static str,
     expected_name: Name<'static>,
     expected_version: Version<'static>,
@@ -89,7 +88,7 @@ fn assert_package<'a, Querier: Query<'a>>(
         actual_version.as_str(),
         expected_pkg.version().unwrap().as_str(),
     );
-    assert_eq!(*actual_pkg.attachment(), actual_version.parse().unwrap());
+    assert_eq!(actual_pkg.parsed_version(), actual_version.parse().unwrap());
 }
 
 fn assert_multi_querier_get(

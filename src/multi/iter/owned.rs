@@ -1,5 +1,5 @@
 use crate::{
-    multi::{MultiQuerier, MultiQueryDatabase, WithVersion},
+    multi::{MultiQuerier, MultiQueryDatabase, WithParsedVersion},
     value::RepositoryName,
 };
 use arch_pkg_text::value::Name;
@@ -50,11 +50,11 @@ impl<'a, Querier> IntoIterator for MultiQueryDatabase<'a, Querier> {
 /// [Iterator] over all pairs of [repository names](RepositoryName) and owned queriers from a [`MultiQuerier`].
 #[derive(Debug)]
 pub struct OwnedEntries<'query, Querier> {
-    internal: hash_map::IntoIter<&'query str, WithVersion<'query, Querier>>,
+    internal: hash_map::IntoIter<&'query str, WithParsedVersion<'query, Querier>>,
 }
 
 impl<'query, Querier> Iterator for OwnedEntries<'query, Querier> {
-    type Item = (RepositoryName<'query>, WithVersion<'query, Querier>);
+    type Item = (RepositoryName<'query>, WithParsedVersion<'query, Querier>);
 
     fn next(&mut self) -> Option<Self::Item> {
         let (name, querier) = self.internal.next()?;
@@ -80,7 +80,7 @@ impl<Querier> FusedIterator for OwnedEntries<'_, Querier> {}
 
 impl<'a, Querier> IntoIterator for MultiQuerier<'a, Querier> {
     type IntoIter = OwnedEntries<'a, Querier>;
-    type Item = (RepositoryName<'a>, WithVersion<'a, Querier>);
+    type Item = (RepositoryName<'a>, WithParsedVersion<'a, Querier>);
     fn into_iter(self) -> Self::IntoIter {
         OwnedEntries {
             internal: self.internal.into_iter(),

@@ -1,4 +1,4 @@
-use super::{MultiQueryDatabase, WithVersion};
+use super::{MultiQueryDatabase, WithParsedVersion};
 use crate::{
     multi::{Entries, EntriesMut, MultiQuerier, MultiQueriers, MultiQueriersMut},
     value::RepositoryName,
@@ -41,7 +41,10 @@ impl<'r, 'query, 'name, Querier> AlternativeProviders<'r, 'query, 'name, Querier
 impl<'r, 'query, 'name, Querier: Query<'r>> Iterator
     for AlternativeProviders<'r, 'query, 'name, Querier>
 {
-    type Item = (RepositoryName<'query>, &'r WithVersion<'query, Querier>);
+    type Item = (
+        RepositoryName<'query>,
+        &'r WithParsedVersion<'query, Querier>,
+    );
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             if cfg!(debug_assertions) && self.current.is_none() && self.queriers.next().is_some() {
@@ -102,7 +105,10 @@ impl<'r, 'query, 'name, Querier> AlternativeProvidersMut<'r, 'query, 'name, Quer
 impl<'r, 'query, 'name, Querier: QueryMut<'r>> Iterator
     for AlternativeProvidersMut<'r, 'query, 'name, Querier>
 {
-    type Item = (RepositoryName<'query>, &'r mut WithVersion<'query, Querier>);
+    type Item = (
+        RepositoryName<'query>,
+        &'r mut WithParsedVersion<'query, Querier>,
+    );
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             if cfg!(debug_assertions) && self.current.is_none() && self.queriers.next().is_some() {
