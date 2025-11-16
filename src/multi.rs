@@ -1,5 +1,6 @@
 //! Database of a system of multiple repositories.
 
+mod combine;
 mod extend;
 mod get;
 mod insert;
@@ -9,6 +10,10 @@ mod misc;
 mod new;
 mod providers;
 
+pub use combine::{
+    IntoWithParsedVersion, IntoWithRepositoryName, WithParsedVersion, WithParsedVersionUtils,
+    WithRepositoryName, WithRepositoryNameUtils,
+};
 pub use insert::{InsertError, InsertNewerReturn};
 pub use iter::{
     Entries, EntriesMut, LatestEntries, LatestEntriesMut, LatestQueriers, LatestQueriersMut,
