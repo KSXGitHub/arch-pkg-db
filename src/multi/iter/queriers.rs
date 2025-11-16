@@ -1,5 +1,5 @@
 use crate::multi::{
-    LatestQuerier, MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest, WithVersion,
+    LatestQuerier, MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest, WithParsedVersion,
 };
 use core::{
     iter::FusedIterator,
@@ -101,11 +101,11 @@ impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
 /// [Iterator] over all immutable queriers in a [`MultiQuerier`].
 #[derive(Debug, Clone)]
 pub struct Queriers<'r, 'query, Querier> {
-    internal: Values<'r, &'query str, WithVersion<'query, Querier>>,
+    internal: Values<'r, &'query str, WithParsedVersion<'query, Querier>>,
 }
 
 impl<'r, 'query, Querier> Iterator for Queriers<'r, 'query, Querier> {
-    type Item = &'r WithVersion<'query, Querier>;
+    type Item = &'r WithParsedVersion<'query, Querier>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.internal.next()
@@ -131,11 +131,11 @@ impl<Querier> FusedIterator for Queriers<'_, '_, Querier> {}
 /// [Iterator] over all mutable queriers in a [`MultiQuerier`].
 #[derive(Debug)]
 pub struct QueriersMut<'r, 'query, Querier> {
-    internal: ValuesMut<'r, &'query str, WithVersion<'query, Querier>>,
+    internal: ValuesMut<'r, &'query str, WithParsedVersion<'query, Querier>>,
 }
 
 impl<'r, 'query, Querier> Iterator for QueriersMut<'r, 'query, Querier> {
-    type Item = &'r mut WithVersion<'query, Querier>;
+    type Item = &'r mut WithParsedVersion<'query, Querier>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.internal.next()

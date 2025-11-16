@@ -1,7 +1,8 @@
 use super::{
-    LatestQuerier, MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest, WithVersion,
+    LatestQuerier, MultiQuerier, MultiQueryDatabase, MultiQueryDatabaseLatest, WithParsedVersion,
+    WithParsedVersionUtils,
 };
-use crate::{misc::AttachedUtils, value::RepositoryName};
+use crate::value::RepositoryName;
 use arch_pkg_text::value::Name;
 
 impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
@@ -20,19 +21,20 @@ impl<'a, Querier> MultiQueryDatabase<'a, Querier> {
 
 impl<Querier> MultiQuerier<'_, Querier> {
     /// Get an immutable reference to a querier by repository name.
-    pub fn get(&self, repository: RepositoryName) -> Option<WithVersion<'_, &Querier>> {
+    pub fn get(&self, repository: RepositoryName) -> Option<WithParsedVersion<'_, &Querier>> {
         self.internal
             .get(repository.as_str())
-            .map(AttachedUtils::as_deref)
-            .map(AttachedUtils::copied_attachment)
+            .map(WithParsedVersion::to_ref)
     }
 
     /// Get a mutable reference to a querier by repository name.
-    pub fn get_mut(&mut self, repository: RepositoryName) -> Option<WithVersion<'_, &mut Querier>> {
+    pub fn get_mut(
+        &mut self,
+        repository: RepositoryName,
+    ) -> Option<WithParsedVersion<'_, &mut Querier>> {
         self.internal
             .get_mut(repository.as_str())
-            .map(AttachedUtils::as_deref_mut)
-            .map(AttachedUtils::copied_attachment)
+            .map(WithParsedVersion::to_ref_mut)
     }
 }
 

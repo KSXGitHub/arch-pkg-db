@@ -1,11 +1,8 @@
-use super::{MultiQueryDatabase, WithVersion};
-use crate::{
-    misc::{Attached, AttachedUtils, IntoAttached},
-    value::RepositoryName,
-};
+use super::{IntoWithParsedVersion, MultiQueryDatabase, WithParsedVersion};
+use crate::{multi::WithParsedVersionUtils, value::RepositoryName};
 use arch_pkg_text::{
     desc::{Query, QueryMut, misc::ShouldReuse},
-    value::{Name, ParseVersionError, ParsedVersion, Version},
+    value::{Name, ParseVersionError, Version},
 };
 use core::mem::replace;
 use derive_more::{Display, Error};
@@ -35,7 +32,7 @@ impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
         mut querier: Querier,
         get_name: GetName,
         get_version: GetVersion,
-    ) -> Result<Option<WithVersion<'a, Querier>>, InsertError<'a>>
+    ) -> Result<Option<WithParsedVersion<'a, Querier>>, InsertError<'a>>
     where
         GetName: FnOnce(&mut Querier) -> Option<Name<'a>>,
         GetVersion: FnOnce(&mut Querier) -> Option<Version<'a>>,
@@ -50,7 +47,7 @@ impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
             .entry(&name)
             .or_default()
             .internal
-            .insert(&repository, querier.into_attached(version))
+            .insert(&repository, querier.with_parsed_version(version))
             .pipe(Ok)
     }
 
@@ -64,7 +61,7 @@ impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
         &mut self,
         repository: RepositoryName<'a>,
         querier: Querier,
-    ) -> Result<Option<WithVersion<'a, Querier>>, InsertError<'a>>
+    ) -> Result<Option<WithParsedVersion<'a, Querier>>, InsertError<'a>>
     where
         Querier: Query<'a>,
     {
@@ -86,7 +83,7 @@ impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
         &mut self,
         repository: RepositoryName<'a>,
         querier: Querier,
-    ) -> Result<Option<WithVersion<'a, Querier>>, InsertError<'a>>
+    ) -> Result<Option<WithParsedVersion<'a, Querier>>, InsertError<'a>>
     where
         Querier: QueryMut<'a>,
     {
@@ -101,10 +98,10 @@ pub enum InsertNewerReturn<'a, Querier> {
     Unoccupied,
     /// The entry was occupied by a querier whose package version is older than the provided querier.
     /// The provided querier thus replaced the old one.
-    Replaced(Attached<Querier, ParsedVersion<'a>>),
+    Replaced(WithParsedVersion<'a, Querier>),
     /// The entry was occupied by a querier whose package version is not older than the provided querier.
     /// The occupied querier was kept, the provided querier was rejected.
-    Rejected(Attached<Querier, ParsedVersion<'a>>),
+    Rejected(WithParsedVersion<'a, Querier>),
 }
 
 impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
@@ -128,7 +125,7 @@ impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
             .parse()
             .map_err(InsertError::ParseVersion)?;
 
-        let inserted = querier.into_attached(inserted_version);
+        let inserted = querier.with_parsed_version(inserted_version);
 
         let multi_querier = self.internal.entry(&name).or_default();
 
@@ -137,8 +134,8 @@ impl<'a, Querier: ShouldReuse> MultiQueryDatabase<'a, Querier> {
             return Ok(InsertNewerReturn::Unoccupied);
         };
 
-        let existing_version = existing.attachment();
-        Ok(if existing_version < &inserted_version {
+        let existing_version = existing.parsed_version();
+        Ok(if existing_version < inserted_version {
             InsertNewerReturn::Replaced(replace(existing, inserted))
         } else {
             InsertNewerReturn::Rejected(inserted)

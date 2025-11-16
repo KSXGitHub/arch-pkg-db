@@ -4,9 +4,8 @@ use _utils::{MULTI_TEXTS, fixtures};
 use arch_pkg_db::{
     MemoMultiQueryDatabase,
     desc::{MemoQuerier, QueryMut},
-    misc::{Attached, AttachedUtils},
-    multi::MultiQuerier,
-    value::{Name, ParsedVersion, RepositoryName, Version},
+    multi::{MultiQuerier, WithParsedVersion, WithParsedVersionUtils},
+    value::{Name, RepositoryName, Version},
 };
 use itertools::Itertools;
 use pipe_trait::Pipe;
@@ -39,7 +38,7 @@ fn assert_repositories<const LEN: usize>(
 }
 
 fn assert_package<'a, Querier: QueryMut<'a>>(
-    actual_pkg: &mut Attached<Querier, ParsedVersion>,
+    actual_pkg: &mut WithParsedVersion<Querier>,
     expected_desc: &'static str,
     expected_name: Name<'static>,
     expected_version: Version<'static>,
@@ -54,7 +53,7 @@ fn assert_package<'a, Querier: QueryMut<'a>>(
         actual_version.as_str(),
         expected_pkg.version().unwrap().as_str(),
     );
-    assert_eq!(*actual_pkg.attachment(), actual_version.parse().unwrap());
+    assert_eq!(actual_pkg.parsed_version(), actual_version.parse().unwrap());
 }
 
 fn assert_multi_querier_get_mut(
