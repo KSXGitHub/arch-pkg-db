@@ -1,0 +1,53 @@
+%FILENAME%
+paru-2.1.0-1-x86_64.pkg.tar.zst
+
+%NAME%
+paru
+
+%BASE%
+paru
+
+%VERSION%
+2.1.0-1
+
+%DESC%
+Feature packed AUR helper
+
+%CSIZE%
+3613531
+
+%ISIZE%
+8830012
+
+%SHA256SUM%
+00693dd2a1cd0c14a849f522ed4040c0f055135699dd63b2530091cc8b49de3c
+
+%PGPSIG%
+iI0EABYKADUWIQSk1zXwzax6+ewHOm6jZ/sBrlQEDgUCaG10ZRccbWFudWVsQGVuZGVhdm91cm9zLmNvbQAKCRCjZ/sBrlQEDnIRAPoCLLQ5ULE92cV8vbqQCJcBcSfkrUuVaOKjIz0rwrW2UwD+K7+X3rXVVPRrL/XPrDt2/fIPV0uAr3F7sqbSz+OMPAg=
+
+%URL%
+https://github.com/morganamilo/paru
+
+%LICENSE%
+GPL-3.0-or-later
+
+%ARCH%
+x86_64
+
+%BUILDDATE%
+1752003551
+
+%PACKAGER%
+Fictional packager of Paru <email@example.org>
+
+%DEPENDS%
+git
+pacman
+libalpm.so>=14
+
+%OPTDEPENDS%
+bat: colored pkgbuild printing
+devtools: build in chroot and downloading pkgbuilds
+
+%MAKEDEPENDS%
+cargo

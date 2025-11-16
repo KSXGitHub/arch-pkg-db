@@ -27,9 +27,19 @@ default = []
 parking_lot = ["arch-pkg-text/parking_lot"]
 
 [dependencies]
-arch-pkg-text = "0.9.4"
-derive_more = { version = "2.0.1", default-features = false, features = ["display", "error"] }
+arch-pkg-text = "0.9.5"
+derive_more = { version = "2.0.1", default-features = false, features = ["as_ref", "deref", "deref_mut", "display", "error", "from", "into"] }
+infer = "0.19.0"
 libflate = "2.1.0"
+lzma-rs = "0.3.0"
 is_type = "0.2.1"
+itertools = "0.14.0"
 pipe-trait = "0.4.0"
+rayon = "1.10.0"
+strum = { version = "0.27.1", features = ["phf"] }
 tar = "0.4.44"
+
+[dev-dependencies]
+_utils.path = "utils"
+pretty_assertions = "1.4.1"
+text-block-macros = "0.2.0"
