@@ -44,6 +44,7 @@ fn assert_bash_completion(querier: QuerierVersionRepository) {
 fn assert_parallel_disk_usage(querier: QuerierVersionRepository) {
     assert_eq!(querier.name(), Some(Name("parallel-disk-usage")));
     let version = querier.version().unwrap();
+    assert_eq!(version.as_str(), "0.21.1-1");
     assert_eq!(querier.repository_name(), RepositoryName("extra"));
     assert_eq!(querier.parsed_version(), version.parse().unwrap());
 }
