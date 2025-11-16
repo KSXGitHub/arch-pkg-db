@@ -1,6 +1,5 @@
 //! Database of a system of multiple repositories.
 
-mod combine;
 mod extend;
 mod get;
 mod insert;
@@ -9,11 +8,8 @@ mod latest;
 mod misc;
 mod new;
 mod providers;
+mod with;
 
-pub use combine::{
-    IntoWithParsedVersion, IntoWithRepositoryName, WithParsedVersion, WithParsedVersionUtils,
-    WithRepositoryName, WithRepositoryNameUtils,
-};
 pub use insert::{InsertError, InsertNewerReturn};
 pub use iter::{
     Entries, EntriesMut, LatestEntries, LatestEntriesMut, LatestQueriers, LatestQueriersMut,
@@ -21,6 +17,10 @@ pub use iter::{
     OwnedEntries, Queriers, QueriersMut, RepositoryNames,
 };
 pub use providers::{AlternativeProviders, AlternativeProvidersMut};
+pub use with::{
+    IntoWithParsedVersion, IntoWithRepositoryName, WithParsedVersion, WithParsedVersionUtils,
+    WithRepositoryName, WithRepositoryNameUtils,
+};
 
 use arch_pkg_text::desc::{EagerQuerier, MemoQuerier};
 use std::collections::HashMap;
