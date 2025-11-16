@@ -26,42 +26,33 @@ fn assert_db_get(
 
 fn assert_bash(querier: QuerierVersionRepository) {
     assert_eq!(querier.name(), Some(Name("bash")));
-    assert_eq!(querier.version().unwrap().as_str(), "5.2.026-2");
+    let version = querier.version().unwrap();
+    assert_eq!(version.as_str(), "5.2.026-2");
     assert_eq!(querier.attachment(), &RepositoryName("core"));
-    assert_eq!(
-        querier.main().attachment(),
-        &querier.version().unwrap().parse().unwrap(),
-    );
+    assert_eq!(querier.main().attachment(), &version.parse().unwrap(),);
 }
-
 fn assert_bash_completion(querier: QuerierVersionRepository) {
     assert_eq!(querier.name(), Some(Name("bash-completion")));
-    assert_eq!(querier.version().unwrap().as_str(), "2.14.0-2");
+    let version = querier.version().unwrap();
+    assert_eq!(version.as_str(), "2.14.0-2");
     assert_eq!(querier.attachment(), &RepositoryName("extra"));
-    assert_eq!(
-        querier.main().attachment(),
-        &querier.version().unwrap().parse().unwrap(),
-    );
+    assert_eq!(querier.main().attachment(), &version.parse().unwrap());
 }
 
 fn assert_parallel_disk_usage(querier: QuerierVersionRepository) {
     assert_eq!(querier.name(), Some(Name("parallel-disk-usage")));
-    assert_eq!(querier.version().unwrap().as_str(), "0.21.1-1");
+    let version = querier.version().unwrap();
+    assert_eq!(version.as_str(), "0.21.1-1");
     assert_eq!(querier.attachment(), &RepositoryName("extra"));
-    assert_eq!(
-        querier.main().attachment(),
-        &querier.version().unwrap().parse().unwrap(),
-    );
+    assert_eq!(querier.main().attachment(), &version.parse().unwrap());
 }
 
 fn assert_paru(querier: QuerierVersionRepository) {
     assert_eq!(querier.name(), Some(Name("paru")));
-    assert_eq!(querier.version().unwrap().as_str(), "2.1.0-1");
+    let version = querier.version().unwrap();
+    assert_eq!(version.as_str(), "2.1.0-1");
     assert_eq!(querier.attachment(), &RepositoryName("derivative"));
-    assert_eq!(
-        querier.main().attachment(),
-        &querier.version().unwrap().parse().unwrap(),
-    );
+    assert_eq!(querier.main().attachment(), &version.parse().unwrap());
 }
 
 #[test]
