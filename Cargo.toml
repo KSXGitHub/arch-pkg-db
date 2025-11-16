@@ -6,11 +6,11 @@ edition = "2024"
 authors = ["khai96_ <hvksmr1996@gmail.com>"]
 license = "MIT"
 repository = "https://github.com/pacman-repo-builder/arch-pkg-db.git"
-#readme = "README.md"
+readme = "README.md"
 include = [
   "/src",
   "/Cargo.toml",
-  #"/README.md",
+  "/README.md",
   "/LICENSE.md",
 ]
 keywords = [
